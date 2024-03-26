@@ -14,6 +14,7 @@ import { customShadows } from './custom-shadows';
 import { createPresets } from './options/presets';
 import NextAppDirEmotionCacheProvider from './next-emotion-cache';
 import { useSettingsContext } from '#/components/settings';
+import { componentsOverrides } from './overrides';
 
 // ----------------------------------------------------------------------
 
@@ -29,23 +30,23 @@ export default function ThemeProvider({ children }: Props) {
   const memoizedValue = useMemo(
     () => ({
       palette: {
-        ...palette(settings.themeMode),
+        ...palette(),
         ...presets.palette,
       },
       customShadows: {
-        ...customShadows(settings.themeMode),
+        ...customShadows(),
         ...presets.customShadows,
       },
       direction: settings.themeDirection,
-      shadows: shadows(settings.themeMode),
+      shadows: shadows(),
       shape: { borderRadius: 8 },
       typography,
     }),
-    [settings.themeMode, settings.themeDirection, presets.palette, presets.customShadows]
+    [settings.themeDirection, presets.palette, presets.customShadows]
   );
 
   const theme = createTheme(memoizedValue as ThemeOptions);
-
+  theme.components = componentsOverrides(theme);
 
   return (
     <NextAppDirEmotionCacheProvider options={{ key: 'css' }}>

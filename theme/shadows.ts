@@ -1,11 +1,11 @@
 import { alpha, Shadows } from '@mui/material/styles';
 
-import { grey, common } from './palette';
+import { common } from './palette';
 
 // ----------------------------------------------------------------------
 
-export function shadows(mode: 'light' | 'dark'): Shadows {
-  const color = mode === 'light' ? grey[500] : common.black;
+export function shadows(): Shadows {
+  const color = common.black;
 
   const transparent1 = alpha(color, 0.2);
   const transparent2 = alpha(color, 0.14);
