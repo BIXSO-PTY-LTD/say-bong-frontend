@@ -15,7 +15,6 @@ declare module '@mui/material/Button' {
 // ----------------------------------------------------------------------
 
 export function button(theme: Theme) {
-  const lightMode = theme.palette.mode === 'light';
 
   const rootStyles = (ownerState: ButtonProps) => {
     const inheritColor = ownerState.color === 'inherit';
@@ -38,10 +37,10 @@ export function button(theme: Theme) {
       ...(inheritColor && {
         // CONTAINED
         ...(containedVariant && {
-          color: lightMode ? theme.palette.common.white : theme.palette.grey[800],
-          backgroundColor: lightMode ? theme.palette.grey[800] : theme.palette.common.white,
+          color: theme.palette.common.black,
+          backgroundColor: theme.palette.common.white,
           '&:hover': {
-            backgroundColor: lightMode ? theme.palette.grey[700] : theme.palette.grey[400],
+            backgroundColor: theme.palette.grey[400]
           },
         }),
         // OUTLINED
@@ -84,7 +83,7 @@ export function button(theme: Theme) {
         }),
         // SOFT
         ...(softVariant && {
-          color: theme.palette[color][lightMode ? 'dark' : 'light'],
+          color: theme.palette[color],
           backgroundColor: alpha(theme.palette[color].main, 0.16),
           '&:hover': {
             backgroundColor: alpha(theme.palette[color].main, 0.32),
