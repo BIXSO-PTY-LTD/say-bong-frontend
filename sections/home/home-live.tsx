@@ -20,7 +20,6 @@ const defaultFilters: IMatchFilters = {
 // ----------------------------------------------------------------------
 export default function HomeLive() {
 
-  const [sortBy, setSortBy] = useState('Tất cả giải đấu');
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -38,18 +37,15 @@ export default function HomeLive() {
     [handleFilters]
   );
 
-  const handleSortBy = useCallback((newValue: string) => {
-    setSortBy(newValue);
-  }, []);
+
 
   const dataFiltered = applyFilter({
     inputData: _matchList,
     filters,
-    sortBy
   });
   return (
-    <Container>
-      <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">Trực tiếp bóng đá</Typography>
+    <>
+
       <Stack spacing={3}
         justifyContent="space-between"
         alignItems={{ xs: 'flex-end', sm: 'center' }}
@@ -64,6 +60,7 @@ export default function HomeLive() {
             background: (theme) => theme.palette.grey[800],
             pl: 2,
             pr: 17,
+            py: 0.5,
             borderRadius: 1,
             my: { xs: 3, md: 5 },
           }}
@@ -104,12 +101,15 @@ export default function HomeLive() {
             />
           ))}
         </Tabs>
-        <CompetitionSort sort={sortBy} onSort={handleSortBy} sortOptions={COMPETITION_SORT_OPTIONS} />
+        <CompetitionSort filters={filters}
+          onFilters={handleFilters}
+          //
+          competitionOptions={COMPETITION_SORT_OPTIONS} />
       </Stack>
       <MatchListHorizontal matchs={dataFiltered}
       //  loading={matchsLoading} 
       />
-    </Container>
+    </>
   )
 }
 // ----------------------------------------------------------------------
@@ -117,75 +117,19 @@ export default function HomeLive() {
 const applyFilter = ({
   inputData,
   filters,
-  sortBy
 }: {
   inputData: IMatchItem[];
   filters: IMatchFilters;
-  sortBy: string;
 }) => {
-  const { status } = filters;
+  const { status, competitions } = filters;
 
-  if (sortBy === 'fifa world cup') {
-    inputData = orderBy(inputData, ['competitions'], ['desc']);
-  }
 
-  if (sortBy === 'uefa european championship (euro)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'copa america') {
-    inputData = orderBy(inputData, ['competitions'], ['desc']);
-  }
-
-  if (sortBy === 'uefa champions league') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'uefa europa league') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'english premier league') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'la liga (spain)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'bundesliga (germany)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'serie a (italy)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'ligue 1 (france)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'brasileirão (brazil)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'argentine primera división') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'mls (major league soccer - usa)') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'afc asian cup') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
-
-  if (sortBy === 'africa cup of nations') {
-    inputData = orderBy(inputData, ['competitions'], ['asc']);
-  }
   if (status !== 'all') {
     inputData = inputData.filter((match) => match.status === status);
+  }
+
+  if (competitions.length) {
+    inputData = inputData.filter((match) => competitions.includes(match.competitions));
   }
 
   return inputData;

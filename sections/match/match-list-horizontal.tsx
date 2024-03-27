@@ -4,6 +4,7 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
 import { IMatchItem } from '#/types/match';
 import MatchItemHorizontal from './match-item-horizontal';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ export default function MatchListHorizontal({ matchs,
 
   const renderList = (
     <>
-      {matchs.map((match) => (
+      {matchs.slice(0, 8).map((match) => (
         <MatchItemHorizontal key={match.id} match={match} />
       ))}
     </>
@@ -45,17 +46,15 @@ export default function MatchListHorizontal({ matchs,
         {renderList}
       </Box>
 
-      {matchs.length > 8 && (
-        <Pagination
-          count={8}
-          sx={{
-            mt: 8,
-            [`& .${paginationClasses.ul}`]: {
-              justifyContent: 'center',
-            },
-          }}
-        />
-      )}
+      <Button
+        fullWidth
+        sx={{
+          my: 5,
+          color: "#01B243",
+          background: theme => theme.palette.grey[800]
+        }}>
+        Xem thêm lịch trực tiếp
+      </Button>
     </>
   );
 }

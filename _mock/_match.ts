@@ -9,7 +9,7 @@ export const MATCH_STATUS_OPTIONS = [
 
 export const COMPETITION_SORT_OPTIONS = [
   { value: 'fifa world cup', label: 'FIFA World Cup' },
-  { value: 'uefa european championship (euro)', label: 'UEFA (Euro)' },
+  { value: 'uefa european championship (euro)', label: 'UEFA European Championship (Euro)' },
   { value: 'copa america', label: 'Copa America' },
   { value: 'uefa champions league', label: 'UEFA Champions League' },
   { value: 'uefa europa league', label: 'UEFA Europa League' },
