@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 // ----------------------------------------------------------------------
 
 
+const spacingLayout = ['/', '/livestream', '/hightlight', '/bxh', '/results', '/schedule', '/news'];
 
 type Props = {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ export default function MainLayout({ children }: Props) {
           flexGrow: 1,
         }}
       >
-
+        {actionPage(spacingLayout) && <Spacing />}
         {children}
       </Box>
 
