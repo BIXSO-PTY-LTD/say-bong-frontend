@@ -1,5 +1,9 @@
 // ----------------------------------------------------------------------
 
 export const paths = {
-  home: "/"
+  home: "/",
+  news: {
+    root: "/news",
+    details: "/news/details"
+  }
 };

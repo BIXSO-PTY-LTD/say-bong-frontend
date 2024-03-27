@@ -1,19 +1,24 @@
 'use client';
 
-import ScrollProgress from '#/components/scroll-progress';
 import MainLayout from '#/layouts/main';
-import { useScroll } from 'framer-motion';
+import { Container, Typography } from '@mui/material';
+import HomeLive from '../home-live';
+import { _careerPosts } from '#/_mock/_blog';
+import HomeHighlight from '../home-highlights';
+import HomeLastestPosts from '../home-latest-posts';
 
 
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const { scrollYProgress } = useScroll();
   return (
     <MainLayout>
-      <ScrollProgress scrollYProgress={scrollYProgress} />
-
-      <>Hi</>
+      <Container>
+        <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">Trực tiếp bóng đá</Typography>
+        <HomeLive />
+        <HomeHighlight posts={_careerPosts.slice(0, 7)} />
+        <HomeLastestPosts posts={_careerPosts.slice(0, 7)} />
+      </Container>
     </MainLayout>
   );
 }
