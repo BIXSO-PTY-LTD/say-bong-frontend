@@ -1,5 +1,5 @@
 {
-  "name": "coach-linker-academy",
+  "name": "say-bong-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,6 +15,7 @@
     "@iconify/react": "^4.1.1",
     "@mui/lab": "^5.0.0-alpha.169",
     "@mui/material": "^5.15.14",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.0.20",
     "lodash.isequal": "^4.5.0",
     "mui-one-time-password-input": "^2.0.2",
