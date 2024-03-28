@@ -5,6 +5,7 @@ import { SettingsProvider } from "#/components/settings";
 import ThemeProvider from "#/theme";
 import { MotionLazy } from "#/components/animate/motion-lazy";
 import ProgressBar from "#/components/progress-bar/progress-bar";
+import MainLayout from "#/layouts/main";
 
 
 export const metadata: Metadata = {

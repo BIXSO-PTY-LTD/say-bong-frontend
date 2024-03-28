@@ -8,12 +8,12 @@ export const pageLinks = [
     cover: '/assets/images/menu/menu_marketing.jpg',
     items: [
       { title: 'Trang chủ', path: paths.home },
-      { title: 'Livestream', path: paths.home },
-      { title: 'Highlight', path: paths.home },
-      { title: 'BXH', path: paths.home },
-      { title: 'Kết quả', path: paths.home },
-      { title: 'Lịch thi đấu', path: paths.home },
-      { title: 'Tin tức', path: paths.home },
+      { title: 'Livestream', path: paths.livestream.root },
+      { title: 'Highlight', path: paths.highlight.root },
+      { title: 'BXH', path: paths.bxh.root },
+      { title: 'Kết quả', path: paths.result.root },
+      { title: 'Lịch thi đấu', path: paths.schedule.root },
+      { title: 'Tin tức', path: paths.news.root },
     ],
   },
 ];
@@ -21,13 +21,13 @@ export const pageLinks = [
 
 
 export const navConfig = [
-  { title: 'LIVESTREAM', path: paths.home },
-  { title: 'HIGHTLIGHT', path: paths.home },
+  { title: 'LIVESTREAM', path: paths.livestream.root },
+  { title: 'HIGHTLIGHT', path: paths.highlight.root },
   {
     title: 'BXH',
-    path: paths.home,
+    path: paths.bxh.root,
   },
-  { title: 'KẾT QUẢ', path: paths.home },
-  { title: 'LỊCH THI ĐẤU', path: paths.home },
-  { title: 'TIN TỨC', path: paths.home },
+  { title: 'KẾT QUẢ', path: paths.result.root },
+  { title: 'LỊCH THI ĐẤU', path: paths.schedule.root },
+  { title: 'TIN TỨC', path: paths.news.root },
 ];

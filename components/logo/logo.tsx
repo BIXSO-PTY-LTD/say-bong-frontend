@@ -13,9 +13,12 @@ interface LogoProps extends BoxProps {
   single?: boolean;
 }
 
-function Logo({ sx }: LogoProps) {
+function Logo({ sx, single }: LogoProps) {
   const fullLogo = (
     <Image disabledEffect alt='logo' src='/assets/images/logo/logo.svg' />
+  );
+  const singleLogo = (
+    <Image disabledEffect alt='logo' src='/assets/images/logo/single-logo.svg' />
   );
 
   return (
@@ -35,7 +38,7 @@ function Logo({ sx }: LogoProps) {
           ...sx,
         }}
       >
-        {fullLogo}
+        {single ? singleLogo : fullLogo}
       </Box>
     </Link>
   );
