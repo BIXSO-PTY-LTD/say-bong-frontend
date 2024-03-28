@@ -1,7 +1,10 @@
+"use client"
+
 import { Typography, Stack, Avatar, Card } from '@mui/material';
 import Label from '#/components/label';
 import { fDateTime } from '#/utils/format-time';
 import { IMatchItem } from '#/types/match';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -26,11 +29,18 @@ export default function MatchItemHorizontal({ match }: Props) {
     image
   } = match;
 
+  const [formattedDateTime, setFormattedDateTime] = useState('');
+
+  useEffect(() => {
+    setFormattedDateTime(fDateTime(date_time));
+
+
+  }, [date_time]); // 
   return (
     <Stack component={Card} sx={{ backgroundImage: `url(${image})`, p: 1, backgroundSize: 'cover' }} direction="column">
       <Stack sx={{ py: 0.5, px: '20px', mb: 1 }} direction="row" justifyContent="space-between">
         <Typography variant="body1">{competitions}</Typography>
-        <Typography variant="body1">{fDateTime(date_time)}</Typography>
+        <Typography variant="body1">{formattedDateTime}</Typography>
       </Stack>
       <Stack direction="row" justifyContent="space-around" spacing={2} alignItems="center">
         <TeamInfo image={home_image} team={home_team} />

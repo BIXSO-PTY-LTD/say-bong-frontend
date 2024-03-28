@@ -4,26 +4,25 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { IBlogPostProps } from '#/types/blog';
 import { useResponsive } from '#/hooks/use-responsive';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import Iconify from '#/components/iconify';
-import HomeHighlightItem from './home-highlight-item';
-import HomeHighlightMobile from './home-highlight-mobile';
+import { ITourProps } from '#/types/tour';
+import LivestreamLatestItem from './livestream-latest-item';
+import LivestreamLatestPostMobile from './livestream-latest-mobile';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IBlogPostProps[];
+  tours: ITourProps[];
 };
 
-export default function HomeHighlight({ posts }: Props) {
+export default function LivestreamLastest({ tours }: Props) {
   const mdUp = useResponsive('up', 'md');
 
-  const latestPost = posts[0];
 
   const viewAllBtn = (
     <Button
@@ -53,9 +52,7 @@ export default function HomeHighlight({ posts }: Props) {
         }}
       >
         <Typography variant="h3" sx={{ my: 3, textTransform: "uppercase" }}>
-          Video
-          <Typography component="span" variant='h3' color="#0EB349"> Highlight</Typography>
-
+          Các trận đấu đang diễn ra
         </Typography>
 
         {mdUp && viewAllBtn}
@@ -67,25 +64,23 @@ export default function HomeHighlight({ posts }: Props) {
           gap: { xs: 3, md: 4 },
           gridTemplateColumns: {
             xs: 'repeat(1, 1fr)',
-            sm: 'repeat(12, 1fr)',
+            sm: 'repeat(4, 1fr)',
           },
         }}
       >
         {mdUp ? (
           <>
-            <Box sx={{ gridColumn: 'span 5' }}>
-              <HomeHighlightItem post={latestPost} largePost />
-            </Box>
-            <Masonry columns={{ xs: 1, md: 3 }} spacing={3} sx={{ justifyContent: "space-between", gridColumn: 'span 7', alignItems: "center" }}>
-              {posts.slice(1, 7).map((post) => (
-                <HomeHighlightItem key={post.id} post={post} />
-              ))}
-            </Masonry>
+            {tours.slice(0, 4).map((tour, index) => (
+              <LivestreamLatestItem key={tour.id} tour={tour}
+              // order={index % 2}
+              />
+            ))}
+
           </>
         ) : (
           <>
-            {posts.slice(0, 5).map((post) => (
-              <HomeHighlightMobile key={post.id} post={post} />
+            {tours.slice(0, 4).map((tour) => (
+              <LivestreamLatestPostMobile key={tour.id} tour={tour} />
             ))}
           </>
         )}

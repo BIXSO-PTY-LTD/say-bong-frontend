@@ -19,7 +19,7 @@ export default function MainLayout({ children }: Props) {
   const pathname = usePathname();
 
   const actionPage = (arr: string[]) =>
-    arr.some((path) => pathname === path || pathname === `${path}/`);
+    arr.map((path) => pathname === path || pathname === `${path}/`);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
