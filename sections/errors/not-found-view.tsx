@@ -41,8 +41,6 @@ export default function NotFoundView() {
             }}
           />
         </m.div>
-
-
         <Button component={RouterLink} href="/" size="large" color="inherit" variant="contained">
           Go to Home
         </Button>
