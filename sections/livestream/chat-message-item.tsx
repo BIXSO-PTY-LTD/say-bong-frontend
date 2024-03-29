@@ -31,7 +31,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
     currentUserId: `${user?.id}`,
   });
 
-  const { firstName, avatarUrl } = senderDetails;
+  const { firstName } = senderDetails;
 
   const { body, createdAt } = message;
 

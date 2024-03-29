@@ -5,6 +5,7 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 import { IMatchItem } from '#/types/match';
 import MatchItemHorizontal from './match-item-horizontal';
 import { Button } from '@mui/material';
+import { paths } from '#/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ export default function MatchListHorizontal({ matchs,
 
       <Button
         fullWidth
+        href={paths.livestream.root}
         sx={{
           my: 5,
           color: "#01B243",

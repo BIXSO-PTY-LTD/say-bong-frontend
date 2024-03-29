@@ -48,18 +48,18 @@ export default function HomeLive() {
 
       <Stack spacing={3}
         justifyContent="space-between"
-        alignItems={{ xs: 'flex-end', sm: 'center' }}
-        direction={{ xs: 'column', sm: 'row' }}
+        alignItems={{ sm: 'center' }}
+        direction={{ sm: 'column', md: 'row' }}
         sx={{
           mb: { xs: 3, md: 5 },
+
         }}>
         <Tabs
           value={filters.status}
           onChange={handleFilterStatus}
           sx={{
             background: (theme) => theme.palette.grey[800],
-            pl: 2,
-            pr: 17,
+            px: 2,
             py: 0.5,
             borderRadius: 1,
             my: { xs: 3, md: 5 },

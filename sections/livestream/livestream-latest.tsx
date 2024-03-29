@@ -64,7 +64,8 @@ export default function LivestreamLastest({ tours }: Props) {
           gap: { xs: 3, md: 4 },
           gridTemplateColumns: {
             xs: 'repeat(1, 1fr)',
-            sm: 'repeat(4, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(4, 1fr)',
           },
         }}
       >

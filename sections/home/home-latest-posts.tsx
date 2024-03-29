@@ -9,8 +9,6 @@ import { useResponsive } from '#/hooks/use-responsive';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import Iconify from '#/components/iconify';
-import HomeHighlightItem from './home-highlight-item';
-import HomeHighlightMobile from './home-highlight-mobile';
 import HomeLatestPostItem from './home-latest-post-item';
 import HomeLatestPostMobile from './home-latest-post-mobile';
 
@@ -25,7 +23,6 @@ type Props = {
 export default function HomeLastestPosts({ posts }: Props) {
   const mdUp = useResponsive('up', 'md');
 
-  const latestPost = posts[0];
 
   const viewAllBtn = (
     <Button
@@ -69,7 +66,8 @@ export default function HomeLastestPosts({ posts }: Props) {
           gap: { xs: 3, md: 4 },
           gridTemplateColumns: {
             xs: 'repeat(1, 1fr)',
-            sm: 'repeat(4, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(4, 1fr)',
           },
         }}
       >

@@ -78,6 +78,7 @@ export default function Header() {
         )}
       </Stack>
 
+
       {!mdUp && <NavMobile data={navConfig} />}
     </>
   );

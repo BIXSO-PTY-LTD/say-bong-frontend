@@ -19,14 +19,12 @@ type Props = {
   largePost?: boolean;
 };
 
-export default function HomeHighlightItem({ post,
+export default function ExcitingLatestItem({ post,
   //  order,
   largePost }: Props) {
 
   return (
-    <Card sx={{
-      background: theme => theme.palette.grey[800],
-    }}>
+    <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Stack
         spacing={2}
         sx={{
@@ -59,8 +57,8 @@ export default function HomeHighlightItem({ post,
             }),
           }}
         >
-
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(post.id)} color="inherit">
+          <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.exciting.details(post.id)} color="inherit">
             <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
           </Link>
 

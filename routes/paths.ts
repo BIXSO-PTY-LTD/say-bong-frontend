@@ -7,7 +7,12 @@ export const paths = {
     details: (id: string) => `/livestream/${id}`,
   },
   highlight: {
-    root: "/highlight"
+    root: "/highlight",
+    details: (id: string) => `/highlight/${id}`,
+
+  },
+  exciting: {
+    details: (Id: string) => `highlight/exciting/${Id}`,
   },
   bxh: {
     root: "/bxh"
@@ -20,7 +25,7 @@ export const paths = {
   },
   news: {
     root: "/news",
-    details: "/news/details"
+    details: (id: string) => `/news/${id}`,
   }
 
 };

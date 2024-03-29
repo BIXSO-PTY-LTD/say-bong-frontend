@@ -1,4 +1,3 @@
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 
 
@@ -9,6 +8,9 @@ import TextMaxLine from '#/components/text-max-line';
 import { fDate } from '#/utils/format-time';
 import { IBlogPostProps } from '#/types/blog';
 import { ITourProps } from '#/types/tour';
+import { paths } from '#/routes/paths';
+import { Link } from '@mui/material';
+import { RouterLink } from '#/routes/components';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +40,7 @@ export default function LivestreamLatestPostMobile({ tour, onSiderbar }: Props) 
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit">
+        <Link component={RouterLink} color="inherit" href={paths.livestream.details(tour.id)}>
           <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{tour.slug}</TextMaxLine>
         </Link>
 

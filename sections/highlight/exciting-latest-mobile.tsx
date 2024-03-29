@@ -9,7 +9,6 @@ import TextMaxLine from '#/components/text-max-line';
 import { fDate } from '#/utils/format-time';
 import { IBlogPostProps } from '#/types/blog';
 import { paths } from '#/routes/paths';
-import { RouterLink } from '#/routes/components';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +17,7 @@ type Props = {
   onSiderbar?: boolean;
 };
 
-export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
+export default function ExcitingLatestMobile({ post, onSiderbar }: Props) {
   return (
     <Stack
       spacing={2}
@@ -39,7 +38,7 @@ export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit" component={RouterLink} href={paths.highlight.details(post.id)}>
+        <Link color="inherit" href={paths.exciting.details(post.id)}>
           <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{post.title}</TextMaxLine>
         </Link>
 
