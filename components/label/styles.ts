@@ -27,7 +27,7 @@ export const StyledLabel = styled(Box)(({
     ...(ownerState.color === 'default' && {
       // FILLED
       ...(filledVariant && {
-        color: lightMode ? theme.palette.common.white : theme.palette.grey[800],
+        color: theme.palette.common.white,
         backgroundColor: theme.palette.text.primary,
       }),
       // OUTLINED
@@ -48,7 +48,7 @@ export const StyledLabel = styled(Box)(({
     ...(ownerState.color !== 'default' && {
       // FILLED
       ...(filledVariant && {
-        color: theme.palette[ownerState.color].contrastText,
+        color: theme.palette.common.white,
         backgroundColor: theme.palette[ownerState.color].main,
       }),
       // OUTLINED

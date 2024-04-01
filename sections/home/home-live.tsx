@@ -3,18 +3,23 @@
 import { COMPETITION_SORT_OPTIONS, MATCH_STATUS_OPTIONS, _matchList } from "#/_mock/_match";
 import Label from "#/components/label";
 import { IMatchFilterValue, IMatchFilters, IMatchItem } from "#/types/match";
-import { Container, Stack, Tab, Tabs, Typography, alpha } from "@mui/material";
+import { Stack, Tab, Tabs, Typography, alpha } from "@mui/material";
 import { useCallback, useState } from "react";
 import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "../match/match-list-horizontal";
 import { orderBy } from "lodash";
+import { match } from "assert";
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [...MATCH_STATUS_OPTIONS, { value: 'all', label: 'Tất cả' }];
 
+const COMPETITION_OPTIONS = [...COMPETITION_SORT_OPTIONS];
+const allOption = { value: 'all', label: 'Tất cả trận đấu' };
+COMPETITION_OPTIONS.unshift(allOption);
+
 const defaultFilters: IMatchFilters = {
-  competitions: [],
+  competition: 'all',
   status: 'all',
 };
 // ----------------------------------------------------------------------
@@ -28,6 +33,7 @@ export default function HomeLive() {
       ...prevState,
       [name]: value,
     }));
+
   }, []);
 
   const handleFilterStatus = useCallback(
@@ -104,7 +110,7 @@ export default function HomeLive() {
         <CompetitionSort filters={filters}
           onFilters={handleFilters}
           //
-          competitionOptions={COMPETITION_SORT_OPTIONS} />
+          competitionOptions={COMPETITION_OPTIONS} />
       </Stack>
       <MatchListHorizontal matchs={dataFiltered}
       //  loading={matchsLoading} 
@@ -121,15 +127,16 @@ const applyFilter = ({
   inputData: IMatchItem[];
   filters: IMatchFilters;
 }) => {
-  const { status, competitions } = filters;
+  const { status, competition } = filters;
 
 
   if (status !== 'all') {
     inputData = inputData.filter((match) => match.status === status);
   }
 
-  if (competitions.length) {
-    inputData = inputData.filter((match) => competitions.includes(match.competitions));
+  if (competition !== 'all') {
+    inputData = inputData.filter((match) => match.competition === competition);
+
   }
 
   return inputData;

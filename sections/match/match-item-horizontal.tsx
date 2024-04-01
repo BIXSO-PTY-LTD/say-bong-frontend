@@ -16,7 +16,7 @@ type Props = {
 
 export default function MatchItemHorizontal({ match }: Props) {
   const {
-    competitions,
+    competition,
     date_time,
     home_team,
     away_team,
@@ -39,7 +39,7 @@ export default function MatchItemHorizontal({ match }: Props) {
   return (
     <Stack component={Card} sx={{ backgroundImage: `url(${image})`, p: 1, backgroundSize: 'cover' }} direction="column">
       <Stack sx={{ py: 0.5, px: '20px', mb: 1 }} direction="row" justifyContent="space-between">
-        <Typography variant="body1">{competitions}</Typography>
+        <Typography variant="body1">{competition}</Typography>
         <Typography variant="body1">{formattedDateTime}</Typography>
       </Stack>
       <Stack direction="row" justifyContent="space-around" spacing={2} alignItems="center">

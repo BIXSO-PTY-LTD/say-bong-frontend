@@ -4,21 +4,21 @@ export const _id = [...Array(40)].map(
   (_, index) => `e99f09a7-dd88-49d5-b1c8-1daf80c2d7b${index + 1}`
 );
 export const _competition = [
-  'FIFA World Cup',
-  'UEFA European Championship (Euro)',
-  'Copa America',
-  'UEFA Champions League',
-  'UEFA Europa League',
-  'English Premier League',
-  'La Liga (Spain)',
-  'Bundesliga (Germany)',
-  'Serie A (Italy)',
-  'Ligue 1 (France)',
-  'Brasileirão (Brazil)',
-  'Argentine Primera División',
-  'MLS (Major League Soccer - USA)',
-  'AFC Asian Cup',
-  'Africa Cup of Nations'
+  'fifa world cup',
+  'uefa european championship (euro)',
+  'copa america',
+  'uefa champions league',
+  'uefa europa league',
+  'english premier league',
+  'la liga (spain)',
+  'bundesliga (germany)',
+  'serie a (italy)',
+  'ligue 1 (france)',
+  'brasileirão (brazil)',
+  'argentine primera división',
+  'mls (major league soccer - usa)',
+  'afc asian cup',
+  'africa cup of nations'
 ];
 export const _soccerTeams = [
   // FIFA World Cup Teams

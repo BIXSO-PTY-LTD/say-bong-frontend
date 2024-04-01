@@ -27,7 +27,7 @@ export const COMPETITION_SORT_OPTIONS = [
 
 export const _matchList = [...Array(20)].map((_, index) => ({
   id: _mock.id(index),
-  competitions: _mock.competition(index),
+  competition: _mock.competition(index),
   status: (index % 2 && 'live') || (index % 3 && 'hot') || (index % 4 && 'today') || 'tomorrow',
   date_time: _mock.time(index),
   home_team: _mock.team(index),
