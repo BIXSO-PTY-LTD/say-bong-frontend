@@ -15,10 +15,10 @@ interface LogoProps extends BoxProps {
 
 function Logo({ sx, single }: LogoProps) {
   const fullLogo = (
-    <Image disabledEffect alt='logo' src='/assets/images/logo/logo.svg' />
+    <Image alt='logo' src='/assets/images/logo/logo.svg' />
   );
   const singleLogo = (
-    <Image disabledEffect alt='logo' src='/assets/images/logo/single-logo.svg' />
+    <Image alt='logo-single' src='/assets/images/logo/single-logo.svg' />
   );
 
   return (

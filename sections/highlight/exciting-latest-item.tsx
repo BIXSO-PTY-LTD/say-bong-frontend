@@ -19,7 +19,7 @@ type Props = {
   largePost?: boolean;
 };
 
-export default function ExcitingLatestItem({ post,
+export default function HighlightLatestItem({ post,
   //  order,
   largePost }: Props) {
 
@@ -36,7 +36,6 @@ export default function ExcitingLatestItem({ post,
         }}
       >
         <Image
-          disabledEffect
           src={post.coverUrl}
           alt={post.title}
           ratio={(largePost && '3/4') ||

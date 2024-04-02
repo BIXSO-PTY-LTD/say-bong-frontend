@@ -28,7 +28,7 @@ export default function ExcitingLatest({ posts }: Props) {
   const viewAllBtn = (
     <Button
       component={RouterLink}
-      href={paths.news.root}
+      href={paths.highlight.root}
       color="inherit"
       endIcon={<Iconify icon="carbon:chevron-right" />}
     >
@@ -48,7 +48,7 @@ export default function ExcitingLatest({ posts }: Props) {
         }}
       >
         <Typography variant="h3" sx={{ my: 3, textTransform: "uppercase" }}>
-          Highlight mới nhất
+          Những pha bóng khác
 
 
         </Typography>

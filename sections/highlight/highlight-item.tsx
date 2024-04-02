@@ -52,7 +52,7 @@ export default function HighlightItem({ tour }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image disabledEffect alt={slug} src={coverUrl} ratio="1/1" />
+        <Image alt={slug} src={coverUrl} ratio="1/1" />
 
       </Box>
 

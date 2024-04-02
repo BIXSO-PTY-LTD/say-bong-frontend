@@ -28,7 +28,6 @@ export default function LivestreamLatestPostMobile({ tour, onSiderbar }: Props) 
       sx={{ width: 1 }}
     >
       <Image
-        disabledEffect
         alt={tour.slug}
         src={tour.coverUrl}
         sx={{

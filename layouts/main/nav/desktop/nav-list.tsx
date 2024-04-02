@@ -149,7 +149,6 @@ function NavSubList({ subheader, isNew, cover, items }: NavSubListProps) {
       {!commonList && (
         <Link component={RouterLink} href={coverPath}>
           <Image
-            disabledEffect
             alt={cover}
             src={cover || '/assets/placeholder.svg'}
             ratio="16/9"

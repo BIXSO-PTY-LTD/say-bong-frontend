@@ -17,7 +17,7 @@ const TABLE_HEAD = [
   { id: 'lose', label: 'B', color: "#E4312B" },
   { id: 'score', label: 'HS', },
   { id: 'goal difference', label: 'Đ', color: "#E4312B" },
-  { id: '5_matchs', label: 'Status', },
+  { id: '5_matchs', label: '5 trận gần nhất', },
 ];
 
 const defaultFilters: IUserTableFilters = {

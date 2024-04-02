@@ -27,7 +27,6 @@ export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
       sx={{ width: 1 }}
     >
       <Image
-        disabledEffect
         alt={post.title}
         src={post.coverUrl}
         sx={{

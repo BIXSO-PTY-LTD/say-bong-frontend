@@ -48,7 +48,7 @@ export default function LivestreamItem({ tour }: Props) {
 
       </Box>
 
-      <Image disabledEffect alt={slug} src={coverUrl} ratio="1/1" />
+      <Image alt={slug} src={coverUrl} ratio="1/1" />
 
 
 

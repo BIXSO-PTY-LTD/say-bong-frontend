@@ -12,7 +12,7 @@ export const paths = {
 
   },
   exciting: {
-    details: (Id: string) => `highlight/exciting/${Id}`,
+    details: (Id: string) => `/highlight/exciting/${Id}`,
   },
   bxh: {
     root: "/bxh"
@@ -26,6 +26,9 @@ export const paths = {
   news: {
     root: "/news",
     details: (id: string) => `/news/${id}`,
+  },
+  account: {
+    root: "/account"
   }
 
 };

@@ -31,7 +31,6 @@ export default function NotFoundView() {
 
         <m.div variants={varBounce().in}>
           <Image
-            disabledEffect
             alt="404"
             src="/assets/illustrations/illustration_404.svg"
             sx={{

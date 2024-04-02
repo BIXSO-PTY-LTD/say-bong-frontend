@@ -14,7 +14,7 @@ const Image = forwardRef<HTMLSpanElement, ImageProps>(
     {
       ratio,
       overlay,
-      disabledEffect = false,
+      disabledEffect = true,
       alt,
       src,
       afterLoad,

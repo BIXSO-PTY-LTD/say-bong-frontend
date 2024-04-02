@@ -38,7 +38,6 @@ export default function HomeHighlightItem({ post,
         }}
       >
         <Image
-          disabledEffect
           src={post.coverUrl}
           alt={post.title}
           ratio={(largePost && '3/4') ||
