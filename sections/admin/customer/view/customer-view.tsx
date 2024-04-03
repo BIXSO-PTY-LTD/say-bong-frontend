@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, IconButton, Pagination, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
+import { Card, Container, IconButton, Pagination, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
 import { _careerPosts } from '#/_mock/_blog';
 import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
@@ -102,7 +102,7 @@ export default function CustomerView() {
         />
 
         <Scrollbar>
-          <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+          <Table sx={{ minWidth: 960 }}>
             <TableHeadCustom
               order={table.order}
               orderBy={table.orderBy}

@@ -1,4 +1,4 @@
-import CustomerView from "#/sections/admin/customer/view/account-view";
+import CustomerView from "#/sections/admin/customer/view/customer-view";
 
 // ----------------------------------------------------------------------
 
