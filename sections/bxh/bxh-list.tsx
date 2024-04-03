@@ -4,8 +4,8 @@ import { useCallback, useState } from "react";
 import { IMatchFilterValue, IMatchFilters } from "#/types/match";
 import Scrollbar from "#/components/scrollbar";
 import { TableEmptyRows, TableHeadCustom, TableNoData, emptyRows, getComparator, useTable } from "#/components/table";
-import { _teamList } from "#/_mock/_user";
-import { IUserItem, IUserTableFilters } from "#/types/user";
+import { _teamList } from "#/_mock/_team";
+import { ITeamItem, ITeamTableFilters } from "#/types/team";
 import CompetitionSort from "../competition/competition-sort";
 import BXHTableRow from "./bxh-table-row";
 
@@ -20,7 +20,7 @@ const TABLE_HEAD = [
   { id: '5_matchs', label: '5 trận gần nhất', },
 ];
 
-const defaultFilters: IUserTableFilters = {
+const defaultFilters: ITeamTableFilters = {
   competition: 'all',
 };
 
@@ -96,9 +96,9 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: IUserItem[];
+  inputData: ITeamItem[];
   comparator: (a: any, b: any) => number;
-  filters: IUserTableFilters;
+  filters: ITeamTableFilters;
 }) {
   const { competition } = filters;
 
@@ -115,7 +115,7 @@ function applyFilter({
 
 
   if (competition !== 'all') {
-    inputData = inputData.filter((user) => user.competition === competition);
+    inputData = inputData.filter((team) => team.competition === competition);
   }
 
 

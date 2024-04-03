@@ -1,4 +1,8 @@
 // ----------------------------------------------------------------------
+const ROOTS = {
+  AUTH: '/auth',
+  DASHBOARD: '/dashboard',
+};
 
 export const paths = {
   home: "/",
@@ -29,6 +33,22 @@ export const paths = {
   },
   account: {
     root: "/account"
+  },
+  auth: {
+    login: `${ROOTS.AUTH}/login`,
+  },
+  dashboard: {
+    root: `${ROOTS.DASHBOARD}`,
+    news: `${ROOTS.DASHBOARD}/news`,
+    video: {
+      root: `${ROOTS.DASHBOARD}/video`,
+      highlight: `${ROOTS.DASHBOARD}/video/highlight`,
+    },
+    api: `${ROOTS.DASHBOARD}/api`,
+    livestream: `${ROOTS.DASHBOARD}/livestream`,
+    password: `${ROOTS.DASHBOARD}/password`,
+    user: {
+      edit: (id: string) => `${ROOTS.DASHBOARD}/edit/${id}`
+    }
   }
-
 };

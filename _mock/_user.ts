@@ -4,24 +4,11 @@ import { _mock } from './_mock';
 
 // ----------------------------------------------------------------------
 
-
-
-
-
-
-export const _teamList = [...Array(20)].map((_, index) => ({
+export const _userList = [...Array(20)].map((_, index) => ({
   id: _mock.id(index),
-  zipCode: '85807',
-  state: 'Virginia',
-  city: 'Rancho Cordova',
-  role: _mock.role(index),
-  address: '908 Jack Locks',
+  username: 'customer',
+  createdAt: _mock.time(index),
   name: _mock.fullName(index),
-  isVerified: _mock.boolean(index),
-  country: countries[index + 1].label,
   avatarUrl: _mock.image.avatar(index),
-  competition: _mock.competition(index),
-  phoneNumber: "1",
-  status:
-    ["W", "L", "D", "W", "W"]
+  phoneNumber: _mock.phoneNumber(index),
 }));

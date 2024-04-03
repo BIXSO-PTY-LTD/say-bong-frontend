@@ -1,27 +1,17 @@
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
-import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
-
-import { useBoolean } from '#/hooks/use-boolean';
 
 import Label from '#/components/label';
-import Iconify from '#/components/iconify';
-import { usePopover } from '#/components/custom-popover';
 
-import { IUserItem } from '#/types/user';
+import { ITeamItem } from '#/types/team';
 import { Typography } from '@mui/material';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IUserItem;
+  row: ITeamItem;
 };
 
 export default function BXHTableRow({
