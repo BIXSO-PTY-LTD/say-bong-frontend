@@ -1,10 +1,6 @@
-import CustomPopover, { usePopover } from '#/components/custom-popover';
-import Iconify from '#/components/iconify';
 import { IMatchFilterValue, IMatchFilters } from '#/types/match';
 import { ITeamTableFilters } from '#/types/team';
-import { Card, Checkbox, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Select, SelectChangeEvent, Stack, TextField, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { FormControl, Select, SelectChangeEvent } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { useCallback } from 'react';
 
