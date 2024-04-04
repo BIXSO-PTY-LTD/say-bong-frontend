@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------
 const ROOTS = {
   AUTH: '/auth',
-  DASHBOARD: '/dashboard',
+  DASHBOARD: '/admin',
 };
 
 export const paths = {
@@ -38,7 +38,11 @@ export const paths = {
     login: `${ROOTS.AUTH}/login`,
   },
   dashboard: {
-    root: `${ROOTS.DASHBOARD}`,
+    root: '/',
+    customer: {
+      root: `${ROOTS.DASHBOARD}/customer`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/customer/${id}`,
+    },
     news: `${ROOTS.DASHBOARD}/news`,
     video: {
       root: `${ROOTS.DASHBOARD}/video`,

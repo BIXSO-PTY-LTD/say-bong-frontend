@@ -1,12 +1,21 @@
-import CustomerView from "#/sections/admin/customer/view/customer-view";
+"use client"
+
+import { paths } from "#/routes/paths";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
 
-export const metadata = {
-  title: 'Dashboard: Customer',
-};
-
 export default function OverviewAppPage() {
-  return <CustomerView />;
+  const router = useRouter()
+  useEffect(() => {
+    (
+      router.push(paths.dashboard.customer.root)
+
+    )
+  })
+  return (
+    <></>
+  )
 }

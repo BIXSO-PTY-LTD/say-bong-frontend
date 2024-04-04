@@ -1,11 +1,12 @@
+
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { SettingsProvider } from "#/components/settings";
 import ThemeProvider from "#/theme";
 import { MotionLazy } from "#/components/animate/motion-lazy";
 import ProgressBar from "#/components/progress-bar/progress-bar";
 import { AuthProvider } from "#/auth/context";
+import { SnackbarProvider } from "#/components/snackbar";
 
 
 export const metadata: Metadata = {

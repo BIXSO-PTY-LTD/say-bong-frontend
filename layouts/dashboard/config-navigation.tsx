@@ -33,7 +33,7 @@ export function useNavData() {
         items: [
           {
             title: 'Khách hàng',
-            path: paths.dashboard.root,
+            path: paths.dashboard.customer.root,
             icon: ICONS.user,
           },
           {
