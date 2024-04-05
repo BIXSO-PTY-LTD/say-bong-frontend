@@ -25,7 +25,6 @@ export default function DashboardLayout({ children }: Props) {
 
   const isHorizontal = settings.themeLayout === 'horizontal';
 
-
   const renderHorizontal = <NavHorizontal />;
 
   const renderNavVertical = <NavVertical openNav={nav.value} onCloseNav={nav.onFalse} />;
@@ -46,7 +45,6 @@ export default function DashboardLayout({ children }: Props) {
   return (
     <>
       <Header onOpenNav={nav.onTrue} />
-
       <Box
         sx={{
           minHeight: 1,

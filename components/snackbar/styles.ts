@@ -5,7 +5,6 @@ import { alpha, styled } from '@mui/material/styles';
 // ----------------------------------------------------------------------
 
 export const StyledNotistack = styled(MaterialDesignContent)(({ theme }) => {
-  const lightMode = theme.palette.mode === 'light';
 
   return {
     '& #notistack-snackbar': {
@@ -22,8 +21,8 @@ export const StyledNotistack = styled(MaterialDesignContent)(({ theme }) => {
     },
     '&.notistack-MuiContent-default': {
       padding: theme.spacing(1, 2, 1, 1),
-      color: lightMode ? theme.palette.common.white : theme.palette.grey[800],
-      backgroundColor: lightMode ? theme.palette.grey[800] : theme.palette.common.white,
+      color: theme.palette.grey[800],
+      backgroundColor: theme.palette.common.white,
     },
     // '&.notistack-MuiContent-info': {},
     // '&.notistack-MuiContent-success': {},

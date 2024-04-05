@@ -39,20 +39,31 @@ export const paths = {
   },
   dashboard: {
     root: '/',
-    customer: {
-      root: `${ROOTS.DASHBOARD}/customer`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/customer/${id}`,
+    user: {
+      root: `${ROOTS.DASHBOARD}/user`,
+      new: `${ROOTS.DASHBOARD}/user/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/user/${id}`,
     },
-    news: `${ROOTS.DASHBOARD}/news`,
+    news: {
+      root: `${ROOTS.DASHBOARD}/news`,
+      new: `${ROOTS.DASHBOARD}/news/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/news/${id}`,
+    },
     video: {
-      root: `${ROOTS.DASHBOARD}/video`,
-      highlight: `${ROOTS.DASHBOARD}/video/highlight`,
+      exciting: {
+        root: `${ROOTS.DASHBOARD}/video/exciting`,
+        new: `${ROOTS.DASHBOARD}/video/exciting/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/video/exciting/${id}`,
+      },
+      highlight: {
+        root: `${ROOTS.DASHBOARD}/video/highlight`,
+        new: `${ROOTS.DASHBOARD}/video/highlight/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/video/highlight/${id}`,
+      },
     },
     api: `${ROOTS.DASHBOARD}/api`,
     livestream: `${ROOTS.DASHBOARD}/livestream`,
     password: `${ROOTS.DASHBOARD}/password`,
-    user: {
-      edit: (id: string) => `${ROOTS.DASHBOARD}/edit/${id}`
-    }
+
   }
 };

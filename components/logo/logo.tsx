@@ -11,9 +11,10 @@ import Image from '../image';
 
 interface LogoProps extends BoxProps {
   single?: boolean;
+  isAdmin?: boolean;
 }
 
-function Logo({ sx, single }: LogoProps) {
+function Logo({ sx, single, isAdmin }: LogoProps) {
   const fullLogo = (
     <Image alt='logo' src='/assets/images/logo/logo.svg' />
   );
@@ -24,7 +25,7 @@ function Logo({ sx, single }: LogoProps) {
   return (
     <Link
       component={RouterLink}
-      href="/"
+      href={isAdmin ? '/admin' : '/'}
       color="inherit"
       aria-label="go to homepage"
       sx={{ lineHeight: 0 }}

@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Container, IconButton, Pagination, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
+import { Button, Card, Container, IconButton, Pagination, Stack, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
 import { _careerPosts } from '#/_mock/_blog';
 import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
@@ -15,6 +15,7 @@ import Scrollbar from '#/components/scrollbar';
 import UserTableRow from '../user-table-row';
 import { useBoolean } from '#/hooks/use-boolean';
 import { paths } from '#/routes/paths';
+import { RouterLink } from '#/routes/components';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ const defaultFilters: IUserTableFilters = {
   name: '',
 };
 
-export default function CustomerView() {
+export default function UserListView() {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -61,7 +62,7 @@ export default function CustomerView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      router.push(paths.dashboard.user.details(id));
     },
     [router]
   );
@@ -78,9 +79,19 @@ export default function CustomerView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <Typography variant="h3" sx={{
-        mb: { xs: 3, md: 5 },
-      }}>Danh sách user</Typography>
+      <Stack direction="row" justifyContent="space-between" sx={{
+        mb: { xs: 3, md: 5 }
+      }}>
+        <Typography variant="h3">Danh sách người dùng</Typography>
+        <Button
+          component={RouterLink}
+          href={paths.dashboard.user.new}
+          variant="contained"
+          startIcon={<Iconify icon="mingcute:add-line" />}
+        >
+          Thêm người dùng
+        </Button>
+      </Stack>
       <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
         <TableSelectedAction
           dense={table.dense}

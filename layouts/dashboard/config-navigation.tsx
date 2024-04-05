@@ -33,36 +33,26 @@ export function useNavData() {
         items: [
           {
             title: 'Khách hàng',
-            path: paths.dashboard.customer.root,
+            path: paths.dashboard.user.root,
             icon: ICONS.user,
           },
           {
             title: 'Tin tức',
-            path: paths.dashboard.news,
+            path: paths.dashboard.news.root,
             icon: ICONS.blog,
           },
           {
             title: 'Video',
-            path: paths.dashboard.video.root,
+            path: paths.dashboard.video.exciting.root,
             icon: ICONS.video,
             children: [
-              { title: 'Những pha bóng thú vị', path: paths.dashboard.video.root },
+              { title: 'Những pha bóng thú vị', path: paths.dashboard.video.exciting.root },
               {
                 title: 'Highlight',
-                path: paths.dashboard.video.highlight,
+                path: paths.dashboard.video.highlight.root,
               },
 
             ],
-          },
-          {
-            title: 'API cập nhật',
-            path: paths.dashboard.api,
-            icon: ICONS.api,
-          },
-          {
-            title: 'Livestream',
-            path: paths.dashboard.livestream,
-            icon: ICONS.user,
           },
           {
             title: 'Đổi mật khẩu',

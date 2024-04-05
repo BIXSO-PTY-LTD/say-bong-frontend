@@ -1,6 +1,9 @@
-import CustomerView from "#/sections/admin/customer/view/customer-view";
+import UserListView from "#/sections/admin/user/view/user-list-view";
 
 // ----------------------------------------------------------------------
+
+
+
 
 
 export const metadata = {
@@ -8,5 +11,5 @@ export const metadata = {
 };
 
 export default function OverviewAppPage() {
-  return <CustomerView />;
+  return <UserListView />;
 }

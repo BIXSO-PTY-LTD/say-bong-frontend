@@ -1,12 +1,12 @@
-import APIView from "#/sections/admin/api/view/api-view";
+import NewsListView from "#/sections/admin/news/view/news-list-view";
 
 // ----------------------------------------------------------------------
 
 
 export const metadata = {
-  title: 'Dashboard: Customer',
+  title: 'Dashboard: News',
 };
 
 export default function OverviewAppPage() {
-  return <APIView />;
+  return <NewsListView />;
 }

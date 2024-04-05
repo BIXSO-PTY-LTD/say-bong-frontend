@@ -11,7 +11,7 @@ export default function OverviewAppPage() {
   const router = useRouter()
   useEffect(() => {
     (
-      router.push(paths.dashboard.user.root)
+      router.push(paths.dashboard.video.exciting.root)
     )
   })
   return (

@@ -17,8 +17,6 @@ export default function LivestreamChatView() {
 
   const selectedConversationId = 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2' || '';
 
-  const { conversations, conversationsLoading } = useGetConversations();
-
   const { conversation, conversationError } = useGetConversation(`${selectedConversationId}`);
 
   const participants: IChatParticipant[] = conversation
@@ -71,7 +69,7 @@ export default function LivestreamChatView() {
     <Stack
       sx={{
         width: 1,
-        height: "425px",
+        height: "530px",
         overflow: 'hidden',
       }}
     >

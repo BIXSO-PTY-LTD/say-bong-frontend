@@ -2,10 +2,24 @@ import { IAuthorProps } from './author';
 import { ISocialLinks } from './socials';
 
 // ----------------------------------------------------------------------
+export type IBlogTableFilterValue = string | string[];
 
+export type IBlogTableFilters = {
+  title: string;
+};
 export type IBlogCategoryProps = {
   label: string;
   path: string;
+};
+
+export type IPostHero = {
+  title: string;
+  coverUrl: string;
+  createdAt?: Date;
+  author?: {
+    name: string;
+    avatarUrl: string;
+  };
 };
 
 export type IBlogPostProps = {

@@ -37,7 +37,7 @@ export default function Header({ onOpenNav }: Props) {
 
   const renderContent = (
     <>
-      {lgUp && isNavHorizontal && <Logo sx={{ mr: 2.5 }} />}
+      {lgUp && isNavHorizontal && <Logo isAdmin sx={{ mr: 2.5 }} />}
 
       {!lgUp && (
         <IconButton onClick={onOpenNav}>
