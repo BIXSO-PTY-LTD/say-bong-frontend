@@ -15,8 +15,9 @@ type Props = {
 };
 
 export default function MatchItemHorizontal({ match }: Props) {
+
   const {
-    competitions,
+    competition,
     date_time,
     home_team,
     away_team,
@@ -26,7 +27,8 @@ export default function MatchItemHorizontal({ match }: Props) {
     away_score,
     round,
     minute,
-    image
+    image,
+    status
   } = match;
 
   const [formattedDateTime, setFormattedDateTime] = useState('');
@@ -39,17 +41,23 @@ export default function MatchItemHorizontal({ match }: Props) {
   return (
     <Stack component={Card} sx={{ backgroundImage: `url(${image})`, p: 1, backgroundSize: 'cover' }} direction="column">
       <Stack sx={{ py: 0.5, px: '20px', mb: 1 }} direction="row" justifyContent="space-between">
-        <Typography variant="body1">{competitions}</Typography>
+        <Typography variant="body1">{competition}</Typography>
         <Typography variant="body1">{formattedDateTime}</Typography>
       </Stack>
       <Stack direction="row" justifyContent="space-around" spacing={2} alignItems="center">
         <TeamInfo image={home_image} team={home_team} />
-        <Stack direction="column" spacing={2}>
-          <Label color="success" variant="filled">{`Hiệp ${round} : ${minute}'`}</Label>
-          <Label sx={{ background: BACKGROUND_GRADIENT }} variant="filled">
-            {`${home_score} - ${away_score}`}
-          </Label>
-        </Stack>
+        {status === "live" ? (
+          <Stack direction="column" spacing={2}>
+            <Label color="success" variant="filled">{`Hiệp ${round} : ${minute}'`}</Label>
+            <Label sx={{ background: BACKGROUND_GRADIENT }} variant="filled">
+              {`${home_score} - ${away_score}`}
+            </Label>
+          </Stack>
+        ) :
+          (
+            <Typography sx={{ mb: 3 }} variant='h3'>VS</Typography>
+          )}
+
         <TeamInfo image={away_image} team={away_team} />
       </Stack>
     </Stack>
@@ -74,7 +82,9 @@ function TeamInfo({ image, team }: TeamInfoProps) {
           border: '2px solid white',
         }}
       />
-      <Typography variant="body1">{team}</Typography>
+      <Typography variant="body1">
+        {team.length > 9 ? `${team.substring(0, 9)}...` : team}
+      </Typography>
     </Stack>
   );
 }

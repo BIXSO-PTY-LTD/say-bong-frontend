@@ -2,6 +2,9 @@ import { IAuthorProps } from './author';
 import { ISocialLinks } from './socials';
 
 // ----------------------------------------------------------------------
+export type ITourTableFilters = {
+  title: string;
+};
 
 export type ITourProps = {
   id: string;
@@ -35,26 +38,4 @@ export type ITourProps = {
   }[];
 };
 
-export type ITourCheckoutProps = {
-  billingAddress: {
-    firstName: string;
-    lastName: string;
-    fullAddress: string;
-    fullAddress2: string;
-  };
-  shippingAddress: {
-    firstName: string;
-    lastName: string;
-    fullAddress: string;
-    fullAddress2: string;
-  };
-  paymentMethods: {
-    methods: string;
-    card: {
-      cardNumber: string;
-      cardHolder: string;
-      expirationDate: string;
-      ccv: string;
-    };
-  };
-};
+

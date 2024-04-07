@@ -8,6 +8,8 @@ import Image from '#/components/image';
 import TextMaxLine from '#/components/text-max-line';
 import { fDate } from '#/utils/format-time';
 import { IBlogPostProps } from '#/types/blog';
+import { paths } from '#/routes/paths';
+import { RouterLink } from '#/routes/components';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +27,6 @@ export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
       sx={{ width: 1 }}
     >
       <Image
-        disabledEffect
         alt={post.title}
         src={post.coverUrl}
         sx={{
@@ -37,7 +38,7 @@ export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit">
+        <Link color="inherit" component={RouterLink} href={paths.highlight.details(post.id)}>
           <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{post.title}</TextMaxLine>
         </Link>
 

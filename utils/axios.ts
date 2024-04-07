@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { CHAT_API } from '#/config-global';
+import { HOST_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: CHAT_API });
+const axiosInstance = axios.create({ baseURL: HOST_API });
 
 axiosInstance.interceptors.response.use(
   (res) => res,

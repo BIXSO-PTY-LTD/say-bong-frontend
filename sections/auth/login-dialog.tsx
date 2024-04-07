@@ -3,7 +3,7 @@
 import { useBoolean } from '#/hooks/use-boolean';
 import { RouterLink } from '#/routes/components';
 import { paths } from '#/routes/paths';
-import { Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
 import { m, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -65,7 +65,7 @@ export default function LoginDialog({ open, openRegister, onClose }: LoginDialog
   });
 
   const renderHead = (
-    <div>
+    <Box >
       <Typography variant="h3" sx={{ color: "black" }} paragraph>
         Đăng nhập
       </Typography>
@@ -82,7 +82,7 @@ export default function LoginDialog({ open, openRegister, onClose }: LoginDialog
           Đăng kí
         </Typography>
       </Typography>
-    </div >
+    </Box>
   );
 
   const renderForm = (
@@ -125,7 +125,7 @@ export default function LoginDialog({ open, openRegister, onClose }: LoginDialog
     <AnimatePresence>
       <Dialog open={open} onClose={onClose} PaperComponent={(props: PaperProps) => (
         <m.div {...varSlide().inUp}>
-          <Paper {...props}>{props.children}</Paper>
+          <Paper sx={{ background: theme => theme.palette.common.white }} {...props}>{props.children}</Paper>
         </m.div>
       )}>
         <Stack

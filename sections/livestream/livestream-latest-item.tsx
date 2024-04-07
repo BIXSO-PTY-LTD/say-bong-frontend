@@ -51,7 +51,6 @@ export default function LivestreamLatestItem({ tour,
 
         </Box>
         <Image
-          disabledEffect
           src={tour.coverUrl}
           alt={tour.slug}
           ratio={(largeTour && '3/4') ||

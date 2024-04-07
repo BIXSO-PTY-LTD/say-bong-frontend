@@ -1,8 +1,10 @@
 // ----------------------------------------------------------------------
 
 export type SettingsValueProps = {
+  themeStretch: boolean;
   themeDirection: 'rtl' | 'ltr';
   themeColorPresets: 'default' | 'preset01' | 'preset02' | 'preset03' | 'preset04' | 'preset05';
+  themeLayout: 'vertical' | 'horizontal';
 };
 
 export type SettingsContextProps = SettingsValueProps & {

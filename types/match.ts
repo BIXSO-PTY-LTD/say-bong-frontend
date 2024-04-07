@@ -4,13 +4,13 @@
 export type IMatchFilterValue = string | string[];
 
 export type IMatchFilters = {
-  competitions: string[];
+  competition: string;
   status: string;
 };
 
 export type IMatchItem = {
   id: string;
-  competitions: string;
+  competition: string;
   status: string;
   date_time: Date;
   home_team: string;

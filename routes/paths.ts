@@ -1,4 +1,8 @@
 // ----------------------------------------------------------------------
+const ROOTS = {
+  AUTH: '/auth',
+  DASHBOARD: '/admin',
+};
 
 export const paths = {
   home: "/",
@@ -7,7 +11,12 @@ export const paths = {
     details: (id: string) => `/livestream/${id}`,
   },
   highlight: {
-    root: "/highlight"
+    root: "/highlight",
+    details: (id: string) => `/highlight/${id}`,
+
+  },
+  exciting: {
+    details: (Id: string) => `/highlight/exciting/${Id}`,
   },
   bxh: {
     root: "/bxh"
@@ -20,7 +29,41 @@ export const paths = {
   },
   news: {
     root: "/news",
-    details: "/news/details"
-  }
+    details: (id: string) => `/news/${id}`,
+  },
+  account: {
+    root: "/account"
+  },
+  auth: {
+    login: `${ROOTS.AUTH}/login`,
+  },
+  dashboard: {
+    root: '/',
+    user: {
+      root: `${ROOTS.DASHBOARD}/user`,
+      new: `${ROOTS.DASHBOARD}/user/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/user/${id}`,
+    },
+    news: {
+      root: `${ROOTS.DASHBOARD}/news`,
+      new: `${ROOTS.DASHBOARD}/news/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/news/${id}`,
+    },
+    video: {
+      exciting: {
+        root: `${ROOTS.DASHBOARD}/video/exciting`,
+        new: `${ROOTS.DASHBOARD}/video/exciting/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/video/exciting/${id}`,
+      },
+      highlight: {
+        root: `${ROOTS.DASHBOARD}/video/highlight`,
+        new: `${ROOTS.DASHBOARD}/video/highlight/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/video/highlight/${id}`,
+      },
+    },
+    api: `${ROOTS.DASHBOARD}/api`,
+    livestream: `${ROOTS.DASHBOARD}/livestream`,
+    password: `${ROOTS.DASHBOARD}/change-password`,
 
+  }
 };

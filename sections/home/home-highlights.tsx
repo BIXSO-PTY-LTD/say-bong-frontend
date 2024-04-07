@@ -28,7 +28,7 @@ export default function HomeHighlight({ posts }: Props) {
   const viewAllBtn = (
     <Button
       component={RouterLink}
-      href={paths.news.root}
+      href={paths.highlight.root}
       color="inherit"
       endIcon={<Iconify icon="carbon:chevron-right" />}
     >
@@ -67,7 +67,8 @@ export default function HomeHighlight({ posts }: Props) {
           gap: { xs: 3, md: 4 },
           gridTemplateColumns: {
             xs: 'repeat(1, 1fr)',
-            sm: 'repeat(12, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(12, 1fr)',
           },
         }}
       >

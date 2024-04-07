@@ -38,7 +38,6 @@ export default function HomeHighlightItem({ post,
         }}
       >
         <Image
-          disabledEffect
           src={post.coverUrl}
           alt={post.title}
           ratio={(largePost && '3/4') ||
@@ -60,7 +59,7 @@ export default function HomeHighlightItem({ post,
           }}
         >
 
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details} color="inherit">
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(post.id)} color="inherit">
             <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
           </Link>
 

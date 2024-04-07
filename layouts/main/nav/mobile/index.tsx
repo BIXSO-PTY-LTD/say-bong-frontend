@@ -46,7 +46,9 @@ export default function NavMobile({ data }: NavProps) {
           },
         }}
       >
-        <Scrollbar>
+        <Scrollbar
+
+        >
           <Logo sx={{ mx: 2.5, my: 3 }} />
 
           <List component="nav" disablePadding>

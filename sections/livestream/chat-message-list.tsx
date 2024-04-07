@@ -26,7 +26,7 @@ export default function ChatMessageList({ messages = [], participants }: Props) 
 
   return (
     <>
-      <Box ref={messagesEndRef} sx={{ overflow: "auto", px: 3, py: 5, height: 1 }}>
+      <Scrollbar ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1 }}>
         <Box>
           {messages.map((message) => (
             <ChatMessageItem
@@ -37,7 +37,7 @@ export default function ChatMessageList({ messages = [], participants }: Props) 
             />
           ))}
         </Box>
-      </Box>
+      </Scrollbar>
 
       <Lightbox
         index={lightbox.selected}

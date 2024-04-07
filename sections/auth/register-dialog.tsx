@@ -130,7 +130,7 @@ export default function RegisterDialog({ open, openLogin, onClose }: RegisterDia
     <AnimatePresence>
       <Dialog open={open} onClose={onClose} PaperComponent={(props: PaperProps) => (
         <m.div {...varSlide().inUp}>
-          <Paper {...props}>{props.children}</Paper>
+          <Paper sx={{ background: theme => theme.palette.common.white }} {...props}>{props.children}</Paper>
         </m.div>
       )}>
         <Stack

@@ -53,7 +53,7 @@ export default function ChatMessageInput({
       address: `${user?.address}`,
       name: `${user?.displayName}`,
       lastActivity: new Date(),
-      avatarUrl: `${user?.photoURL}`,
+      avatarUrl: `${user?.avatarUrl}`,
       phoneNumber: `${user?.phoneNumber}`,
       status: 'online' as 'online' | 'offline' | 'alway' | 'busy',
     }),

@@ -17,14 +17,15 @@ type Props = {
   post: IBlogPostProps;
   // order?: number;
   largePost?: boolean;
+  transparent?: boolean;
 };
 
-export default function HomeLatestPostItem({ post,
+export default function HomeLatestPostItem({ post, transparent,
   //  order,
   largePost }: Props) {
 
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
       <Stack
         spacing={2}
         sx={{
@@ -36,7 +37,6 @@ export default function HomeLatestPostItem({ post,
         }}
       >
         <Image
-          disabledEffect
           src={post.coverUrl}
           alt={post.title}
           ratio={(largePost && '3/4') ||
@@ -58,7 +58,7 @@ export default function HomeLatestPostItem({ post,
           }}
         >
           <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details} color="inherit">
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
             <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
           </Link>
 
