@@ -1,12 +1,12 @@
-import NewsListView from "#/sections/admin/news/view/news-list-view";
+import { HighlightListView } from "#/sections/admin/highlight/view";
 
 // ----------------------------------------------------------------------
 
 
 export const metadata = {
-  title: 'Dashboard: News',
+  title: 'Dashboard: Highlights',
 };
 
-export default function OverviewAppPage() {
-  return <NewsListView />;
+export default function HighlightPage() {
+  return <HighlightListView />;
 }

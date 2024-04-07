@@ -19,7 +19,7 @@ type Props = {
   largePost?: boolean;
 };
 
-export default function HighlightLatestItem({ post,
+export default function ExcitingLatestItem({ post,
   //  order,
   largePost }: Props) {
 

@@ -7,6 +7,6 @@ export const metadata = {
   title: 'Dashboard: News',
 };
 
-export default function OverviewAppPage() {
+export default function NewsPage() {
   return <NewsListView />;
 }

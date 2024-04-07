@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -29,6 +29,7 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
   RHFUpload,
+  RHFUploadFile,
 } from '#/components/hook-form';
 
 import { IUserItem } from '#/types/user';
@@ -37,34 +38,43 @@ import { CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
 import { useBoolean } from '#/hooks/use-boolean';
+import { ITourProps } from '#/types/tour';
+import { Upload } from '#/components/upload';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentNews?: IBlogPostProps;
+  currentVideo?: ITourProps;
 };
 
-export default function NewsNewEditForm({ currentNews }: Props) {
+export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const router = useRouter();
+
+  const [file, setFile] = useState<File | string | null>(currentVideo?.video || null);
 
   const mdUp = useResponsive('up', 'md');
 
-  const preview = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
 
+  useEffect(() => {
+    if (currentVideo?.video) {
+      setFile(currentVideo.video);
+    }
+  }, [currentVideo?.video]);
+
   const NewPostSchema = Yup.object().shape({
-    title: Yup.string().required('Title is required'),
-    content: Yup.string().required('Content is required'),
+    slug: Yup.string().required('slug is required'),
+    video: Yup.mixed<any>().nullable().required('Video is required')
   });
 
   const defaultValues = useMemo(
     () => ({
-      title: currentNews?.title || '',
-      content: currentNews?.content || '',
+      slug: currentVideo?.slug || '',
+      video: currentVideo?.video || null,
     }),
-    [currentNews]
+    [currentVideo]
   );
 
   const methods = useForm({
@@ -81,12 +91,25 @@ export default function NewsNewEditForm({ currentNews }: Props) {
     formState: { isSubmitting },
   } = methods;
 
+  const handleDrop = useCallback((acceptedFiles: File[]) => {
+    const newFile = acceptedFiles[0];
+    if (newFile) {
+      setFile(
+        Object.assign(newFile, {
+          preview: URL.createObjectURL(newFile),
+        })
+      );
+    }
+  }, []);
+
+
+
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
-      enqueueSnackbar(currentNews ? 'Cập nhật thành công!' : 'Tạo thành công!');
+      enqueueSnackbar(currentVideo ? 'Cập nhật thành công!' : 'Tạo thành công!');
       router.push(paths.dashboard.news.root);
       console.info('DATA', data);
     } catch (error) {
@@ -104,21 +127,21 @@ export default function NewsNewEditForm({ currentNews }: Props) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Title, short description, image...
+            slug, short description, image...
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Details" />}
+          {!mdUp && <CardHeader slug="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField inputColor='#fff' name="title" label="Post Title" />
+            <RHFTextField inputColor='#fff' name="slug" label="Post slug" />
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Content</Typography>
-              <RHFEditor simple name="content" />
+              <Typography variant="subtitle2">Video</Typography>
+              <Upload file={file} onDrop={handleDrop} onDelete={() => setFile(null)} />
             </Stack>
           </Stack>
         </Card>

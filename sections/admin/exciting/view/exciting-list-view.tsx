@@ -8,21 +8,21 @@ import { _userList } from '#/_mock/_user';
 import Iconify from '#/components/iconify';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
-import { IBlogPostProps, IBlogTableFilters } from '#/types/blog';
-import NewsListHorizontal from '../news-list-horizontal';
+import { ITourProps, ITourTableFilters } from '#/types/tour';
+import ExcitingListHorizontal from '../exciting-list-horizontal';
 
 // ----------------------------------------------------------------------
 
 
-const defaultFilters: IBlogTableFilters = {
+const defaultFilters: ITourTableFilters = {
   title: '',
 };
 
-export default function NewsListView() {
+export default function ExcitingListView() {
   const settings = useSettingsContext();
 
   const dataFiltered = applyFilter({
-    inputData: _marketingPosts,
+    inputData: _tours,
   });
 
 
@@ -35,17 +35,17 @@ export default function NewsListView() {
       <Stack direction="row" justifyContent="space-between" sx={{
         mb: { xs: 3, md: 5 }
       }}>
-        <Typography variant="h3">Danh sách tin tức</Typography>
+        <Typography variant="h3">Danh sách những pha bóng thú vị</Typography>
         <Button
           component={RouterLink}
-          href={paths.dashboard.news.new}
+          href={paths.dashboard.video.exciting.new}
           variant="contained"
           startIcon={<Iconify icon="mingcute:add-line" />}
         >
           Thêm video
         </Button>
       </Stack>
-      <NewsListHorizontal news={dataFiltered}
+      <ExcitingListHorizontal news={dataFiltered}
       //  loading={newsLoading} 
       />
 
@@ -68,7 +68,7 @@ export default function NewsListView() {
 function applyFilter({
   inputData,
 }: {
-  inputData: IBlogPostProps[];
+  inputData: ITourProps[];
 }) {
 
   return inputData;

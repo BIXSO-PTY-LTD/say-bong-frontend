@@ -63,7 +63,7 @@ export const paths = {
     },
     api: `${ROOTS.DASHBOARD}/api`,
     livestream: `${ROOTS.DASHBOARD}/livestream`,
-    password: `${ROOTS.DASHBOARD}/password`,
+    password: `${ROOTS.DASHBOARD}/change-password`,
 
   }
 };

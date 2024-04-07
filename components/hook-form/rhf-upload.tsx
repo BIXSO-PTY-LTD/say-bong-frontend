@@ -53,6 +53,22 @@ export function RHFUploadBox({ name, ...other }: Props) {
 
 // ----------------------------------------------------------------------
 
+export function RHFUploadFile({ name, ...other }: Props) {
+  const { control } = useFormContext();
+
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState: { error } }) => (
+        <Upload files={field.value} error={!!error} {...other} />
+      )}
+    />
+  );
+}
+
+// ----------------------------------------------------------------------
+
 export function RHFUpload({ name, multiple, helperText, ...other }: Props) {
   const { control } = useFormContext();
 
@@ -95,3 +111,7 @@ export function RHFUpload({ name, multiple, helperText, ...other }: Props) {
     />
   );
 }
+
+// ----------------------------------------------------------------------
+
+

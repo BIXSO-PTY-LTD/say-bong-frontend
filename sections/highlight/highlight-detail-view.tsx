@@ -5,7 +5,7 @@ import { Box, Container, Grid, Typography } from "@mui/material"
 import { _tours } from "#/_mock"
 import HighlightVideo from "./highlight-video"
 import { _careerPosts } from "#/_mock/_blog"
-import ExcitingLatest from "./exciting-latest"
+import ExcitingLatest from "./exciting/exciting-latest"
 import HighlightLatest from "./highlight-latest"
 
 type Props = {

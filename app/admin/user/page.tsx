@@ -10,6 +10,6 @@ export const metadata = {
   title: 'Dashboard: Khách hàng',
 };
 
-export default function OverviewAppPage() {
+export default function UserPage() {
   return <UserListView />;
 }

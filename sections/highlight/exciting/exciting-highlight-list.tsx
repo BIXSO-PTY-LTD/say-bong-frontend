@@ -1,7 +1,7 @@
 import { ITourProps } from '#/types/tour';
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
-import HighlightItem from './highlight-item';
+import HighlightItem from '../highlight-item';
 import ExcitingHighlightItem from './exciting-highlight-item';
 import { Typography } from '@mui/material';
 

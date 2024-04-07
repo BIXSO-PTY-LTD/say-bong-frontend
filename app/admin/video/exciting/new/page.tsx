@@ -1,13 +1,13 @@
-import { NewsCreateView } from "#/sections/admin/news/view";
-import UserCreateView from "#/sections/admin/user/view/user-create-view";
+import { ExcitingCreateView } from "#/sections/admin/exciting/view";
+
 
 // ----------------------------------------------------------------------
 
 
 export const metadata = {
-  title: 'Dashboard: Thêm tin tức',
+  title: 'Dashboard: Thêm những pha bóng thú vị',
 };
 
-export default function NewsCreatePage() {
-  return <NewsCreateView />;
+export default function ExcitingCreatePage() {
+  return <ExcitingCreateView />;
 }

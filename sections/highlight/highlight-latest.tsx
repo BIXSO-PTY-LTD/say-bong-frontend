@@ -9,10 +9,8 @@ import { useResponsive } from '#/hooks/use-responsive';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import Iconify from '#/components/iconify';
-import HighlightLatestItem from './exciting-latest-item';
-import HighlightLatestMobile from './exciting-latest-mobile';
-import ExcitingLatestItem from './exciting-latest-item';
-import ExcitingLatestMobile from './exciting-latest-mobile';
+import HighlightLatestItem from './highlight-latest-item';
+import HighlightLatestMobile from './highlight-latest-mobile';
 
 
 

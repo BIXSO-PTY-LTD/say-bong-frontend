@@ -1,11 +1,11 @@
 import { _userList } from '#/_mock/_user';
-import { NewsEditView } from '#/sections/admin/news/view';
+import { HighlightEditView } from '#/sections/admin/highlight/view';
 
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: Thông tin tin tức',
+  title: 'Dashboard: Thông tin Highlight',
 };
 
 type Props = {
@@ -14,9 +14,9 @@ type Props = {
   };
 };
 
-export default function NewsEditPage({ params }: Props) {
+export default function HighlightEditPage({ params }: Props) {
   const { id } = params;
 
-  return <NewsEditView id={id} />;
+  return <HighlightEditView id={id} />;
 }
 
