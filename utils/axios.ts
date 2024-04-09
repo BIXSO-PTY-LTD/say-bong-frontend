@@ -1,53 +1,46 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { ASSETS_API, HOST_API } from '#/config-global';
+import { getStorage } from '#/hooks/use-local-storage';
 
-import { HOST_API } from '#/config-global';
+const axiosHostInstance: AxiosInstance = axios.create({ baseURL: HOST_API });
+const axiosAssetsInstance: AxiosInstance = axios.create({ baseURL: ASSETS_API });
 
-// ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: HOST_API });
+const responseInterceptor = (error: any) => Promise.reject((error.response && error.response.data) || 'Something went wrong');
 
-axiosInstance.interceptors.response.use(
-  (res) => res,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
-);
+axiosHostInstance.interceptors.response.use((res) => res, responseInterceptor);
+axiosAssetsInstance.interceptors.response.use((res) => res, responseInterceptor);
 
-export default axiosInstance;
+export const axiosHost: AxiosInstance = axiosHostInstance;
+export const axiosAssets: AxiosInstance = axiosAssetsInstance;
 
-// ----------------------------------------------------------------------
-
-export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
+export const hostFetcher = async (args: string | [string, AxiosRequestConfig]) => {
   const [url, config] = Array.isArray(args) ? args : [args];
 
-  const res = await axiosInstance.get(url, { ...config });
+  const res = await axiosHostInstance.get(url, { ...config });
 
   return res.data;
 };
 
-// ----------------------------------------------------------------------
+export const assetsFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+  const [url, config] = Array.isArray(args) ? args : [args];
+
+  const res = await axiosAssetsInstance.get(url, { ...config });
+
+  return res.data;
+};
 
 export const endpoints = {
   chat: '/api/chat',
-  kanban: '/api/kanban',
-  calendar: '/api/calendar',
   auth: {
-    me: '/api/auth/me',
-    login: '/api/auth/login',
-    register: '/api/auth/register',
+    me: '/api/v1/me',
+    login: '/api/v1/login',
+    register: '/api/v1/register',
+    changePassword: '/api/v1/change-password',
+    logout: '/api/v1/logout',
+    refreshToken: '/api/v1/refresh-token',
   },
-  mail: {
-    list: '/api/mail/list',
-    details: '/api/mail/details',
-    labels: '/api/mail/labels',
-  },
-  post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
-  },
-  product: {
-    list: '/api/product/list',
-    details: '/api/product/details',
-    search: '/api/product/search',
-  },
+  user: {
+    update: '/api/v1/user'
+  }
 };

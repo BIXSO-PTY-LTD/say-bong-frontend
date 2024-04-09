@@ -30,8 +30,8 @@ export default function SnackbarProvider({ children }: Props) {
       preventDuplicate
       autoHideDuration={3000}
       TransitionComponent={isRTL ? Collapse : undefined}
-      variant="success" // Set default variant
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      variant="success"
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       iconVariant={{
         info: (
           <StyledIcon color="info">

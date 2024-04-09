@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'; // Import useState hook
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
+import { Alert, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
 import { m, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
@@ -12,6 +12,8 @@ import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { useBoolean } from '#/hooks/use-boolean';
 import { varSlide } from '#/components/animate/variants';
+import { useAuthContext } from '#/auth/hooks';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 type RegisterDialogProps = {
@@ -21,8 +23,13 @@ type RegisterDialogProps = {
 };
 
 export default function RegisterDialog({ open, openLogin, onClose }: RegisterDialogProps) {
+  const { register } = useAuthContext();
   const passwordShow = useBoolean();
   const theme = useTheme();
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const { enqueueSnackbar } = useSnackbar();
+
 
   const handleLogin = useCallback(() => {
     onClose();
@@ -30,19 +37,23 @@ export default function RegisterDialog({ open, openLogin, onClose }: RegisterDia
   }, [onClose, openLogin])
 
   const RegisterSchema = Yup.object().shape({
-    phone_number: Yup.string().required('Hãy điền số điện thoại'),
-    name: Yup.string().required('Hãy điền tên của bạn'),
-    username: Yup.string().required('Hãy điền tên tài khoản'),
+    phone: Yup.string()
+      .matches(/^\d{10}$/, 'Số điện thoại phải có đúng 10 chữ số')
+      .required('Hãy điền số điện thoại'),
+    fullName: Yup.string().required('Hãy điền tên của bạn'),
+    userName: Yup.string().required('Hãy điền tên tài khoản'),
     password: Yup.string().required('Hãy điền mật khẩu'),
-    confirm_password: Yup.string().oneOf([Yup.ref('password'), undefined], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password')], 'Mật khẩu xác nhận phải trùng khớp với mật khẩu')
+      .required('Hãy nhập mật khẩu xác nhận'),
   });
 
   const defaultValues = {
-    phone_number: '',
-    name: '',
-    username: '',
+    phone: '',
+    fullName: '',
+    userName: '',
     password: '',
-    confirm_password: '',
+    confirmPassword: '',
   };
 
   const methods = useForm({
@@ -58,11 +69,17 @@ export default function RegisterDialog({ open, openLogin, onClose }: RegisterDia
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      console.log('DATA', data);
+
+      await register?.(data.fullName, data.userName, data.phone, data.password, data.confirmPassword);
+      onClose()
+      enqueueSnackbar("Đăng ký thành công")
     } catch (error) {
-      console.error(error);
+      if (error instanceof Yup.ValidationError) {
+        const errorMessage = error.errors[0];
+        setErrorMsg(errorMessage);
+      } else {
+        console.error(error);
+      }
     }
   });
 
@@ -90,9 +107,10 @@ export default function RegisterDialog({ open, openLogin, onClose }: RegisterDia
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2.5} alignItems="flex-end">
-        <RHFTextField name="phone_number" label="Số điện thoại" />
-        <RHFTextField name="name" label="Tên" />
-        <RHFTextField name="username" label="Tên tài khoản" />
+        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+        <RHFTextField name="phone" label="Số điện thoại" />
+        <RHFTextField name="fullName" label="Họ Tên" />
+        <RHFTextField name="userName" label="Tên tài khoản" />
         <RHFTextField
           name="password"
           label="Mật khẩu"
@@ -108,9 +126,18 @@ export default function RegisterDialog({ open, openLogin, onClose }: RegisterDia
           }}
         />
         <RHFTextField
-          name="confirm_password"
-          label="Xác nhận mật khẩu"
-          type="password"
+          name="confirmPassword"
+          label="Nhập lại mật khẩu"
+          type={passwordShow.value ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={passwordShow.onToggle} edge="end">
+                  <Iconify icon={passwordShow.value ? 'carbon:view' : 'carbon:view-off'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <LoadingButton
           fullWidth

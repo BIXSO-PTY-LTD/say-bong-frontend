@@ -17,3 +17,10 @@ export type IUserItem = {
   phoneNumber: string;
 };
 
+export type IUserAccount = {
+  id: string;
+  fullName: string;
+  userName: string;
+  phone: string;
+  email: string;
+};

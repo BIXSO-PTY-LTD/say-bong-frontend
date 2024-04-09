@@ -24,6 +24,7 @@ import RegisterDialog from '#/sections/auth/register-dialog';
 import { useMockedUser } from '#/hooks/use-mocked-user';
 import AccountPopover from '../common/account-popover';
 import ChangePasswordDialog from '#/sections/auth/change-password-dialog';
+import { useAuthContext } from '#/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ import ChangePasswordDialog from '#/sections/auth/change-password-dialog';
 export default function Header() {
   const theme = useTheme();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const dialogLoginOpen = useBoolean();
 

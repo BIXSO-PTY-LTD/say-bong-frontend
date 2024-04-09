@@ -3,7 +3,7 @@
 import { useBoolean } from '#/hooks/use-boolean';
 import { RouterLink } from '#/routes/components';
 import { paths } from '#/routes/paths';
-import { Box, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
+import { Alert, Box, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
 import { m, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -13,7 +13,9 @@ import { RHFTextField } from '#/components/hook-form';
 import Iconify from '#/components/iconify';
 import { LoadingButton } from '@mui/lab';
 import { varSlide } from '#/components/animate/variants';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useAuthContext } from '#/auth/hooks';
 
 // ----------------------------------------------------------------------
 type LoginDialogProps = {
@@ -23,6 +25,12 @@ type LoginDialogProps = {
 };
 
 export default function LoginDialog({ open, openRegister, onClose }: LoginDialogProps) {
+  const { login } = useAuthContext();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [errorMsg, setErrorMsg] = useState('');
+
   const passwordShow = useBoolean();
 
   const theme = useTheme();
@@ -33,13 +41,13 @@ export default function LoginDialog({ open, openRegister, onClose }: LoginDialog
   }, [onClose, openRegister])
 
   const LoginSchema = Yup.object().shape({
-    phone_or_account: Yup.string().required('Hãy điền số điện thoại hoặc tên tài khoản'),
+    phoneOrUserName: Yup.string().required('Hãy điền số điện thoại hoặc tên tài khoản'),
     password: Yup.string()
       .required('Hãy điền mật khẩu')
   });
 
   const defaultValues = {
-    phone_or_account: '',
+    phoneOrUserName: '',
     password: '',
   };
 
@@ -56,11 +64,13 @@ export default function LoginDialog({ open, openRegister, onClose }: LoginDialog
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      console.log('DATA', data);
-    } catch (error) {
+      await login?.(data.phoneOrUserName, data.password);
+      onClose();
+      enqueueSnackbar('Đăng nhập thành công');
+    } catch (error: any) {
       console.error(error);
+      reset();
+      setErrorMsg(typeof error === 'string' ? error : "Sai tên đăng nhập hoặc mật khẩu");
     }
   });
 
@@ -88,7 +98,8 @@ export default function LoginDialog({ open, openRegister, onClose }: LoginDialog
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2.5} alignItems="flex-end">
-        <RHFTextField inputColor="black" name="phone_or_account" label="Số điện thoại / Tài khoản" />
+        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+        <RHFTextField inputColor="black" name="phoneOrUserName" label="Số điện thoại / Tài khoản" />
 
         <RHFTextField
           inputColor="black"

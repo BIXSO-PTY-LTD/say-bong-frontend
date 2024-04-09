@@ -10,7 +10,7 @@ import { useAuthContext } from '../hooks';
 // ----------------------------------------------------------------------
 
 const loginPaths: Record<string, string> = {
-  login: paths.auth.login,
+  login: "/",
 };
 
 // ----------------------------------------------------------------------

@@ -1,25 +1,21 @@
 import { m } from 'framer-motion';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 
-import { paths } from '#/routes/paths';
 import { useRouter } from '#/routes/hooks';
 
-import { useMockedUser } from '#/hooks/use-mocked-user';
 
-// import { useAuthContext } from '#/auth/hooks';
 
 import { useSnackbar } from '#/components/snackbar';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 import { varHover } from '#/components/animate/variants';
 import { useCallback } from 'react';
+import { useAuthContext } from '#/auth/hooks';
+import { paths } from '#/routes/paths';
+import { alpha } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -29,16 +25,23 @@ type Props = {
 
 
 export default function AccountPopover({ onOpen }: Props) {
+
   const router = useRouter();
-
-  const { user } = useMockedUser();
-
-  // const { logout } = useAuthContext();
-
+  const { user, logout } = useAuthContext();
   const handleChangePasswordDialog = useCallback(() => {
     onOpen()
   }, [onOpen])
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      popover.onClose();
+      enqueueSnackbar('Bạn đã đăng xuất');
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+    }
+  };
   const OPTIONS = [
     {
       label: 'Tài khoản',
@@ -50,7 +53,7 @@ export default function AccountPopover({ onOpen }: Props) {
     },
     {
       label: 'Đăng xuất',
-      linkTo: '/',
+      linkTo: handleLogout,
     },
   ];
 
@@ -58,16 +61,7 @@ export default function AccountPopover({ onOpen }: Props) {
 
   const popover = usePopover();
 
-  const handleLogout = async () => {
-    try {
-      // await logout();
-      popover.onClose();
-      router.replace('/');
-    } catch (error) {
-      console.error(error);
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
-    }
-  };
+
 
   const handleClickItem = (path: string | (() => void)) => {
     popover.onClose();
@@ -97,15 +91,15 @@ export default function AccountPopover({ onOpen }: Props) {
         }}
       >
         <Avatar
-          src={user?.avatarUrl}
-          alt={user?.displayName}
+          src={user?.profileImage}
+          alt={user?.userName}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {user?.displayName.charAt(0).toUpperCase()}
+          {user?.fullName?.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 

@@ -23,13 +23,10 @@ type Props = {
 };
 
 export default function LivestreamItem({ tour }: Props) {
-  const { id, slug, location, price, priceSale, favorited, duration, ratingNumber, coverUrl } = tour;
+  const { id, slug, coverUrl } = tour;
 
-  const [favorite, setFavorite] = useState(favorited);
 
-  const handleChangeFavorite = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setFavorite(event.target.checked);
-  }, []);
+
 
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
@@ -49,8 +46,6 @@ export default function LivestreamItem({ tour }: Props) {
       </Box>
 
       <Image alt={slug} src={coverUrl} ratio="1/1" />
-
-
 
       <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit" >
         <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>

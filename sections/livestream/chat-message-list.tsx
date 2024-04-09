@@ -26,18 +26,16 @@ export default function ChatMessageList({ messages = [], participants }: Props) 
 
   return (
     <>
-      <Scrollbar ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1 }}>
-        <Box>
-          {messages.map((message) => (
-            <ChatMessageItem
-              key={message.id}
-              message={message}
-              participants={participants}
-              onOpenLightbox={() => lightbox.onOpen(message.body)}
-            />
-          ))}
-        </Box>
-      </Scrollbar>
+      <Box ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1, overflow: "auto" }}>
+        {messages.map((message) => (
+          <ChatMessageItem
+            key={message.id}
+            message={message}
+            participants={participants}
+            onOpenLightbox={() => lightbox.onOpen(message.body)}
+          />
+        ))}
+      </Box>
 
       <Lightbox
         index={lightbox.selected}

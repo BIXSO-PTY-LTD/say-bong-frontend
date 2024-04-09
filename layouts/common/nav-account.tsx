@@ -39,7 +39,7 @@ export default function NavAccount() {
           </Typography>
         </Stack>
 
-        <Button variant="contained" href={paths.dashboard.root} target="_blank" rel="noopener">
+        <Button variant="contained" href={paths.dashboard.root}>
           Đăng xuất
         </Button>
       </Stack>

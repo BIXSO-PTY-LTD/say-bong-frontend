@@ -12,6 +12,7 @@ type Props = {
 }
 export default function LivestreamDetailView({ currentTour }: Props) {
   const filteredTours = currentTour ? _tours.filter(tour => tour.id !== currentTour.id) : _tours;
+
   return (
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
@@ -20,7 +21,7 @@ export default function LivestreamDetailView({ currentTour }: Props) {
           <LivestreamVideo currentTour={currentTour} />
         </Grid>
         <Grid item xs={12} md={4}>
-          <LivestreamChatView />
+          <LivestreamChatView currentTour={currentTour} />
         </Grid>
       </Grid>
       <LivestreamLastest tours={filteredTours} />

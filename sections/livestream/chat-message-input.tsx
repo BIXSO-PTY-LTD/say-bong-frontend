@@ -25,7 +25,7 @@ type Props = {
   onAddRecipients: (recipients: IChatParticipant[]) => void;
   //
   disabled: boolean;
-  selectedConversationId: string;
+  selectedConversationId?: string;
 };
 
 export default function ChatMessageInput({

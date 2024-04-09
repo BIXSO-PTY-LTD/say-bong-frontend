@@ -2,7 +2,7 @@
 
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
-import axios, { endpoints } from '#/utils/axios';
+import { axiosAssets, axiosHost, endpoints } from '#/utils/axios';
 
 import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
@@ -86,15 +86,13 @@ export function AuthProvider({ children }: Props) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = sessionStorage.getItem(STORAGE_KEY);
-
+      const accessToken = localStorage.getItem(STORAGE_KEY);
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.get(endpoints.auth.me);
+        const res = await axiosHost.get(endpoints.auth.me);
 
-        const { user } = res.data;
-
+        const user = res.data;
         dispatch({
           type: Types.INITIAL,
           payload: {
@@ -128,16 +126,15 @@ export function AuthProvider({ children }: Props) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (phoneOrUserName: string, password: string) => {
     const data = {
-      email,
+      phoneOrUserName,
       password,
     };
 
-    const res = await axios.post(endpoints.auth.login, data);
+    const res = await axiosHost.post(endpoints.auth.login, data);
 
     const { accessToken, user } = res.data;
-
     setSession(accessToken);
 
     dispatch({
@@ -153,19 +150,20 @@ export function AuthProvider({ children }: Props) {
 
   // REGISTER
   const register = useCallback(
-    async (email: string, password: string, firstName: string, lastName: string) => {
+    async (fullName: string, userName: string, phone: string, password: string, confirmPassword: string) => {
       const data = {
-        email,
+        fullName,
+        userName,
+        phone,
         password,
-        firstName,
-        lastName,
+        confirmPassword
       };
 
-      const res = await axios.post(endpoints.auth.register, data);
+      const res = await axiosHost.post(endpoints.auth.register, data);
 
       const { accessToken, user } = res.data;
 
-      sessionStorage.setItem(STORAGE_KEY, accessToken);
+      localStorage.setItem(STORAGE_KEY, accessToken);
 
       dispatch({
         type: Types.REGISTER,
@@ -182,6 +180,7 @@ export function AuthProvider({ children }: Props) {
 
   // LOGOUT
   const logout = useCallback(async () => {
+    await axiosHost.post(endpoints.auth.logout);
     setSession(null);
     dispatch({
       type: Types.LOGOUT,
@@ -197,7 +196,7 @@ export function AuthProvider({ children }: Props) {
   const memoizedValue = useMemo(
     () => ({
       user: state.user,
-      method: 'jwt',
+      method: 'auth',
       loading: status === 'loading',
       authenticated: status === 'authenticated',
       unauthenticated: status === 'unauthenticated',

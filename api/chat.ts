@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import keyBy from 'lodash/keyBy';
 import useSWR, { mutate } from 'swr';
 
-import axios, { fetcher, endpoints } from '#/utils/axios';
+import { axiosAssets, assetsFetcher, endpoints } from '#/utils/axios';
 
 import {
   IChatMessage,
@@ -22,7 +22,7 @@ const options = {
 export function useGetContacts() {
   const URL = [endpoints.chat, { params: { endpoint: 'contacts' } }];
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
+  const { data, isLoading, error, isValidating } = useSWR(URL, assetsFetcher, options);
 
   const memoizedValue = useMemo(
     () => ({
@@ -43,7 +43,7 @@ export function useGetContacts() {
 export function useGetConversations() {
   const URL = [endpoints.chat, { params: { endpoint: 'conversations' } }];
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
+  const { data, isLoading, error, isValidating } = useSWR(URL, assetsFetcher, options);
 
   const memoizedValue = useMemo(() => {
     const byId = keyBy(data?.conversations, 'id') || {};
@@ -66,12 +66,12 @@ export function useGetConversations() {
 
 // ----------------------------------------------------------------------
 
-export function useGetConversation(conversationId: string) {
+export function useGetConversation(conversationId: string | undefined) {
   const URL = conversationId
     ? [endpoints.chat, { params: { conversationId, endpoint: 'conversation' } }]
     : '';
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
+  const { data, isLoading, error, isValidating } = useSWR(URL, assetsFetcher, options);
 
   const memoizedValue = useMemo(
     () => ({
@@ -159,7 +159,7 @@ export async function createConversation(conversationData: IChatConversation) {
    * Work on server
    */
   const data = { conversationData };
-  const res = await axios.post(endpoints.chat, data);
+  const res = await axiosAssets.post(endpoints.chat, data);
 
   /**
    * Work in local

@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import ChatMessageList from "./chat-message-list";
 import ChatMessageInput from "./chat-message-input";
 import { useGetConversation, useGetConversations } from "#/api/chat";
@@ -7,17 +7,21 @@ import { useMockedUser } from "#/hooks/use-mocked-user";
 import { useCallback, useEffect, useState } from "react";
 import { IChatParticipant } from "#/types/chat";
 import { paths } from "#/routes/paths";
+import { ITourProps } from "#/types/tour";
+import { useAuthContext } from "#/auth/hooks";
 
-export default function LivestreamChatView() {
+type Props = {
+  currentTour?: ITourProps
+}
+
+export default function LivestreamChatView({ currentTour }: Props) {
   const router = useRouter();
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
 
 
-  const selectedConversationId = 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2' || '';
-
-  const { conversation, conversationError } = useGetConversation(`${selectedConversationId}`);
+  const { conversation, conversationError } = useGetConversation(currentTour?.id);
 
   const participants: IChatParticipant[] = conversation
     ? conversation.participants.filter(
@@ -26,10 +30,11 @@ export default function LivestreamChatView() {
     : [];
 
   useEffect(() => {
-    if (conversationError || !selectedConversationId) {
+    if (conversationError || !currentTour) {
       router.push(paths.livestream.root);
+
     }
-  }, [conversationError, router, selectedConversationId]);
+  }, [conversationError, router, currentTour]);
 
   const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
     setRecipients(selected);
@@ -55,13 +60,21 @@ export default function LivestreamChatView() {
     >
       <ChatMessageList messages={conversation?.messages} participants={participants} />
 
-      <ChatMessageInput
-        recipients={recipients}
-        onAddRecipients={handleAddRecipients}
-        //
-        selectedConversationId={selectedConversationId}
-        disabled={!recipients.length && !selectedConversationId}
-      />
+      {user ? (
+        <ChatMessageInput
+          recipients={recipients}
+          onAddRecipients={handleAddRecipients}
+          //
+          selectedConversationId={currentTour?.id}
+          disabled={!recipients.length && !currentTour}
+        />
+      ) :
+        (
+          <Box textAlign="center" sx={{ p: 1 }}>
+            <Typography>Đăng nhập để chat</Typography>
+          </Box>
+        )}
+
     </Stack>
   );
 
