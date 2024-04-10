@@ -9,11 +9,12 @@ import { paths } from '#/routes/paths';
 import { useMockedUser } from '#/hooks/use-mocked-user';
 
 import Label from '#/components/label';
+import { useAuthContext } from '#/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function NavAccount() {
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   return (
     <Stack
@@ -25,17 +26,27 @@ export default function NavAccount() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={user?.avatarUrl} alt={user?.displayName} sx={{ width: 48, height: 48 }} />
+          <Avatar
+            src={user?.profileImage}
+            alt={user?.userName}
+            sx={{
+              width: 45,
+              height: 45,
+              border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            }}
+          >
+            {user?.fullName?.charAt(0).toUpperCase()}
+          </Avatar>
 
         </Box>
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {user?.fullName}
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            {user?.email}
+            {user?.userName}
           </Typography>
         </Stack>
 

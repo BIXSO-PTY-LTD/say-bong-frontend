@@ -17,13 +17,14 @@ import Iconify from '#/components/iconify';
 import { IAuthorProps } from '#/types/author';
 import { IBlogPostProps, IBlogCategoryProps } from '#/types/blog';
 import HomeLatestPostMobile from '../home/home-latest-post-mobile';
+import { INewsItem } from '#/types/news';
 
 
 // ----------------------------------------------------------------------
 
 interface Props extends StackProps {
   recentPosts?: {
-    list: IBlogPostProps[];
+    list: INewsItem[];
   };
 }
 

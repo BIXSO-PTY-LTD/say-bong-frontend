@@ -4,11 +4,12 @@ import Box from '@mui/material/Box';
 import { usePathname } from 'next/navigation';
 import { IBlogPostProps } from '#/types/blog';
 import NewsItemHorizontal from './news-item-horizontal';
+import { INewsItem } from '#/types/news';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: IBlogPostProps[];
+  news: INewsItem[];
   // loading?: boolean;
 };
 
@@ -25,7 +26,7 @@ export default function NewsListHorizontal({ news,
 
   const renderList = (
     <>
-      {news.slice(0, 8).map((news) => (
+      {news.map((news) => (
         <NewsItemHorizontal key={news.id} news={news} />
       ))}
     </>

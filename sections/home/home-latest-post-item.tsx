@@ -9,12 +9,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
+import { INewsItem } from '#/types/news';
+import { _mock } from '#/_mock';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  post: INewsItem;
   // order?: number;
   largePost?: boolean;
   transparent?: boolean;
@@ -37,7 +39,7 @@ export default function HomeLatestPostItem({ post, transparent,
         }}
       >
         <Image
-          src={post.coverUrl}
+          src={_mock.image.cover(0)}
           alt={post.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||

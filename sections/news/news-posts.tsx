@@ -7,14 +7,15 @@ import MarketingPostItem from './news-post-item';
 import NewsPostItem from './news-post-item';
 import { _careerPosts } from '#/_mock/_blog';
 import HomeLatestPostItem from '../home/home-latest-post-item';
+import { INewsItem } from '#/types/news';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IBlogPostProps[];
+  news: INewsItem[];
 };
 
-export default function NewsPosts({ posts }: Props) {
+export default function NewsPosts({ news }: Props) {
   return (
     <>
       <Box
@@ -28,7 +29,7 @@ export default function NewsPosts({ posts }: Props) {
           },
         }}
       >
-        {_careerPosts.slice(0, 8).map((post) => (
+        {news.map((post) => (
           <HomeLatestPostItem transparent key={post.id} post={post} />
         ))}
       </Box>

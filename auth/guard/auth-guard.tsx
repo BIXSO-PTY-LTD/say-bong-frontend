@@ -1,17 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { paths } from '#/routes/paths';
-import { useRouter } from '#/routes/hooks';
+import { usePathname, useRouter } from '#/routes/hooks';
 
 import { SplashScreen } from '#/components/loading-screen';
 
 import { useAuthContext } from '../hooks';
+import { useSnackbar } from 'notistack';
+import { error } from 'console';
+import { useDialogControls } from '#/hooks/use-dialog-controls';
+import LoginDialog from '#/sections/auth/login-dialog';
+import RegisterDialog from '#/sections/auth/register-dialog';
 
 // ----------------------------------------------------------------------
 
-const loginPaths: Record<string, string> = {
-  login: "/",
-};
+
 
 // ----------------------------------------------------------------------
 
@@ -30,31 +33,28 @@ export default function AuthGuard({ children }: Props) {
 function Container({ children }: Props) {
   const router = useRouter();
 
-  const { authenticated, method } = useAuthContext();
+  const { authenticated } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
+
   const check = useCallback(() => {
     if (!authenticated) {
-      const searchParams = new URLSearchParams({
-        returnTo: window.location.pathname,
-      }).toString();
-
-      const loginPath = loginPaths[method];
-
-      const href = `${loginPath}?${searchParams}`;
-
-      router.replace(href);
+      router.replace("/");
+      enqueueSnackbar("Bạn phải đăng nhập và phải có quyền admin", { variant: "error" })
     } else {
       setChecked(true);
+
     }
-  }, [authenticated, method, router]);
+  }, [authenticated, router, enqueueSnackbar]);
 
   useEffect(() => {
     check();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   if (!checked) {
     return null;
   }

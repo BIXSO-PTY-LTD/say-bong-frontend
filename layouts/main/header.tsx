@@ -18,13 +18,12 @@ import { HEADER } from '../config-layout';
 import { navConfig } from './config-navigation';
 import Logo from '#/components/logo';
 import HeaderShadow from '../common/header-shadow';
-import { useBoolean } from '#/hooks/use-boolean';
 import LoginDialog from '#/sections/auth/login-dialog';
 import RegisterDialog from '#/sections/auth/register-dialog';
-import { useMockedUser } from '#/hooks/use-mocked-user';
 import AccountPopover from '../common/account-popover';
 import ChangePasswordDialog from '#/sections/auth/change-password-dialog';
 import { useAuthContext } from '#/auth/hooks';
+import { useDialogControls } from '#/hooks/use-dialog-controls';
 
 // ----------------------------------------------------------------------
 
@@ -34,11 +33,9 @@ export default function Header() {
 
   const { user } = useAuthContext();
 
-  const dialogLoginOpen = useBoolean();
+  const { dialogLoginOpen, dialogChangePasswordOpen, dialogRegisterOpen } = useDialogControls();
 
-  const dialogChangePasswordOpen = useBoolean();
 
-  const dialogRegisterOpen = useBoolean();
 
   const offset = useOffSetTop();
 

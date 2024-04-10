@@ -10,23 +10,14 @@ import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { IBlogPostProps, IBlogTableFilters } from '#/types/blog';
 import NewsListHorizontal from '../news-list-horizontal';
+import { useGetNews } from '#/api/news';
 
 // ----------------------------------------------------------------------
-
-
-const defaultFilters: IBlogTableFilters = {
-  title: '',
-};
 
 export default function NewsListView() {
   const settings = useSettingsContext();
 
-  const dataFiltered = applyFilter({
-    inputData: _marketingPosts,
-  });
-
-
-
+  const { news } = useGetNews()
 
 
 
@@ -45,7 +36,7 @@ export default function NewsListView() {
           Thêm tin tức
         </Button>
       </Stack>
-      <NewsListHorizontal news={dataFiltered}
+      <NewsListHorizontal news={news}
       //  loading={newsLoading} 
       />
 
@@ -64,12 +55,3 @@ export default function NewsListView() {
 }
 
 // ----------------------------------------------------------------------
-
-function applyFilter({
-  inputData,
-}: {
-  inputData: IBlogPostProps[];
-}) {
-
-  return inputData;
-}

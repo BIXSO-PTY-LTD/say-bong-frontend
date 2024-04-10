@@ -22,11 +22,13 @@ import TextMaxLine from '#/components/text-max-line';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { IBlogPostProps } from '#/types/blog';
+import { INewsItem } from '#/types/news';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: IBlogPostProps;
+  news: INewsItem;
 };
 
 export default function PostItemHorizontal({ news }: Props) {
@@ -39,7 +41,6 @@ export default function PostItemHorizontal({ news }: Props) {
   const {
     id,
     title,
-    coverUrl,
     createdAt,
   } = news;
 
@@ -79,8 +80,8 @@ export default function PostItemHorizontal({ news }: Props) {
               width: "164px"
             }}
           >
-            <Image alt={title} src={coverUrl} sx={{
-              borderRadius: 1.5,
+            <Image alt={title} src={_mock.image.cover(0)} sx={{
+              borderRadius: 1.5, height: 1
             }} />
           </Box>
         )}

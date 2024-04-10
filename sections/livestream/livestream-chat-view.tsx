@@ -9,6 +9,11 @@ import { IChatParticipant } from "#/types/chat";
 import { paths } from "#/routes/paths";
 import { ITourProps } from "#/types/tour";
 import { useAuthContext } from "#/auth/hooks";
+import { RouterLink } from "#/routes/components";
+import { useDialogControls } from "#/hooks/use-dialog-controls";
+import LoginDialog from "../auth/login-dialog";
+import RegisterDialog from "../auth/register-dialog";
+import ChangePasswordDialog from "../auth/change-password-dialog";
 
 type Props = {
   currentTour?: ITourProps
@@ -17,6 +22,8 @@ type Props = {
 export default function LivestreamChatView({ currentTour }: Props) {
   const router = useRouter();
   const { user } = useAuthContext();
+
+  const { dialogLoginOpen, dialogRegisterOpen } = useDialogControls();
 
   const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
 
@@ -71,7 +78,7 @@ export default function LivestreamChatView({ currentTour }: Props) {
       ) :
         (
           <Box textAlign="center" sx={{ p: 1 }}>
-            <Typography>Đăng nhập để chat</Typography>
+            <Typography component='span' onClick={dialogLoginOpen.onTrue} sx={{ cursor: "pointer" }} color="primary">Đăng nhập</Typography><Typography component='span'> để chat</Typography>
           </Box>
         )}
 
@@ -79,28 +86,33 @@ export default function LivestreamChatView({ currentTour }: Props) {
   );
 
   return (
-    <Stack
-      sx={{
-        width: 1,
-        height: "530px",
-        overflow: 'hidden',
-      }}
-    >
-      {renderHead}
-
+    <>
       <Stack
-        direction="row"
         sx={{
           width: 1,
-          height: 1,
+          height: "530px",
           overflow: 'hidden',
-          borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
         }}
       >
-        {renderMessages}
+        {renderHead}
+
+        <Stack
+          direction="row"
+          sx={{
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+            borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
+          }}
+        >
+          {renderMessages}
 
 
+        </Stack>
       </Stack>
-    </Stack>
+      {dialogLoginOpen.value && <LoginDialog openRegister={dialogRegisterOpen.onTrue} open={dialogLoginOpen.value} onClose={dialogLoginOpen.onFalse} />}
+      {dialogRegisterOpen.value && <RegisterDialog openLogin={dialogLoginOpen.onTrue} open={dialogRegisterOpen.value} onClose={dialogRegisterOpen.onFalse} />}
+
+    </>
   )
 }

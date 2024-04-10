@@ -15,11 +15,12 @@ export const axiosHost: AxiosInstance = axiosHostInstance;
 export const axiosAssets: AxiosInstance = axiosAssetsInstance;
 
 export const hostFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+
   const [url, config] = Array.isArray(args) ? args : [args];
 
   const res = await axiosHostInstance.get(url, { ...config });
 
-  return res.data;
+  return res.data.data;
 };
 
 export const assetsFetcher = async (args: string | [string, AxiosRequestConfig]) => {
@@ -42,5 +43,9 @@ export const endpoints = {
   },
   user: {
     update: '/api/v1/user'
+  },
+  news: {
+    list: '/api/v1/new-feed',
+    create: '/api/v1/new-feed'
   }
 };

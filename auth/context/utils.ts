@@ -1,6 +1,7 @@
 import { paths } from '#/routes/paths';
 
 import { axiosHost } from '#/utils/axios';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ export const tokenExpired = (exp: number) => {
   clearTimeout(expiredTimer);
 
   expiredTimer = setTimeout(() => {
-    alert('Token expired');
+    alert('Vui lòng đăng nhập lại');
 
     localStorage.removeItem('accessToken');
 

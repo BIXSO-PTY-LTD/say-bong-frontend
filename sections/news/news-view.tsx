@@ -5,12 +5,14 @@ import Grid from '@mui/material/Unstable_Grid2';
 import NewsPosts from './news-posts';
 import { _marketingPosts } from '#/_mock/_blog';
 import NewsSidebar from './news-sidebar';
+import { useGetNews } from '#/api/news';
 
 
 
 // ----------------------------------------------------------------------
 
 export default function NewsView() {
+  const { news } = useGetNews();
   return (
     <>
 
@@ -21,12 +23,12 @@ export default function NewsView() {
       >
         <Grid container columnSpacing={{ xs: 0, md: 8 }}>
           <Grid xs={12} md={8}>
-            <NewsPosts posts={_marketingPosts} />
+            <NewsPosts news={news} />
           </Grid>
 
           <Grid xs={12} md={4}>
             <NewsSidebar
-              recentPosts={{ list: _marketingPosts.slice(-4) }}
+              recentPosts={{ list: news.slice(-4) }}
 
             />
           </Grid>

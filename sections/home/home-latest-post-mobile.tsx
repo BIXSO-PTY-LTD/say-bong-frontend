@@ -10,11 +10,13 @@ import { fDate } from '#/utils/format-time';
 import { IBlogPostProps } from '#/types/blog';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
+import { INewsItem } from '#/types/news';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  post: INewsItem;
   onSiderbar?: boolean;
 };
 
@@ -28,7 +30,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
     >
       <Image
         alt={post.title}
-        src={post.coverUrl}
+        src={_mock.image.cover(0)}
         sx={{
           width: 80,
           height: 80,
