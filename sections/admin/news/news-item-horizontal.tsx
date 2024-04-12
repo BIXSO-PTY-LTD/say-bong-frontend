@@ -28,10 +28,10 @@ import { _mock } from '#/_mock';
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: INewsItem;
+  item: INewsItem;
 };
 
-export default function PostItemHorizontal({ news }: Props) {
+export default function PostItemHorizontal({ item }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function PostItemHorizontal({ news }: Props) {
     id,
     title,
     createdAt,
-  } = news;
+  } = item;
 
   return (
     <>

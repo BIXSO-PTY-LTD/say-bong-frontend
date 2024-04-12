@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -19,7 +19,6 @@ import FormProvider, {
   RHFTextField,
 } from '#/components/hook-form';
 import { AuthUserType } from '#/auth/types';
-import { useUpdateUser } from '#/api/user';
 
 
 // ----------------------------------------------------------------------
@@ -58,27 +57,18 @@ export default function AccountEditForm({ currentUser }: Props) {
   const {
     reset,
     watch,
-    handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
   const values = watch();
 
-  const updateUser = useUpdateUser()
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      await updateUser(data);
-      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-      router.push(paths.account.root);
-      console.info('DATA', data);
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    if (currentUser) {
+      reset(defaultValues);
     }
-  });
-
+  }, [currentUser, defaultValues, reset]);
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
+    <FormProvider methods={methods}>
       <Grid xs={12} md={8}>
         <Card sx={{ p: 3 }}>
           <Box
@@ -90,17 +80,13 @@ export default function AccountEditForm({ currentUser }: Props) {
               sm: 'repeat(2, 1fr)',
             }}
           >
-            <RHFTextField inputColor='#fff' name="userName" label="Username" />
+            <RHFTextField contentEditable={false} inputColor='#fff' name="userName" label="Username" />
             <RHFTextField inputColor='#fff' name="fullName" label="Họ và tên" />
             <RHFTextField inputColor='#fff' name="phone" label="Số điện thoại" />
 
           </Box>
 
-          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton type="submit" variant="contained" sx={{ background: "#01B243", color: "#fff" }} loading={isSubmitting}>
-              Lưu Thay đổi
-            </LoadingButton>
-          </Stack>
+
         </Card>
       </Grid>
     </FormProvider>

@@ -24,13 +24,11 @@ import { fDate } from '#/utils/format-time';
 type Props = {
   selected: boolean;
   row: IUserItem;
-  onDeleteRow: VoidFunction;
 };
 
 export default function UserTableRow({
   row,
   selected,
-  onDeleteRow,
 }: Props) {
   const { id, fullName, profileImage, userName, phone, createdAt } = row;
 
@@ -67,35 +65,13 @@ export default function UserTableRow({
           {fDate(createdAt)}
         </TableCell>
 
-        <TableCell align="right" sx={{ border: "none", px: 1, whiteSpace: 'nowrap' }}>
-
-          <IconButton
-            onClick={() => {
-              confirm.onTrue();
-              popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="solar:trash-bin-trash-bold" />
-          </IconButton>
-        </TableCell>
       </TableRow>
 
 
 
 
 
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      />
+
     </>
   );
 }

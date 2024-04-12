@@ -1,7 +1,8 @@
+import { NewsView } from "#/sections/news/view";
 
 // ----------------------------------------------------------------------
 
-import NewsView from "#/sections/news/news-view";
+
 
 
 

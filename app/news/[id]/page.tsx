@@ -4,7 +4,7 @@
 import { _tours } from "#/_mock";
 import { _travelPosts } from "#/_mock/_blog";
 import { useGetNew } from "#/api/news";
-import NewsDetailsView from "#/sections/news/news-details-view";
+import NewsDetailsView from "#/sections/news/view/news-details-view";
 // ----------------------------------------------------------------------
 
 export const metadata = {
@@ -20,8 +20,7 @@ type Props = {
 export default function NewsDetailsPage({ params }: Props) {
   const { id } = params;
 
-  const { new: currentPost } = useGetNew(id)
 
 
-  return <NewsDetailsView currentPost={currentPost} />;
+  return <NewsDetailsView id={id} />;
 }

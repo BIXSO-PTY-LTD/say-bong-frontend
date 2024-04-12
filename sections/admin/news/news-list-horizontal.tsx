@@ -17,9 +17,11 @@ type Props = {
 export default function NewsListHorizontal({ news,
   loading
 }: Props) {
+
+
   const renderSkeleton = (
     <>
-      {[...Array(16)].map((_, index) => (
+      {[...Array(8)].map((_, index) => (
         <MatchItemSkeleton key={index} variant="horizontal" />
       ))}
     </>
@@ -27,8 +29,8 @@ export default function NewsListHorizontal({ news,
 
   const renderList = (
     <>
-      {news.map((news) => (
-        <NewsItemHorizontal key={news.id} news={news} />
+      {news.map((item) => (
+        <NewsItemHorizontal key={item.id} item={item} />
       ))}
     </>
   );
@@ -44,7 +46,6 @@ export default function NewsListHorizontal({ news,
         }}
       >
         {loading ? renderSkeleton : renderList}
-        {renderList}
       </Box>
     </>
   );

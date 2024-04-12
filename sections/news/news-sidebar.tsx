@@ -31,7 +31,6 @@ interface Props extends StackProps {
 export default function NewsSidebar({
   recentPosts,
   sx,
-  ...other
 }: Props) {
   const mdUp = useResponsive('up', 'md');
 

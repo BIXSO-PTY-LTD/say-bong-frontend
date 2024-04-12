@@ -16,12 +16,14 @@ import TextMaxLine from '#/components/text-max-line';
 import { IBlogPostProps } from '#/types/blog';
 import { varHover, varTranHover } from '#/components/animate/variants';
 import NewsTimeBlock from './news-time-block';
+import { INewsItem } from '#/types/news';
+import { _mock } from '#/_mock';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  post: INewsItem;
 };
 
 export default function NewsPostItem({ post }: Props) {
@@ -37,7 +39,7 @@ export default function NewsPostItem({ post }: Props) {
     >
       <m.div variants={varHover(1.25)} transition={varTranHover()}>
         <Image
-          src={post.coverUrl}
+          src={_mock.image.cover(0)}
           alt={post.title}
           ratio="3/4"
           overlay={`linear-gradient(to top, ${alpha(theme.palette.common.black, 0)} 0%, ${theme.palette.common.black
@@ -57,7 +59,7 @@ export default function NewsPostItem({ post }: Props) {
       >
         <Stack spacing={2}>
           <NewsTimeBlock
-            duration={post.duration}
+            duration={post.createdAt}
             createdAt={fDate(post.createdAt)}
             sx={{ color: 'inherit', opacity: 0.72 }}
           />
@@ -67,10 +69,7 @@ export default function NewsPostItem({ post }: Props) {
           </Link>
         </Stack>
 
-        <Stack direction="row" alignItems="center" sx={{ typography: 'body2' }}>
-          <Avatar src={post.author.avatarUrl} sx={{ mr: 1 }} />
-          {post.author.name}
-        </Stack>
+
       </Stack>
     </Stack>
   );

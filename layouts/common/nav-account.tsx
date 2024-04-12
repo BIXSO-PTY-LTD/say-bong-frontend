@@ -4,17 +4,30 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '#/routes/paths';
 
-import { useMockedUser } from '#/hooks/use-mocked-user';
+import { useSnackbar } from '#/components/snackbar';
+import { useRouter } from '#/routes/hooks';
 
-import Label from '#/components/label';
 import { useAuthContext } from '#/auth/hooks';
+import { paths } from '#/routes/paths';
 
 // ----------------------------------------------------------------------
 
 export default function NavAccount() {
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      enqueueSnackbar('Bạn đã đăng xuất');
+      router.push(paths.home)
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+    }
+  };
 
   return (
     <Stack
@@ -50,7 +63,7 @@ export default function NavAccount() {
           </Typography>
         </Stack>
 
-        <Button variant="contained" href={paths.dashboard.root}>
+        <Button variant="contained" onClick={handleLogout}>
           Đăng xuất
         </Button>
       </Stack>

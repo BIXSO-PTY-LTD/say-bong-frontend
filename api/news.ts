@@ -3,11 +3,10 @@ import { axiosHost, endpoints, hostFetcher } from "#/utils/axios";
 import { useMemo } from "react";
 import useSWR from "swr";
 
-export function useGetNews() {
-  const URL = endpoints.news.list;
+export function useGetNews(offset: number) {
+  const URL = `${endpoints.news.list}?offset=${offset}&limit=8`;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
-  console.log(data);
 
   const memoizedValue = useMemo(
     () => ({
@@ -41,7 +40,7 @@ export function useCreateNews() {
   return createNews;
 }
 
-export function useGetNew(newId: string) {
+export function useGetNew(newId: string | undefined) {
   const URL = newId ? `${endpoints.news.details}/${newId}` : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
