@@ -3,6 +3,7 @@
 
 import { _tours } from "#/_mock";
 import { _travelPosts } from "#/_mock/_blog";
+import { useGetNew } from "#/api/news";
 import NewsDetailsView from "#/sections/news/news-details-view";
 // ----------------------------------------------------------------------
 
@@ -19,7 +20,8 @@ type Props = {
 export default function NewsDetailsPage({ params }: Props) {
   const { id } = params;
 
-  const currentPost = _travelPosts.find(post => post.id === id);
+  const { new: currentPost } = useGetNew(id)
+
 
   return <NewsDetailsView currentPost={currentPost} />;
 }

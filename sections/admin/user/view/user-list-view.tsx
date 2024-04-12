@@ -1,13 +1,13 @@
 'use client';
 
-import { Button, Card, Container, IconButton, Pagination, Stack, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
+import { Button, Container, IconButton, Pagination, Stack, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
 import { _careerPosts } from '#/_mock/_blog';
 import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
 import { IUserItem, IUserTableFilters } from '#/types/user';
-import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedAction, getComparator, useTable } from '#/components/table';
+import { TableHeadCustom, TableNoData, TableSelectedAction, TableSkeleton, getComparator, useTable } from '#/components/table';
 import { useRouter } from '#/routes/hooks';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { _userList } from '#/_mock/_user';
 import isEqual from 'lodash.isequal';
 import Iconify from '#/components/iconify';
@@ -16,14 +16,17 @@ import UserTableRow from '../user-table-row';
 import { useBoolean } from '#/hooks/use-boolean';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
+import { useDeleteUser, useGetUsers } from '#/api/user';
+import { ConfirmDialog } from '#/components/custom-dialog';
+import { mutate } from 'swr';
+import { endpoints } from '#/utils/axios';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: '', width: 88 },
-  { id: 'name', label: 'Họ tên' },
-  { id: 'username', label: 'Username', width: 180 },
-  { id: 'phoneNumber', label: 'Số điện thoại', width: 220 },
+  { id: 'fullName', label: 'Họ tên' },
+  { id: 'userName', label: 'Username', width: 180 },
+  { id: 'phone', label: 'Số điện thoại', width: 220 },
   { id: 'createdAt', label: 'Ngày tạo', width: 180 },
   { id: '', width: 88 },
 ];
@@ -35,123 +38,195 @@ const defaultFilters: IUserTableFilters = {
 export default function UserListView() {
   const table = useTable();
 
+  const { users, usersLoading, usersEmpty, paginate } = useGetUsers();
+
+
   const settings = useSettingsContext();
 
   const confirm = useBoolean();
 
-  const router = useRouter();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState<IUserItem[]>([]);
 
-  const [filters, setFilters] = useState(defaultFilters);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  useEffect(() => {
+    if (paginate.current_page) {
+      setCurrentPage(paginate.current_page);
+    }
+  }, [paginate]);
 
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    if (users.length) {
+      setTableData(users);
+    }
+
+  }, [users]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
-  const canReset = !isEqual(defaultFilters, filters);
+  const startIndex = (currentPage - 1) * paginate.per_page;
+  const endIndex = Math.min(startIndex + paginate.per_page, paginate.total);
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const dataInPage = dataFiltered.slice(startIndex, endIndex);
 
-  const handleEditRow = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.user.details(id));
-    },
-    [router]
-  );
+  const canReset = !isEqual(defaultFilters, defaultFilters);
+
+  const notFound = (!dataFiltered.length && canReset) || usersEmpty;
+
+
+
+  const deleteUser = useDeleteUser();
 
   const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
+    async (id: string) => {
+      try {
+        await deleteUser(id);
+        mutate(endpoints.user.list)
+        const updatedTableData = tableData.filter((row) => row.id !== id);
+        setTableData(updatedTableData);
 
-      table.onUpdatePageDeleteRow(dataInPage.length);
+        table.onUpdatePageDeleteRow(dataInPage.length);
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
     },
-    [dataInPage.length, table, tableData]
+    [dataInPage.length, table, tableData, deleteUser]
   );
 
+  const handleDeleteRows = useCallback(async () => {
+    try {
+      const deletedRowIds = table.selected;
+
+
+      await Promise.all(
+        deletedRowIds.map(async (id) => {
+          await deleteUser(id);
+          mutate(endpoints.user.list)
+        })
+      );
+
+
+      const updatedTableData = tableData.filter((row) => !deletedRowIds.includes(row.id));
+      setTableData(updatedTableData);
+
+      table.onUpdatePageDeleteRows({
+        totalRows: updatedTableData.length,
+        totalRowsInPage: dataInPage.length,
+        totalRowsFiltered: dataFiltered.length,
+      });
+    } catch (error) {
+      console.error('Error deleting rows:', error);
+    }
+  }, [dataFiltered.length, dataInPage.length, table, tableData, deleteUser]);
+
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <Stack direction="row" justifyContent="space-between" sx={{
-        mb: { xs: 3, md: 5 }
-      }}>
-        <Typography variant="h3">Danh sách người dùng</Typography>
-        <Button
-          component={RouterLink}
-          href={paths.dashboard.user.new}
-          variant="contained"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          Thêm người dùng
-        </Button>
-      </Stack>
-      <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-        <TableSelectedAction
-          dense={table.dense}
-          numSelected={table.selected.length}
-          rowCount={tableData.length}
-          onSelectAllRows={(checked) =>
-            table.onSelectAllRows(
-              checked,
-              tableData.map((row) => row.id)
-            )
-          }
-          action={
-            <Tooltip title="Delete">
-              <IconButton color="primary" onClick={confirm.onTrue}>
-                <Iconify icon="solar:trash-bin-trash-bold" />
-              </IconButton>
-            </Tooltip>
-          }
+    <>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+
+        <Typography sx={{
+          mb: { xs: 3, md: 5 }
+        }} variant="h3">Danh sách người dùng</Typography>
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <TableSelectedAction
+            dense={table.dense}
+            numSelected={table.selected.length}
+            rowCount={tableData.length}
+            onSelectAllRows={(checked) =>
+              table.onSelectAllRows(
+                checked,
+                tableData.map((row) => row.id)
+              )
+            }
+            action={
+              <Tooltip title="Delete">
+                <IconButton color="primary" onClick={confirm.onTrue}>
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Tooltip>
+            }
+          />
+
+          <Scrollbar>
+            <Table sx={{ minWidth: 960 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={tableData.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+
+              />
+
+              <TableBody>
+                {usersLoading ? (
+                  [...Array(table.rowsPerPage)].map((i, index) => (
+                    <TableSkeleton key={index} />
+                  ))
+                ) : (
+                  <>
+                    {dataFiltered.map((row) => (
+                      <UserTableRow
+                        key={row.id}
+                        row={row}
+                        selected={table.selected.includes(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                      />
+                    ))}
+                  </>
+                )}
+
+
+
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
+        <Pagination
+          count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          sx={{
+            my: 10,
+            [`& .${paginationClasses.ul}`]: {
+              justifyContent: 'center',
+            },
+          }}
         />
-
-        <Scrollbar>
-          <Table sx={{ minWidth: 960 }}>
-            <TableHeadCustom
-              order={table.order}
-              orderBy={table.orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={tableData.length}
-              numSelected={table.selected.length}
-              onSort={table.onSort}
-
-            />
-
-            <TableBody>
-              {dataFiltered.slice(0, 10)
-                .map((row) => (
-                  <UserTableRow
-                    key={row.id}
-                    row={row}
-                    selected={table.selected.includes(row.id)}
-                    onSelectRow={() => table.onSelectRow(row.id)}
-                    onDeleteRow={() => handleDeleteRow(row.id)}
-                    onEditRow={() => handleEditRow(row.id)}
-                  />
-                ))}
-              <TableNoData notFound={notFound} />
-            </TableBody>
-          </Table>
-        </Scrollbar>
-      </TableContainer>
-      <Pagination
-        count={10}
-        color="primary"
-        sx={{
-          my: 10,
-          [`& .${paginationClasses.ul}`]: {
-            justifyContent: 'center',
-          },
-        }}
+      </Container >
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content={
+          <>
+            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleDeleteRows();
+              confirm.onFalse();
+            }}
+          >
+            Delete
+          </Button>
+        }
       />
-    </Container >
+    </>
   );
 }
 

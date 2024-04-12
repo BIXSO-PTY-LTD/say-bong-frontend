@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -33,10 +33,10 @@ import { INewsItem } from '#/types/news';
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentNews?: INewsItem;
+  currentNew?: INewsItem;
 };
 
-export default function NewsNewEditForm({ currentNews }: Props) {
+export default function NewsNewEditForm({ currentNew }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
@@ -48,16 +48,16 @@ export default function NewsNewEditForm({ currentNews }: Props) {
 
   const NewPostSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
-    content: Yup.string().required('Content is required'),
+    description: Yup.string().required('description is required'),
 
   });
 
   const defaultValues = useMemo(
     () => ({
-      title: currentNews?.title || '',
-      content: currentNews?.content || '',
+      title: currentNew?.title || '',
+      description: currentNew?.description || '',
     }),
-    [currentNews]
+    [currentNew]
   );
 
   const methods = useForm({
@@ -71,14 +71,20 @@ export default function NewsNewEditForm({ currentNews }: Props) {
     formState: { isSubmitting },
   } = methods;
 
+  useEffect(() => {
+    if (currentNew) {
+      reset(defaultValues);
+    }
+  }, [currentNew, defaultValues, reset]);
+
   const createNews = useCreateNews();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (currentNews) {
-        // console.log('Editing News with ID:', currentNews.id);
+      if (currentNew) {
+        // console.log('Editing News with ID:', currentNew.id);
 
         // if (avatarFile) {
-        //   const uploadResult = await uploadAvatar( currentNews?.id,avatarFile);
+        //   const uploadResult = await uploadAvatar( currentNew?.id,avatarFile);
         //   console.log('Upload Result:', uploadResult);
         // }
       } else {
@@ -86,7 +92,7 @@ export default function NewsNewEditForm({ currentNews }: Props) {
       }
       reset();
       mutate(endpoints.news.list);
-      enqueueSnackbar(currentNews ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentNew ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.news.root);
       console.info('DATA', data);
     } catch (error) {
@@ -117,8 +123,8 @@ export default function NewsNewEditForm({ currentNews }: Props) {
             <RHFTextField inputColor='#fff' name="title" label="Post Title" />
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Content</Typography>
-              <RHFEditor simple name="content" />
+              <Typography variant="subtitle2">description</Typography>
+              <RHFEditor simple name="description" />
             </Stack>
           </Stack>
         </Card>

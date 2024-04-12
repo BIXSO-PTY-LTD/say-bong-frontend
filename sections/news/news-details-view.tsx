@@ -14,14 +14,17 @@ import NewsSidebar from './news-sidebar';
 import { _travelPosts } from '#/_mock/_blog';
 import { Stack } from '@mui/material';
 import { fDate } from '#/utils/format-time';
+import { useGetNews } from '#/api/news';
+import { INewsItem } from '#/types/news';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentPost?: IBlogPostProps
+  currentPost?: INewsItem
 }
 
 export default function NewsDetailsView({ currentPost }: Props) {
+  console.log(currentPost);
 
   return (
     <>
@@ -39,7 +42,7 @@ export default function NewsDetailsView({ currentPost }: Props) {
             </Stack>
 
 
-            <Markdown content={currentPost?.content ? currentPost?.content : "Error"} />
+            <Markdown content={currentPost?.description ? currentPost?.description : "Error"} />
 
 
 
@@ -48,7 +51,7 @@ export default function NewsDetailsView({ currentPost }: Props) {
 
           <Grid xs={12} md={4}>
             <NewsSidebar
-              recentPosts={{ list: _travelPosts.slice(-4) }}
+              recentPosts={{ list: news.slice(-4) }}
             />
           </Grid>
         </Grid>

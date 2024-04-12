@@ -42,10 +42,14 @@ export const endpoints = {
     refreshToken: '/api/v1/refresh-token',
   },
   user: {
-    update: '/api/v1/user'
+    update: '/api/v1/user',
+    list: '/api/v1/user',
+    delete: '/api/v1/user',
+    details: '/api/v1/user'
   },
   news: {
     list: '/api/v1/new-feed',
-    create: '/api/v1/new-feed'
+    create: '/api/v1/new-feed',
+    details: '/api/v1/new-feed'
   }
 };

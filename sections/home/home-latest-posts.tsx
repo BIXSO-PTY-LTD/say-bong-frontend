@@ -11,13 +11,14 @@ import { RouterLink } from '#/routes/components';
 import Iconify from '#/components/iconify';
 import HomeLatestPostItem from './home-latest-post-item';
 import HomeLatestPostMobile from './home-latest-post-mobile';
+import { INewsItem } from '#/types/news';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IBlogPostProps[];
+  posts: INewsItem[];
 };
 
 export default function HomeLastestPosts({ posts }: Props) {

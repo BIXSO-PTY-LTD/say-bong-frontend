@@ -7,8 +7,8 @@ import TableRow, { TableRowProps } from '@mui/material/TableRow';
 
 export default function TableSkeleton({ ...other }: TableRowProps) {
   return (
-    <TableRow {...other}>
-      <TableCell colSpan={12}>
+    <TableRow sx={{ borderBottom: theme => `1px solid ${theme.palette.grey[800]}` }} {...other}>
+      <TableCell sx={{ border: "none" }} colSpan={12}>
         <Stack spacing={3} direction="row" alignItems="center">
           <Skeleton sx={{ borderRadius: 1.5, width: 48, height: 48, flexShrink: 0 }} />
           <Skeleton sx={{ width: 1, height: 12 }} />

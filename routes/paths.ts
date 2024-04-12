@@ -37,8 +37,6 @@ export const paths = {
     root: '/',
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
-      new: `${ROOTS.DASHBOARD}/user/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/user/${id}`,
     },
     news: {
       root: `${ROOTS.DASHBOARD}/news`,

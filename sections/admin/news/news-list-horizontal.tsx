@@ -5,24 +5,25 @@ import { usePathname } from 'next/navigation';
 import { IBlogPostProps } from '#/types/blog';
 import NewsItemHorizontal from './news-item-horizontal';
 import { INewsItem } from '#/types/news';
+import { MatchItemSkeleton } from '#/sections/match/match-item-skeleton';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   news: INewsItem[];
-  // loading?: boolean;
+  loading?: boolean;
 };
 
 export default function NewsListHorizontal({ news,
-  //  loading
+  loading
 }: Props) {
-  // const renderSkeleton = (
-  //   <>
-  //     {[...Array(16)].map((_, index) => (
-  //       <MatchItemSkeleton key={index} variant="horizontal" />
-  //     ))}
-  //   </>
-  // );
+  const renderSkeleton = (
+    <>
+      {[...Array(16)].map((_, index) => (
+        <MatchItemSkeleton key={index} variant="horizontal" />
+      ))}
+    </>
+  );
 
   const renderList = (
     <>
@@ -42,7 +43,7 @@ export default function NewsListHorizontal({ news,
           md: 'repeat(2, 1fr)',
         }}
       >
-        {/* {loading ? renderSkeleton : renderList} */}
+        {loading ? renderSkeleton : renderList}
         {renderList}
       </Box>
     </>

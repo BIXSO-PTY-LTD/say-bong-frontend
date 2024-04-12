@@ -1,5 +1,4 @@
 import { NewsCreateView } from "#/sections/admin/news/view";
-import UserCreateView from "#/sections/admin/user/view/user-create-view";
 
 // ----------------------------------------------------------------------
 

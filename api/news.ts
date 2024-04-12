@@ -7,14 +7,16 @@ export function useGetNews() {
   const URL = endpoints.news.list;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
+  console.log(data);
 
   const memoizedValue = useMemo(
     () => ({
       news: (data?.data as INewsItem[]) || [],
       newsLoading: isLoading,
+      paginate: data || [],
       newsError: error,
       newsValidating: isValidating,
-      newsEmpty: !isLoading && !data?.length,
+      newsEmpty: !isLoading && !data?.data.length,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -37,4 +39,21 @@ export function useCreateNews() {
   };
 
   return createNews;
+}
+
+export function useGetNew(newId: string) {
+  const URL = newId ? `${endpoints.news.details}/${newId}` : '';
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      new: data as INewsItem,
+      newLoading: isLoading,
+      newError: error,
+      newValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  return memoizedValue
 }

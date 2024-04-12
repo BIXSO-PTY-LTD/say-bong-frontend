@@ -7,11 +7,13 @@ import { _careerPosts } from '#/_mock/_blog';
 import HomeHighlight from '../home-highlights';
 import HomeLastestPosts from '../home-latest-posts';
 import MatchList from '../../match/match-list';
+import { useGetNews } from '#/api/news';
 
 
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
+  const { news } = useGetNews()
   return (
     <MainLayout>
       <Container>
@@ -19,7 +21,7 @@ export default function HomeView() {
         <MatchList />
 
         <HomeHighlight posts={_careerPosts.slice(0, 7)} />
-        <HomeLastestPosts posts={_careerPosts.slice(0, 7)} />
+        <HomeLastestPosts posts={news.slice(0, 7)} />
       </Container>
     </MainLayout>
   );

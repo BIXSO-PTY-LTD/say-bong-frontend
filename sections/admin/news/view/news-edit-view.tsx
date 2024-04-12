@@ -12,6 +12,7 @@ import { Typography } from '@mui/material';
 import UserNewEditForm from '../news-new-edit-form';
 import NewsNewEditForm from '../news-new-edit-form';
 import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
+import { useGetNew } from '#/api/news';
 
 // ----------------------------------------------------------------------
 
@@ -22,14 +23,14 @@ type Props = {
 export default function NewsEditView({ id }: Props) {
   const settings = useSettingsContext();
 
-  const currentNews = _marketingPosts.find((news) => news.id === id);
+  const { new: currentNew } = useGetNew(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Typography variant="h3" sx={{
         mb: { xs: 3, md: 5 },
       }}>Thông tin tin tức</Typography>
-      <NewsNewEditForm currentNews={currentNews} />
+      <NewsNewEditForm currentNew={currentNew} />
     </Container>
   );
 }

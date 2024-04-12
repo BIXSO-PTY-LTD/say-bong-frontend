@@ -1,11 +1,12 @@
 export type INewsMetas = {
+  id: string;
   key: string;
   content: string;
 };
 export type INewsItem = {
   id: string;
   title: string;
-  content: string
+  description: string
   createdAt: Date;
-  metas: INewsMetas[];
+  meta: INewsMetas[];
 };
