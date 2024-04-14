@@ -48,5 +48,15 @@ export const endpoints = {
     list: '/api/v1/new-feed',
     create: '/api/v1/new-feed',
     details: '/api/v1/new-feed'
+  },
+  excitingVideo: {
+    list: '/api/v1/interesting-shots',
+    create: '/api/v1/interesting-shots',
+    details: '/api/v1/interesting-shots'
+  },
+  highlightVideo: {
+    list: '/api/v1/highlight',
+    create: '/api/v1/highlight',
+    details: '/api/v1/highlight'
   }
 };

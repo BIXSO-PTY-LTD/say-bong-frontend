@@ -10,6 +10,9 @@ import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { ITourProps, ITourTableFilters } from '#/types/tour';
 import ExcitingListHorizontal from '../exciting-list-horizontal';
+import { useGetExcitingVideos } from '#/api/exciting-video';
+import { IVideoItem } from '#/types/video';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +24,16 @@ const defaultFilters: ITourTableFilters = {
 export default function ExcitingListView() {
   const settings = useSettingsContext();
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { excitingVideos, paginate } = useGetExcitingVideos(currentPage, 8)
+
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
   const dataFiltered = applyFilter({
-    inputData: _tours,
+    inputData: excitingVideos,
   });
 
 
@@ -45,12 +56,14 @@ export default function ExcitingListView() {
           Thêm video
         </Button>
       </Stack>
-      <ExcitingListHorizontal news={dataFiltered}
+      <ExcitingListHorizontal excitingVideos={dataFiltered}
       //  loading={newsLoading} 
       />
 
       <Pagination
-        count={10}
+        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
         sx={{
           my: 10,
@@ -68,7 +81,7 @@ export default function ExcitingListView() {
 function applyFilter({
   inputData,
 }: {
-  inputData: ITourProps[];
+  inputData: IVideoItem[];
 }) {
 
   return inputData;

@@ -3,8 +3,12 @@ import { axiosHost, endpoints, hostFetcher } from "#/utils/axios";
 import { useMemo } from "react";
 import useSWR from "swr";
 
-export function useGetNews(offset: number) {
-  const URL = `${endpoints.news.list}?offset=${offset}&limit=8`;
+export function useGetNews(offset?: number, limit?: number) {
+  let URL = endpoints.news.list;
+
+  if (offset !== undefined && limit !== undefined) {
+    URL += `?offset=${offset}&limit=${limit}`;
+  }
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
 

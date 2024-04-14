@@ -24,7 +24,7 @@ export default function NewsListView() {
   const [currentPage, setCurrentPage] = useState(1);
 
 
-  const { news, newsLoading, paginate } = useGetNews(currentPage);
+  const { news, newsLoading, paginate } = useGetNews(currentPage, 8);
 
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {

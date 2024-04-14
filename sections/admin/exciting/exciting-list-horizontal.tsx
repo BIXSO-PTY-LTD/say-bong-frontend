@@ -4,15 +4,16 @@ import Box from '@mui/material/Box';
 import NewsItemHorizontal from './exciting-item-horizontal';
 import { ITourProps } from '#/types/tour';
 import ExcitingItemHorizontal from './exciting-item-horizontal';
+import { IVideoItem } from '#/types/video';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: ITourProps[];
+  excitingVideos: IVideoItem[];
   // loading?: boolean;
 };
 
-export default function ExcitingListHorizontal({ news,
+export default function ExcitingListHorizontal({ excitingVideos,
   //  loading
 }: Props) {
   // const renderSkeleton = (
@@ -25,8 +26,8 @@ export default function ExcitingListHorizontal({ news,
 
   const renderList = (
     <>
-      {news.slice(0, 8).map((news) => (
-        <ExcitingItemHorizontal key={news.id} news={news} />
+      {excitingVideos.map((video) => (
+        <ExcitingItemHorizontal key={video.id} video={video} />
       ))}
     </>
   );

@@ -24,17 +24,21 @@ import { CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import { ITourProps } from '#/types/tour';
 import { Upload } from '#/components/upload';
+import { IVideoItem } from '#/types/video';
+import { useCreateHighlightVideo } from '#/api/highlight-video';
+import { mutate } from 'swr';
+import { endpoints } from '#/utils/axios';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentVideo?: ITourProps;
+  currentVideo?: IVideoItem;
 };
 
 export default function HighlightNewEditForm({ currentVideo }: Props) {
   const router = useRouter();
 
-  const [file, setFile] = useState<File | string | null>(currentVideo?.video || null);
+  // const [file, setFile] = useState<File | string | null>(currentVideo?.video || null);
 
   const mdUp = useResponsive('up', 'md');
 
@@ -42,21 +46,24 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
 
-  useEffect(() => {
-    if (currentVideo?.video) {
-      setFile(currentVideo.video);
-    }
-  }, [currentVideo?.video]);
+  // useEffect(() => {
+  //   if (currentVideo?.video) {
+  //     setFile(currentVideo.video);
+  //   }
+  // }, [currentVideo?.video]);
 
   const NewPostSchema = Yup.object().shape({
-    slug: Yup.string().required('slug is required'),
-    video: Yup.mixed<any>().nullable().required('Video is required')
+    title: Yup.string().required('title is required'),
+    // video: Yup.mixed<any>().nullable().required('Video is required')
+    description: Yup.string().required('description is required'),
+
   });
 
   const defaultValues = useMemo(
     () => ({
-      slug: currentVideo?.slug || '',
-      video: currentVideo?.video || null,
+      title: currentVideo?.title || '',
+      description: currentVideo?.description || '',
+      // video: currentVideo?.video || null,
     }),
     [currentVideo]
   );
@@ -75,32 +82,47 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const handleDrop = useCallback((acceptedFiles: File[]) => {
-    const newFile = acceptedFiles[0];
-    if (newFile) {
-      setFile(
-        Object.assign(newFile, {
-          preview: URL.createObjectURL(newFile),
-        })
-      );
+  useEffect(() => {
+    if (currentVideo) {
+      reset(defaultValues);
     }
-  }, []);
+  }, [currentVideo, defaultValues, reset]);
+
+  // const handleDrop = useCallback((acceptedFiles: File[]) => {
+  //   const newFile = acceptedFiles[0];
+  //   if (newFile) {
+  //     setFile(
+  //       Object.assign(newFile, {
+  //         preview: URL.createObjectURL(newFile),
+  //       })
+  //     );
+  //   }
+  // }, []);
 
 
-
+  const createHighlight = useCreateHighlightVideo()
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (currentVideo) {
+        // console.log('Editing News with ID:', currentNew.id);
+
+        // if (avatarFile) {
+        //   const uploadResult = await uploadAvatar( currentNew?.id,avatarFile);
+        //   console.log('Upload Result:', uploadResult);
+        // }
+      } else {
+        await createHighlight(data);
+      }
       reset();
-      enqueueSnackbar(currentVideo ? 'Cập nhật thành công!' : 'Tạo thành công!');
-      router.push(paths.dashboard.news.root);
+      mutate(endpoints.highlightVideo.list);
+      enqueueSnackbar(currentVideo ? 'Update success!' : 'Create success!');
+      router.push(paths.dashboard.video.highlight.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
   });
-
 
 
   const renderDetails = (
@@ -121,12 +143,13 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
           {!mdUp && <CardHeader slug="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField inputColor='#fff' name="slug" label="Post slug" />
+            <RHFTextField inputColor='#fff' name="title" label="Chủ đề" />
+            <RHFTextField inputColor='#fff' name="description" label="Mô tả" />
 
-            <Stack spacing={1.5}>
+            {/* <Stack spacing={1.5}>
               <Typography variant="subtitle2">Video</Typography>
               <Upload file={file} onDrop={handleDrop} onDelete={() => setFile(null)} />
-            </Stack>
+            </Stack> */}
           </Stack>
         </Card>
       </Grid>

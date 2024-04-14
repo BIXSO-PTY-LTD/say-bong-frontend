@@ -8,14 +8,21 @@ import NewsPostItem from './news-post-item';
 import { _careerPosts } from '#/_mock/_blog';
 import HomeLatestPostItem from '../home/home-latest-post-item';
 import { INewsItem } from '#/types/news';
+import { Dispatch, SetStateAction } from 'react';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   news: INewsItem[];
+  paginate: any;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
 };
 
-export default function NewsPosts({ news }: Props) {
+export default function NewsPosts({ news, paginate, setCurrentPage, currentPage }: Props) {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
   return (
     <>
       <Box
@@ -35,7 +42,9 @@ export default function NewsPosts({ news }: Props) {
       </Box>
 
       <Pagination
-        count={10}
+        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
         sx={{
           my: 10,

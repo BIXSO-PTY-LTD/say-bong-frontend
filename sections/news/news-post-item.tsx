@@ -59,7 +59,7 @@ export default function NewsPostItem({ post }: Props) {
       >
         <Stack spacing={2}>
           <NewsTimeBlock
-            duration={post.createdAt}
+            duration={fDate(post.createdAt)}
             createdAt={fDate(post.createdAt)}
             sx={{ color: 'inherit', opacity: 0.72 }}
           />

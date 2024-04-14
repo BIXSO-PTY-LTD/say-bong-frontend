@@ -5,15 +5,16 @@ import NewsItemHorizontal from './highlight-item-horizontal';
 import { ITourProps } from '#/types/tour';
 import ExcitingItemHorizontal from './highlight-item-horizontal';
 import HighlightItemHorizontal from './highlight-item-horizontal';
+import { IVideoItem } from '#/types/video';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: ITourProps[];
+  highlights: IVideoItem[];
   // loading?: boolean;
 };
 
-export default function HighlightListHorizontal({ news,
+export default function HighlightListHorizontal({ highlights,
   //  loading
 }: Props) {
   // const renderSkeleton = (
@@ -26,8 +27,8 @@ export default function HighlightListHorizontal({ news,
 
   const renderList = (
     <>
-      {news.slice(0, 8).map((news) => (
-        <HighlightItemHorizontal key={news.id} news={news} />
+      {highlights.map((highlight) => (
+        <HighlightItemHorizontal key={highlight.id} highlight={highlight} />
       ))}
     </>
   );

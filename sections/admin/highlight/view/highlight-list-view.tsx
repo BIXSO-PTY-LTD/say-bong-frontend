@@ -10,6 +10,9 @@ import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { ITourProps, ITourTableFilters } from '#/types/tour';
 import HighlightListHorizontal from '../highlight-list-horizontal';
+import { useGetHighlightVideos } from '#/api/highlight-video';
+import { IVideoItem } from '#/types/video';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +24,15 @@ const defaultFilters: ITourTableFilters = {
 export default function HighlightListView() {
   const settings = useSettingsContext();
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { highlightVideos, paginate } = useGetHighlightVideos(currentPage, 8)
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
   const dataFiltered = applyFilter({
-    inputData: _tours,
+    inputData: highlightVideos,
   });
 
 
@@ -45,12 +55,14 @@ export default function HighlightListView() {
           Thêm highlight
         </Button>
       </Stack>
-      <HighlightListHorizontal news={dataFiltered}
+      <HighlightListHorizontal highlights={dataFiltered}
       //  loading={newsLoading} 
       />
 
       <Pagination
-        count={10}
+        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
         sx={{
           my: 10,
@@ -68,7 +80,7 @@ export default function HighlightListView() {
 function applyFilter({
   inputData,
 }: {
-  inputData: ITourProps[];
+  inputData: IVideoItem[];
 }) {
 
   return inputData;

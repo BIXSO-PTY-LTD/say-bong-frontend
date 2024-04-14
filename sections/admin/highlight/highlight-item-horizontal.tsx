@@ -22,15 +22,18 @@ import TextMaxLine from '#/components/text-max-line';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { ITourProps } from '#/types/tour';
+import { IVideoItem } from '#/types/video';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: ITourProps;
+  highlight: IVideoItem;
 };
 
-export default function HighlightItemHorizontal({ news }: Props) {
+export default function HighlightItemHorizontal({ highlight }: Props) {
   const popover = usePopover();
+
 
   const router = useRouter();
 
@@ -38,10 +41,9 @@ export default function HighlightItemHorizontal({ news }: Props) {
 
   const {
     id,
-    slug,
-    coverUrl,
-    createdAt,
-  } = news;
+    title,
+    description,
+  } = highlight;
 
   return (
     <>
@@ -54,7 +56,7 @@ export default function HighlightItemHorizontal({ news }: Props) {
         >
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
             <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {fDate(createdAt)}
+              {title}
             </Box>
 
             <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -65,7 +67,7 @@ export default function HighlightItemHorizontal({ news }: Props) {
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.video.highlight.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {slug}
+                {description}
               </TextMaxLine>
             </Link>
           </Stack>
@@ -79,7 +81,7 @@ export default function HighlightItemHorizontal({ news }: Props) {
               width: "164px"
             }}
           >
-            <Image alt={slug} src={coverUrl} sx={{
+            <Image alt={title} src={_mock.image.cover(0)} sx={{
               borderRadius: 1.5,
             }} />
           </Box>
