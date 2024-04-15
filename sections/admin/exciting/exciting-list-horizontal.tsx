@@ -5,29 +5,35 @@ import NewsItemHorizontal from './exciting-item-horizontal';
 import { ITourProps } from '#/types/tour';
 import ExcitingItemHorizontal from './exciting-item-horizontal';
 import { IVideoItem } from '#/types/video';
+import { MatchItemSkeleton } from '#/sections/match/match-item-skeleton';
+import EmptyContent from '#/components/empty-content/empty-content';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   excitingVideos: IVideoItem[];
-  // loading?: boolean;
+  loading?: boolean;
+  empty?: boolean;
+  endpoints?: string;
 };
 
 export default function ExcitingListHorizontal({ excitingVideos,
-  //  loading
+  loading, empty, endpoints
 }: Props) {
-  // const renderSkeleton = (
-  //   <>
-  //     {[...Array(16)].map((_, index) => (
-  //       <MatchItemSkeleton key={index} variant="horizontal" />
-  //     ))}
-  //   </>
-  // );
+  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+
+  const renderSkeleton = (
+    <>
+      {[...Array(16)].map((_, index) => (
+        <MatchItemSkeleton key={index} variant="horizontal" />
+      ))}
+    </>
+  );
 
   const renderList = (
     <>
       {excitingVideos.map((video) => (
-        <ExcitingItemHorizontal key={video.id} video={video} />
+        <ExcitingItemHorizontal endpoints={endpoints} key={video.id} video={video} />
       ))}
     </>
   );
@@ -42,8 +48,8 @@ export default function ExcitingListHorizontal({ excitingVideos,
           md: 'repeat(2, 1fr)',
         }}
       >
-        {/* {loading ? renderSkeleton : renderList} */}
-        {renderList}
+        {empty && renderNotFound}
+        {loading ? renderSkeleton : renderList}
       </Box>
     </>
   );

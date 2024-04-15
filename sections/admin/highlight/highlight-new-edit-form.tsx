@@ -25,7 +25,7 @@ import { useResponsive } from '#/hooks/use-responsive';
 import { ITourProps } from '#/types/tour';
 import { Upload } from '#/components/upload';
 import { IVideoItem } from '#/types/video';
-import { useCreateHighlightVideo } from '#/api/highlight-video';
+import { useCreateHighlightVideo, useUpdateHighlightVideo } from '#/api/highlight-video';
 import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
 
@@ -53,6 +53,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
   // }, [currentVideo?.video]);
 
   const NewPostSchema = Yup.object().shape({
+    id: Yup.string().required('id is required'),
     title: Yup.string().required('title is required'),
     // video: Yup.mixed<any>().nullable().required('Video is required')
     description: Yup.string().required('description is required'),
@@ -61,6 +62,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
   const defaultValues = useMemo(
     () => ({
+      id: currentVideo?.id || '',
       title: currentVideo?.title || '',
       description: currentVideo?.description || '',
       // video: currentVideo?.video || null,
@@ -75,9 +77,6 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
   const {
     reset,
-    watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -101,12 +100,12 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
 
   const createHighlight = useCreateHighlightVideo()
-
+  const updateHighlight = useUpdateHighlightVideo()
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentVideo) {
         // console.log('Editing News with ID:', currentNew.id);
-
+        updateHighlight(data)
         // if (avatarFile) {
         //   const uploadResult = await uploadAvatar( currentNew?.id,avatarFile);
         //   console.log('Upload Result:', uploadResult);
@@ -114,9 +113,8 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
       } else {
         await createHighlight(data);
       }
-      reset();
       mutate(endpoints.highlightVideo.list);
-      enqueueSnackbar(currentVideo ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentVideo ? 'Cập nhật thành công' : 'Tạo thành công');
       router.push(paths.dashboard.video.highlight.root);
       console.info('DATA', data);
     } catch (error) {
@@ -159,7 +157,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
   const renderActions = (
     <Box sx={{ mt: 3, width: "100%", textAlign: "end" }}>
       <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-        Tạo mới
+        {currentVideo ? "Cập nhật" : "Tạo mới"}
       </LoadingButton>
     </Box>
   );

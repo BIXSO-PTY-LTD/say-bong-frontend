@@ -13,17 +13,18 @@ import Image from '#/components/image';
 import Iconify from '#/components/iconify';
 import TextMaxLine from '#/components/text-max-line';
 
-import { ITourProps } from '#/types/tour';
+import { IVideoItem } from '#/types/video';
 import Label from '#/components/label';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tour: ITourProps;
+  video: IVideoItem;
 };
 
-export default function ExcitingHighlightItem({ tour }: Props) {
-  const { id, slug, coverUrl } = tour;
+export default function ExcitingHighlightItem({ video }: Props) {
+  const { id, title } = video;
 
 
 
@@ -48,7 +49,7 @@ export default function ExcitingHighlightItem({ tour }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={slug} src={coverUrl} ratio="1/1" />
+        <Image alt={title} src={_mock.image.cover(3)} ratio="1/1" />
 
       </Box>
 
@@ -57,7 +58,7 @@ export default function ExcitingHighlightItem({ tour }: Props) {
 
       <Link component={RouterLink} href={paths.exciting.details(id)} color="inherit" >
         <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
-          {slug}
+          {title}
         </TextMaxLine>
       </Link>
     </Card>

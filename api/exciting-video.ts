@@ -20,8 +20,9 @@ export function useGetExcitingVideos(offset?: number, limit?: number) {
       excitingVideosError: error,
       excitingVideosValidating: isValidating,
       excitingVideosEmpty: !isLoading && !data?.data.length,
+      endpoints: URL
     }),
-    [data, error, isLoading, isValidating]
+    [URL, data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -58,4 +59,34 @@ export function useGetExcitingVideo(videoId: string | undefined) {
     [data, error, isLoading, isValidating]
   );
   return memoizedValue
+}
+export function useUpdateExcitingVideo() {
+  const updateExcitingVideo = async (updatedExcitingVideoData: Partial<IVideoItem>) => {
+    const URL = `${endpoints.excitingVideo.update}`;
+    try {
+      await axiosHost.put(URL, updatedExcitingVideoData)
+    } catch (error) {
+      console.error('Error updating ExcitingVideo:', error);
+      throw new Error('Update  failed');
+    }
+
+  }
+  return updateExcitingVideo
+}
+
+
+export function useDeleteExcitingVideo() {
+  const deleteExcitingVideo = async (excitingVideoId: string) => {
+    const URL = `${endpoints.excitingVideo.list}/${excitingVideoId}`;
+
+    try {
+      await axiosHost.delete(URL);
+      return true;
+    } catch (error) {
+      console.error('Error deleting ExcitingVideo:', error);
+      throw new Error('Deletion failed');
+    }
+  };
+
+  return deleteExcitingVideo;
 }

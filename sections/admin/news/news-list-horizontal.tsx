@@ -12,10 +12,11 @@ import { MatchItemSkeleton } from '#/sections/match/match-item-skeleton';
 type Props = {
   news: INewsItem[];
   loading?: boolean;
+  endpoints?: string;
 };
 
 export default function NewsListHorizontal({ news,
-  loading
+  loading, endpoints
 }: Props) {
 
 
@@ -30,7 +31,7 @@ export default function NewsListHorizontal({ news,
   const renderList = (
     <>
       {news.map((item) => (
-        <NewsItemHorizontal key={item.id} item={item} />
+        <NewsItemHorizontal endpoints={endpoints} key={item.id} item={item} />
       ))}
     </>
   );

@@ -24,19 +24,44 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 import { IBlogPostProps } from '#/types/blog';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
+import { useCallback } from 'react';
+import { useDeleteNew, useGetNews } from '#/api/news';
+import { mutate } from 'swr';
+import { endpoints } from '#/utils/axios';
+import { ConfirmDialog } from '#/components/custom-dialog';
+import { Button } from '@mui/material';
+import { useBoolean } from '#/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   item: INewsItem;
+  endpoints?: string;
 };
 
-export default function PostItemHorizontal({ item }: Props) {
+export default function PostItemHorizontal({ item, endpoints }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
 
+  const confirm = useBoolean();
+
+
   const smUp = useResponsive('up', 'sm');
+  const deleteNew = useDeleteNew();
+
+  const handleDeleteNew = useCallback(
+    async (id: string) => {
+      try {
+        await deleteNew(id);
+        confirm.onFalse();
+        mutate(endpoints);
+      } catch (error) {
+        console.error('Error deleting news:', error);
+      }
+    },
+    [deleteNew, endpoints, confirm]
+  );
 
   const {
     id,
@@ -104,14 +129,26 @@ export default function PostItemHorizontal({ item }: Props) {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            confirm.onTrue();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          Xóa
         </MenuItem>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content={"Bạn chắc chắn muốn xóa?"}
+        action={
+          <Button variant="contained" color="error" onClick={() => handleDeleteNew(id)}>
+            Delete
+          </Button>
+        }
+      />
     </>
   );
 }

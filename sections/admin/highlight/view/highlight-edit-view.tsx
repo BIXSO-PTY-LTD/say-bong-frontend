@@ -12,7 +12,7 @@ import { Typography } from '@mui/material';
 import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
 import { _tours } from '#/_mock';
 import HighlightNewEditForm from '../highlight-new-edit-form';
-import { useGetHighlightVideo } from '#/api/highlight-video';
+import { useGetHighlightVideo, useGetHighlightVideos } from '#/api/highlight-video';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,6 @@ export default function HighlightEditView({ id }: Props) {
   const settings = useSettingsContext();
 
   const { video: currentVideo } = useGetHighlightVideo(id);
-
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Typography variant="h3" sx={{

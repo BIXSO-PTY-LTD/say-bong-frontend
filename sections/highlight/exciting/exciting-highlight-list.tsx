@@ -4,51 +4,58 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 import HighlightItem from '../highlight-item';
 import ExcitingHighlightItem from './exciting-highlight-item';
 import { Typography } from '@mui/material';
+import { IVideoItem } from '#/types/video';
+import EmptyContent from '#/components/empty-content/empty-content';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tours: ITourProps[];
-  // loading?: boolean;
+  videos: IVideoItem[];
+  loading?: boolean;
+  empty?: boolean;
+  paginate: any;
+  handlePageChange: (event: React.ChangeEvent<unknown>, page: number) => void
+  currentPage: number
 };
 
-export default function ExcitingHighlightList({ tours,
-  //  loading 
+export default function ExcitingHighlightList({ videos,
+  loading, empty, paginate, handlePageChange, currentPage
 }: Props) {
+
+  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+
+  const renderList = <Box
+    sx={{
+      columnGap: 3,
+      display: 'grid',
+      rowGap: { xs: 4, md: 5 },
+      gridTemplateColumns: {
+        xs: 'repeat(1, 1fr)',
+        sm: 'repeat(2, 1fr)',
+        md: 'repeat(4, 1fr)',
+      },
+    }}
+  >
+
+    {videos.map((video) =>
+    (
+      <ExcitingHighlightItem key={video.id} video={video} />
+    )
+    )}
+
+  </Box>
   return (
     <>
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Những pha bóng thú vị</Typography>
-      <Box
-        sx={{
-          columnGap: 3,
-          display: 'grid',
-          rowGap: { xs: 4, md: 5 },
-          gridTemplateColumns: {
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
-            md: 'repeat(4, 1fr)',
-          },
-        }}
-      >
-        {/* {(loading ? [...Array(12)] : tours).map((tour, index) =>
-          tour ? (
-            <TravelTourItem key={tour.id} tour={tour} />
-          ) : (
-            <TravelTourItemSkeleton key={index} />
-          )
-        )} */}
-        {tours.slice(0, 8).map((tour) =>
-        (
-          <ExcitingHighlightItem key={tour.id} tour={tour} />
-        )
-        )}
 
-      </Box>
-
+      {empty && renderNotFound}
+      {loading ? <Typography>Loading...</Typography> : renderList}
       <Pagination
-        count={10}
+        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
         sx={{
           my: 10,

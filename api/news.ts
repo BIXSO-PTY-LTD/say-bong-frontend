@@ -20,8 +20,9 @@ export function useGetNews(offset?: number, limit?: number) {
       newsError: error,
       newsValidating: isValidating,
       newsEmpty: !isLoading && !data?.data.length,
+      endpoints: URL
     }),
-    [data, error, isLoading, isValidating]
+    [URL, data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -44,6 +45,19 @@ export function useCreateNews() {
   return createNews;
 }
 
+export function useUpdateNew() {
+  const updateNew = async (updatedNewData: Partial<INewsItem>) => {
+    const URL = `${endpoints.news.update}`;
+    try {
+      await axiosHost.put(URL, updatedNewData)
+    } catch (error) {
+      console.error('Error updating New:', error);
+      throw new Error('Update  failed');
+    }
+
+  }
+  return updateNew
+}
 export function useGetNew(newId: string | undefined) {
   const URL = newId ? `${endpoints.news.details}/${newId}` : '';
 
@@ -59,4 +73,20 @@ export function useGetNew(newId: string | undefined) {
     [data, error, isLoading, isValidating]
   );
   return memoizedValue
+}
+
+export function useDeleteNew() {
+  const deleteNew = async (newId: string) => {
+    const URL = `${endpoints.news.delete}/${newId}`;
+
+    try {
+      await axiosHost.delete(URL);
+      return true;
+    } catch (error) {
+      console.error('Error deleting New:', error);
+      throw new Error('Deletion failed');
+    }
+  };
+
+  return deleteNew;
 }

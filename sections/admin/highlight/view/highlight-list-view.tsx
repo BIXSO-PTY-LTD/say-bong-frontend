@@ -8,7 +8,7 @@ import { _userList } from '#/_mock/_user';
 import Iconify from '#/components/iconify';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
-import { ITourProps, ITourTableFilters } from '#/types/tour';
+import { ITourTableFilters } from '#/types/tour';
 import HighlightListHorizontal from '../highlight-list-horizontal';
 import { useGetHighlightVideos } from '#/api/highlight-video';
 import { IVideoItem } from '#/types/video';
@@ -26,7 +26,7 @@ export default function HighlightListView() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { highlightVideos, paginate } = useGetHighlightVideos(currentPage, 8)
+  const { highlightVideos, highlightVideosLoading, paginate, endpoints } = useGetHighlightVideos(currentPage, 8)
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -34,11 +34,6 @@ export default function HighlightListView() {
   const dataFiltered = applyFilter({
     inputData: highlightVideos,
   });
-
-
-
-
-
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -55,8 +50,8 @@ export default function HighlightListView() {
           Thêm highlight
         </Button>
       </Stack>
-      <HighlightListHorizontal highlights={dataFiltered}
-      //  loading={newsLoading} 
+
+      <HighlightListHorizontal loading={highlightVideosLoading} endpoints={endpoints} highlights={dataFiltered}
       />
 
       <Pagination

@@ -13,23 +13,21 @@ import Image from '#/components/image';
 import Iconify from '#/components/iconify';
 import TextMaxLine from '#/components/text-max-line';
 
-import { ITourProps } from '#/types/tour';
 import Label from '#/components/label';
+import { IVideoItem } from '#/types/video';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tour: ITourProps;
+  video: IVideoItem;
 };
 
-export default function HighlightItem({ tour }: Props) {
-  const { id, slug, favorited, coverUrl } = tour;
+export default function HighlightItem({ video }: Props) {
+  const { id, title } = video;
 
-  const [favorite, setFavorite] = useState(favorited);
 
-  const handleChangeFavorite = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setFavorite(event.target.checked);
-  }, []);
+
 
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
@@ -52,13 +50,13 @@ export default function HighlightItem({ tour }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={slug} src={coverUrl} ratio="1/1" />
+        <Image alt={title} src={_mock.image.cover(4)} ratio="1/1" />
 
       </Box>
 
       <Link component={RouterLink} href={paths.highlight.details(id)} color="inherit" >
         <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
-          {slug}
+          {title}
         </TextMaxLine>
       </Link>
     </Card>

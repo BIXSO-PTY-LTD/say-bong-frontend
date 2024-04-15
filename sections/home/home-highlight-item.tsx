@@ -9,17 +9,20 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
+import { IVideoItem } from '#/types/video';
+import { _mock } from '#/_mock';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  video: IVideoItem;
   // order?: number;
   largePost?: boolean;
+  loading?: boolean;
 };
 
-export default function HomeHighlightItem({ post,
+export default function HomeHighlightItem({ video,
   //  order,
   largePost }: Props) {
 
@@ -38,8 +41,8 @@ export default function HomeHighlightItem({ post,
         }}
       >
         <Image
-          src={post.coverUrl}
-          alt={post.title}
+          src={_mock.image.cover(0)}
+          alt={video?.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -59,8 +62,8 @@ export default function HomeHighlightItem({ post,
           }}
         >
 
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{video?.title}</TextMaxLine>
           </Link>
 
 

@@ -20,8 +20,9 @@ export function useGetHighlightVideos(offset?: number, limit?: number) {
       highlightVideosError: error,
       highlightVideosValidating: isValidating,
       highlightVideosEmpty: !isLoading && !data?.data.length,
+      endpoints: URL
     }),
-    [data, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating, URL]
   );
 
   return memoizedValue;
@@ -58,4 +59,33 @@ export function useGetHighlightVideo(videoId: string | undefined) {
     [data, error, isLoading, isValidating]
   );
   return memoizedValue
+}
+export function useUpdateHighlightVideo() {
+  const updateHighlightVideo = async (updatedHighlightVideoData: Partial<IVideoItem>) => {
+    const URL = `${endpoints.highlightVideo.list}`;
+    try {
+      await axiosHost.put(URL, updatedHighlightVideoData)
+    } catch (error) {
+      console.error('Error updating HighlightVideo:', error);
+      throw new Error('Update  failed');
+    }
+
+  }
+  return updateHighlightVideo
+}
+
+export function useDeleteHighlightVideo() {
+  const deleteHighlightVideo = async (highlightVideoId: string) => {
+    const URL = `${endpoints.highlightVideo.delete}/${highlightVideoId}`;
+
+    try {
+      await axiosHost.delete(URL);
+      return true;
+    } catch (error) {
+      console.error('Error deleting HighlightVideo:', error);
+      throw new Error('Deletion failed');
+    }
+  };
+
+  return deleteHighlightVideo;
 }

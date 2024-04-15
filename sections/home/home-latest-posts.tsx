@@ -12,6 +12,7 @@ import Iconify from '#/components/iconify';
 import HomeLatestPostItem from './home-latest-post-item';
 import HomeLatestPostMobile from './home-latest-post-mobile';
 import { INewsItem } from '#/types/news';
+import EmptyContent from '#/components/empty-content/empty-content';
 
 
 
@@ -19,9 +20,11 @@ import { INewsItem } from '#/types/news';
 
 type Props = {
   posts: INewsItem[];
+  loading?: boolean;
+  empty?: boolean;
 };
 
-export default function HomeLastestPosts({ posts }: Props) {
+export default function HomeLastestPosts({ posts, loading, empty }: Props) {
   const mdUp = useResponsive('up', 'md');
 
 
@@ -35,7 +38,44 @@ export default function HomeLastestPosts({ posts }: Props) {
       Xem tất cả
     </Button>
   );
+  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+  const renderList = <><Box
+    sx={{
+      display: 'grid',
+      gap: { xs: 3, md: 4 },
+      gridTemplateColumns: {
+        xs: 'repeat(1, 1fr)',
+        sm: 'repeat(2, 1fr)',
+        md: 'repeat(4, 1fr)',
+      },
+    }}
+  >
+    {mdUp ? (
+      <>
+        {posts.slice(0, 4).map((post, index) => (
+          <HomeLatestPostItem key={post.id} post={post}
+          // order={index % 2}
+          />
+        ))}
 
+      </>
+    ) : (
+      <>
+        {posts.slice(0, 4).map((post) => (
+          <HomeLatestPostMobile key={post.id} post={post} />
+        ))}
+      </>
+    )}
+  </Box>
+
+    {
+      !mdUp && (
+        <Stack alignItems="center" sx={{ mt: 8 }}>
+          {viewAllBtn}
+        </Stack>
+      )
+    }
+  </>
   return (
     <Container
       sx={{
@@ -60,41 +100,9 @@ export default function HomeLastestPosts({ posts }: Props) {
 
         {mdUp && viewAllBtn}
       </Stack>
+      {empty && renderNotFound}
+      {loading ? <Typography>Loading...</Typography> : renderList}
 
-      <Box
-        sx={{
-          display: 'grid',
-          gap: { xs: 3, md: 4 },
-          gridTemplateColumns: {
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
-            md: 'repeat(4, 1fr)',
-          },
-        }}
-      >
-        {mdUp ? (
-          <>
-            {posts.slice(0, 4).map((post, index) => (
-              <HomeLatestPostItem key={post.id} post={post}
-              // order={index % 2}
-              />
-            ))}
-
-          </>
-        ) : (
-          <>
-            {posts.slice(0, 4).map((post) => (
-              <HomeLatestPostMobile key={post.id} post={post} />
-            ))}
-          </>
-        )}
-      </Box>
-
-      {!mdUp && (
-        <Stack alignItems="center" sx={{ mt: 8 }}>
-          {viewAllBtn}
-        </Stack>
-      )}
     </Container>
   );
 }

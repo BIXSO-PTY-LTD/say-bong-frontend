@@ -24,21 +24,42 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 import { ITourProps } from '#/types/tour';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
+import { useBoolean } from '#/hooks/use-boolean';
+import { mutate } from 'swr';
+import { useCallback } from 'react';
+import { useDeleteHighlightVideo } from '#/api/highlight-video';
+import { ConfirmDialog } from '#/components/custom-dialog';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   highlight: IVideoItem;
+  endpoints?: string;
 };
 
-export default function HighlightItemHorizontal({ highlight }: Props) {
+export default function HighlightItemHorizontal({ highlight, endpoints }: Props) {
   const popover = usePopover();
 
+  const confirm = useBoolean();
 
   const router = useRouter();
 
   const smUp = useResponsive('up', 'sm');
+  const deleteVideo = useDeleteHighlightVideo();
 
+  const handleDeleteVideo = useCallback(
+    async (id: string) => {
+      try {
+        await deleteVideo(id);
+        confirm.onFalse();
+        mutate(endpoints);
+      } catch (error) {
+        console.error('Error deleting Video:', error);
+      }
+    },
+    [deleteVideo, confirm, endpoints]
+  );
   const {
     id,
     title,
@@ -105,14 +126,26 @@ export default function HighlightItemHorizontal({ highlight }: Props) {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            confirm.onTrue();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          Xóa
         </MenuItem>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content={"Bạn chắc chắn muốn xóa?"}
+        action={
+          <Button variant="contained" color="error" onClick={() => handleDeleteVideo(id)}>
+            Xóa
+          </Button>
+        }
+      />
     </>
   );
 }

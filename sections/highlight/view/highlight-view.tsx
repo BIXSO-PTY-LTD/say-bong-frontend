@@ -5,21 +5,48 @@ import { _careerPosts } from '#/_mock/_blog';
 import { _tours } from '#/_mock';
 import HighlightList from '../highlight-list';
 import ExcitingHighlightList from '../exciting/exciting-highlight-list';
+import { useGetHighlightVideos } from '#/api/highlight-video';
+import { useState } from 'react';
+import { useGetExcitingVideos } from '#/api/exciting-video';
 
 
 // ----------------------------------------------------------------------
 
 export default function HighlightView() {
+  const [currentPageHighlight, setCurrentPageHighlight] = useState(1);
 
+  const [currentPageExciting, setCurrentPageExciting] = useState(1);
+
+  const { highlightVideos, highlightVideosLoading, highlightVideosEmpty, paginate: highlightPaginate } = useGetHighlightVideos(currentPageHighlight, 16);
+
+  const { excitingVideos, excitingVideosLoading, excitingVideosEmpty, paginate: excitingPaginate } = useGetExcitingVideos(currentPageExciting, 8);
+
+  const handlePageChangeHighlight = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPageHighlight(page);
+  };
+
+  const handlePageChangeExciting = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPageExciting(page);
+  };
   return (
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Highlight</Typography>
       <HighlightList
-        tours={_tours}
-      // loading={loading.value}
+        videos={highlightVideos}
+        loading={highlightVideosLoading}
+        empty={highlightVideosEmpty}
+        paginate={highlightPaginate}
+        handlePageChange={handlePageChangeHighlight}
+        currentPage={currentPageHighlight}
       />
 
-      <ExcitingHighlightList tours={_tours} />
+      <ExcitingHighlightList
+        videos={excitingVideos}
+        loading={excitingVideosLoading}
+        empty={excitingVideosEmpty}
+        paginate={excitingPaginate}
+        handlePageChange={handlePageChangeExciting}
+        currentPage={currentPageExciting} />
     </Container>
   );
 }

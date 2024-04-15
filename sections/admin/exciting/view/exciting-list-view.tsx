@@ -26,7 +26,7 @@ export default function ExcitingListView() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { excitingVideos, paginate } = useGetExcitingVideos(currentPage, 8)
+  const { excitingVideos, excitingVideosLoading, excitingVideosEmpty, paginate, endpoints } = useGetExcitingVideos(currentPage, 8)
 
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
@@ -56,7 +56,7 @@ export default function ExcitingListView() {
           Thêm video
         </Button>
       </Stack>
-      <ExcitingListHorizontal excitingVideos={dataFiltered}
+      <ExcitingListHorizontal endpoints={endpoints} loading={excitingVideosLoading} empty={excitingVideosEmpty} excitingVideos={dataFiltered}
       //  loading={newsLoading} 
       />
 

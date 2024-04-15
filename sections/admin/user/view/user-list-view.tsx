@@ -29,7 +29,7 @@ export default function UserListView() {
   const [currentPage, setCurrentPage] = useState(1);
 
 
-  const { users, usersLoading, paginate } = useGetUsers(currentPage);
+  const { users, usersLoading, usersEmpty, paginate } = useGetUsers(currentPage);
 
 
   const settings = useSettingsContext();

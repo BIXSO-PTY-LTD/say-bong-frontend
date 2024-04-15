@@ -27,7 +27,7 @@ import RHFEditor from '#/components/hook-form/rhf-editor';
 import { useBoolean } from '#/hooks/use-boolean';
 import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
-import { useCreateNews } from '#/api/news';
+import { useCreateNews, useUpdateNew } from '#/api/news';
 import { INewsItem } from '#/types/news';
 
 // ----------------------------------------------------------------------
@@ -47,6 +47,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
 
 
   const NewPostSchema = Yup.object().shape({
+    id: Yup.string().required('id is required'),
     title: Yup.string().required('Title is required'),
     description: Yup.string().required('description is required'),
 
@@ -54,6 +55,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
 
   const defaultValues = useMemo(
     () => ({
+      id: currentNew?.id || '',
       title: currentNew?.title || '',
       description: currentNew?.description || '',
     }),
@@ -78,21 +80,16 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   }, [currentNew, defaultValues, reset]);
 
   const createNews = useCreateNews();
+  const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentNew) {
-        // console.log('Editing News with ID:', currentNew.id);
-
-        // if (avatarFile) {
-        //   const uploadResult = await uploadAvatar( currentNew?.id,avatarFile);
-        //   console.log('Upload Result:', uploadResult);
-        // }
+        await updateNew(data);
       } else {
         await createNews(data);
       }
-      reset();
       mutate(endpoints.news.list);
-      enqueueSnackbar(currentNew ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.news.root);
       console.info('DATA', data);
     } catch (error) {
@@ -135,7 +132,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const renderActions = (
     <Box sx={{ mt: 3, width: "100%", textAlign: "end" }}>
       <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-        Tạo mới
+        {currentNew ? "Cập nhật" : "Tạo mới"}
       </LoadingButton>
     </Box>
   );

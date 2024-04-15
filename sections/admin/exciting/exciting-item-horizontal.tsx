@@ -24,20 +24,44 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 import { ITourProps } from '#/types/tour';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
+import { useDeleteExcitingVideo } from '#/api/exciting-video';
+import { useCallback } from 'react';
+import { mutate } from 'swr';
+import { ConfirmDialog } from '#/components/custom-dialog';
+import { Button } from '@mui/material';
+import { useBoolean } from '#/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   video: IVideoItem;
+  endpoints?: string;
 };
 
-export default function ExcitingItemHorizontal({ video }: Props) {
+export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
 
+  const confirm = useBoolean();
+
+
   const smUp = useResponsive('up', 'sm');
 
+  const deleteExcitingVideo = useDeleteExcitingVideo();
+
+  const handleDeleteVideo = useCallback(
+    async (id: string) => {
+      try {
+        await deleteExcitingVideo(id);
+        confirm.onFalse();
+        mutate(endpoints);
+      } catch (error) {
+        console.error('Error deleting news:', error);
+      }
+    },
+    [deleteExcitingVideo, endpoints, confirm]
+  );
   const {
     id,
     title,
@@ -103,6 +127,7 @@ export default function ExcitingItemHorizontal({ video }: Props) {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            confirm.onTrue();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
@@ -111,6 +136,17 @@ export default function ExcitingItemHorizontal({ video }: Props) {
           Delete
         </MenuItem>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content={"Bạn chắc chắn muốn xóa?"}
+        action={
+          <Button variant="contained" color="error" onClick={() => handleDeleteVideo(id)}>
+            Delete
+          </Button>
+        }
+      />
     </>
   );
 }
