@@ -62,5 +62,8 @@ export const endpoints = {
     create: '/api/v1/highlight',
     details: '/api/v1/highlight',
     delete: '/api/v1/highlight/delete',
+  },
+  file: {
+    upload: '/api/v1/upload/base64'
   }
 };

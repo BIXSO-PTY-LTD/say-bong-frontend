@@ -7,6 +7,7 @@ export type IVideoMetas = {
 export type IVideoItem = {
   id: string;
   title: string;
-  description: string
+  content: string
+  video: string
   meta: IVideoMetas[];
 };

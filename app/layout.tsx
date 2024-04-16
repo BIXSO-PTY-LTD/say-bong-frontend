@@ -13,10 +13,6 @@ import { SettingsProvider } from '#/components/settings';
 
 
 import { AuthProvider } from '#/auth/context';
-// import { AuthProvider } from 'src/auth/context/auth0';
-// import { AuthProvider } from 'src/auth/context/amplify';
-// import { AuthProvider } from 'src/auth/context/firebase';
-
 // ----------------------------------------------------------------------
 
 export const metadata = {

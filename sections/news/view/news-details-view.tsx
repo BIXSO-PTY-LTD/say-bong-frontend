@@ -26,7 +26,6 @@ export default function NewsDetailsView({ id }: Props) {
       <Container sx={{ mt: 5 }}>
         <Grid container columnSpacing={{ xs: 0, md: 8 }} >
           <Grid xs={12} md={8}>
-
             <NewsDetails currentPost={currentPost} />
 
 

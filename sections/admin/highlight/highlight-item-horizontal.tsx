@@ -63,7 +63,7 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
   const {
     id,
     title,
-    description,
+    content,
   } = highlight;
 
   return (
@@ -88,7 +88,7 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.video.highlight.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {description}
+                {content}
               </TextMaxLine>
             </Link>
           </Stack>

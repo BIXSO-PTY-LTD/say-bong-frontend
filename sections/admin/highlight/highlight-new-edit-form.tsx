@@ -53,10 +53,10 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
   // }, [currentVideo?.video]);
 
   const NewPostSchema = Yup.object().shape({
-    id: Yup.string().required('id is required'),
+    id: Yup.string(),
     title: Yup.string().required('title is required'),
     // video: Yup.mixed<any>().nullable().required('Video is required')
-    description: Yup.string().required('description is required'),
+    content: Yup.string().required('content is required'),
 
   });
 
@@ -64,7 +64,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
     () => ({
       id: currentVideo?.id || '',
       title: currentVideo?.title || '',
-      description: currentVideo?.description || '',
+      content: currentVideo?.content || '',
       // video: currentVideo?.video || null,
     }),
     [currentVideo]
@@ -131,7 +131,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            slug, short description, image...
+            slug, short content, image...
           </Typography>
         </Grid>
       )}
@@ -142,7 +142,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField inputColor='#fff' name="title" label="Chủ đề" />
-            <RHFTextField inputColor='#fff' name="description" label="Mô tả" />
+            <RHFTextField inputColor='#fff' name="content" label="Mô tả" />
 
             {/* <Stack spacing={1.5}>
               <Typography variant="subtitle2">Video</Typography>
