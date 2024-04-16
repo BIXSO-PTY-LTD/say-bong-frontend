@@ -86,6 +86,7 @@ const StyledMarkdown = styled('div', {
   // Image
   '& img': {
     borderRadius: theme.spacing(1),
+    width: '100%',
   },
 
   // Table

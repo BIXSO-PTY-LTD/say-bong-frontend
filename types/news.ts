@@ -6,7 +6,6 @@ export type INewsMetas = {
 export type INewsItem = {
   id: string;
   title: string;
-  description: string
   content: string;
   createdAt: Date;
   images: string[];

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -23,13 +23,11 @@ import FormProvider, {
 import { CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
-import { useBoolean } from '#/hooks/use-boolean';
 import { mutate } from 'swr';
-import { axiosHost, endpoints } from '#/utils/axios';
+import { endpoints } from '#/utils/axios';
 import { useCreateNews, useUpdateNew } from '#/api/news';
 import { INewsItem } from '#/types/news';
-import { Cloudinary } from "@cloudinary/url-gen";
-
+import cloudinary from '#/utils/cloudinaryConfig'
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -41,7 +39,6 @@ export default function NewsNewEditForm({ currentNew }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const preview = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -71,7 +68,6 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const {
     reset,
     handleSubmit,
-    watch,
     formState: { isSubmitting },
   } = methods;
 
@@ -82,19 +78,21 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   }, [currentNew, defaultValues, reset]);
 
   const extractBase64Src = (content: string) => {
-    const imgSrcRegex = /<img.*?src=["']data:image\/.*?;base64,([^"']+)["']/g;
+    const imgSrcRegex = /data:image\/(?:png|jpeg|jpg|gif);base64,([^'"]+)/g;
     const base64SrcArray = [];
     let match;
 
     while ((match = imgSrcRegex.exec(content)) !== null) {
-      base64SrcArray.push(match[1]);
+      base64SrcArray.push(match[0]); // Pushing the whole match
     }
 
     return base64SrcArray;
   };
 
   const base64ToBlob = (base64String: string, contentType = '') => {
-    const byteCharacters = atob(base64String);
+    const base64WithoutPrefix = base64String.replace(/^data:image\/[a-z]+;base64,/, '');
+
+    const byteCharacters = atob(base64WithoutPrefix);
     const byteArrays = [];
     for (let offset = 0; offset < byteCharacters.length; offset += 512) {
       const slice = byteCharacters.slice(offset, offset + 512);
@@ -106,6 +104,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
       byteArrays.push(byteArray);
     }
     const blob = new Blob(byteArrays, { type: contentType });
+
     return blob;
   };
 
@@ -123,8 +122,35 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const base64Array = extractBase64Src(data.content);
+
       const filesArray = base64ToFiles(base64Array, 'image/jpeg');
-      console.log(filesArray);
+
+      // Upload files to Cloudinary
+      const uploadedUrls = await Promise.all(filesArray.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'ml_default');
+
+        const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to upload image to Cloudinary');
+        }
+
+        const responseData = await response.json();
+        return responseData.secure_url;
+      }));
+
+      let updatedContent = data.content;
+      base64Array.forEach((base64String, index) => {
+        updatedContent = updatedContent.replace(base64String, uploadedUrls[index]);
+      });
+
+      data.content = updatedContent;
+
       if (currentNew) {
         await updateNew(data);
       } else {
@@ -166,6 +192,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
               <Typography variant="subtitle2">Nội dung</Typography>
               <RHFEditor simple name="content" />
             </Stack>
+
           </Stack>
         </Card>
       </Grid>
