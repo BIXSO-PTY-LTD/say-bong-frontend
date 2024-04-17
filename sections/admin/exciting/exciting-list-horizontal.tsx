@@ -5,7 +5,7 @@ import NewsItemHorizontal from './exciting-item-horizontal';
 import { ITourProps } from '#/types/tour';
 import ExcitingItemHorizontal from './exciting-item-horizontal';
 import { IVideoItem } from '#/types/video';
-import { MatchItemSkeleton } from '#/sections/match/match-item-skeleton';
+import { MatchItemSkeleton } from '#/sections/skeletons/match-item-skeleton';
 import EmptyContent from '#/components/empty-content/empty-content';
 
 // ----------------------------------------------------------------------

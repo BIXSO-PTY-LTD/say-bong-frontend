@@ -11,6 +11,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
 
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,15 @@ export default function HomeLatestPostItem({ post, transparent,
   //  order,
   largePost }: Props) {
 
+  const [firstImageUrl, setFirstImageUrl] = useState('');
+
+  useEffect(() => {
+    const regex = /<img.*?src="(.*?)".*?>/;
+    const match = post.content.match(regex);
+    if (match && match[1]) {
+      setFirstImageUrl(match[1]);
+    }
+  }, [post.content]);
   return (
     <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
       <Stack
@@ -39,7 +49,7 @@ export default function HomeLatestPostItem({ post, transparent,
         }}
       >
         <Image
-          src={_mock.image.cover(0)}
+          src={firstImageUrl ? firstImageUrl : _mock.image.cover(0)}
           alt={post.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||

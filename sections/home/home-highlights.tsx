@@ -14,6 +14,7 @@ import HomeHighlightMobile from './home-highlight-mobile';
 import { IVideoItem } from '#/types/video';
 import { useEffect } from 'react';
 import EmptyContent from '#/components/empty-content/empty-content';
+import { LargerPostSkeleton } from '../skeletons/larger-post-skeleton';
 
 
 
@@ -103,8 +104,13 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
 
         {mdUp && viewAllBtn}
       </Stack>
-      {empty && renderNotFound}
-      {loading ? <Typography>Loading...</Typography> : renderList}
+      {loading ? (
+        <LargerPostSkeleton />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderList
+      )}
 
 
 

@@ -65,5 +65,8 @@ export const endpoints = {
   },
   file: {
     upload: '/api/v1/upload/base64'
+  },
+  livestream: {
+    base: '/api/v1/livestream'
   }
 };

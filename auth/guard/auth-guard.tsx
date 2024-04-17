@@ -1,16 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { paths } from '#/routes/paths';
-import { usePathname, useRouter } from '#/routes/hooks';
+import { useRouter } from '#/routes/hooks';
 
 import { SplashScreen } from '#/components/loading-screen';
 
 import { useAuthContext } from '../hooks';
 import { useSnackbar } from 'notistack';
-import { error } from 'console';
-import { useDialogControls } from '#/hooks/use-dialog-controls';
-import LoginDialog from '#/sections/auth/login-dialog';
-import RegisterDialog from '#/sections/auth/register-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +28,7 @@ export default function AuthGuard({ children }: Props) {
 function Container({ children }: Props) {
   const router = useRouter();
 
-  const { authenticated } = useAuthContext();
+  const { user } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
@@ -41,14 +36,20 @@ function Container({ children }: Props) {
 
 
   const check = useCallback(() => {
-    if (!authenticated) {
+
+    if (!user?.roles.length) {
       router.replace("/");
-      enqueueSnackbar("Bạn phải đăng nhập và phải có quyền admin", { variant: "error" })
+      setTimeout(() => {
+        enqueueSnackbar("Bạn chưa đăng nhập hoặc tài khoản phải có quyền admin", {
+          variant: 'error', // Loại thông báo (ví dụ: success, error, warning)
+          autoHideDuration: 3000 // Thời gian hiển thị thông báo (đơn vị: ms)
+        });
+      }, 2000);
     } else {
       setChecked(true);
 
     }
-  }, [authenticated, router, enqueueSnackbar]);
+  }, [user, router, enqueueSnackbar]);
 
   useEffect(() => {
     check();

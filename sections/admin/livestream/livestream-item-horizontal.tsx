@@ -2,8 +2,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 
 import { paths } from '#/routes/paths';
@@ -13,33 +11,30 @@ import { RouterLink } from '#/routes/components';
 import { useResponsive } from '#/hooks/use-responsive';
 
 import { fDate } from '#/utils/format-time';
-import { fShortenNumber } from '#/utils/format-number';
 
-import Label from '#/components/label';
 import Image from '#/components/image';
 import Iconify from '#/components/iconify';
 import TextMaxLine from '#/components/text-max-line';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 
-import { IBlogPostProps } from '#/types/blog';
-import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
 import { useCallback, useEffect, useState } from 'react';
-import { useDeleteNew, useGetNews } from '#/api/news';
+import { useDeleteNew } from '#/api/news';
 import { mutate } from 'swr';
-import { endpoints } from '#/utils/axios';
 import { ConfirmDialog } from '#/components/custom-dialog';
-import { Button } from '@mui/material';
+import { Button, MenuItem } from '@mui/material';
 import { useBoolean } from '#/hooks/use-boolean';
+import { ILivestreamItem } from '#/types/livestream';
+import { useDeleteLivestream } from '#/api/livestream';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  item: INewsItem;
+  livestream: ILivestreamItem;
   endpoints?: string;
 };
 
-export default function PostItemHorizontal({ item, endpoints }: Props) {
+export default function LivestreamlivestreamHorizontal({ livestream, endpoints }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
@@ -50,26 +45,26 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
 
   useEffect(() => {
     const regex = /<img.*?src="(.*?)".*?>/;
-    const match = item.content.match(regex);
+    const match = livestream.content.match(regex);
     if (match && match[1]) {
       setFirstImageUrl(match[1]);
     }
-  }, [item.content]);
+  }, [livestream.content]);
 
   const smUp = useResponsive('up', 'sm');
-  const deleteNew = useDeleteNew();
+  const deleteLivestream = useDeleteLivestream();
 
-  const handleDeleteNew = useCallback(
+  const handleDeleteLivestream = useCallback(
     async (id: string) => {
       try {
-        await deleteNew(id);
+        await deleteLivestream(id);
         confirm.onFalse();
         mutate(endpoints);
       } catch (error) {
-        console.error('Error deleting news:', error);
+        console.error('Error deleting Livestream:', error);
       }
     },
-    [deleteNew, endpoints, confirm]
+    [deleteLivestream, endpoints, confirm]
   );
 
   const {
@@ -77,7 +72,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
     title,
     content,
     createdAt,
-  } = item;
+  } = livestream;
 
   return (
     <>
@@ -115,7 +110,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
               width: "164px"
             }}
           >
-            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(3)} sx={{
+            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(0)} sx={{
               borderRadius: 1.5, height: 1
             }} />
           </Box>
@@ -154,7 +149,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
         title="Delete"
         content={"Bạn chắc chắn muốn xóa?"}
         action={
-          <Button variant="contained" color="error" onClick={() => handleDeleteNew(id)}>
+          <Button variant="contained" color="error" onClick={() => handleDeleteLivestream(id)}>
             Delete
           </Button>
         }

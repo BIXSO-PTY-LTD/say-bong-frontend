@@ -25,16 +25,15 @@ import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
 import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
-import { useCreateNews, useUpdateNew } from '#/api/news';
-import { INewsItem } from '#/types/news';
-import cloudinary from '#/utils/cloudinaryConfig'
+import { ILivestreamItem } from '#/types/livestream';
+import { useCreateLivestream, useUpdateLivestream } from '#/api/livestream';
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentNew?: INewsItem;
+  currentLivestream?: ILivestreamItem;
 };
 
-export default function NewsNewEditForm({ currentNew }: Props) {
+export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
@@ -43,25 +42,23 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
 
-  const NewPostSchema = Yup.object().shape({
+  const LivestreamSchema = Yup.object().shape({
     id: Yup.string(),
     title: Yup.string().required('Title is required'),
-
     content: Yup.string().required('content is required'),
-
   });
 
   const defaultValues = useMemo(
     () => ({
-      id: currentNew?.id || '',
-      title: currentNew?.title || '',
-      content: currentNew?.content || '',
+      id: currentLivestream?.id || '',
+      title: currentLivestream?.title || '',
+      content: currentLivestream?.content || '',
     }),
-    [currentNew]
+    [currentLivestream]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewPostSchema),
+    resolver: yupResolver(LivestreamSchema),
     defaultValues,
   });
 
@@ -72,10 +69,10 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   } = methods;
 
   useEffect(() => {
-    if (currentNew) {
+    if (currentLivestream) {
       reset(defaultValues);
     }
-  }, [currentNew, defaultValues, reset]);
+  }, [currentLivestream, defaultValues, reset]);
 
   const extractBase64Src = (content: string) => {
     const imgSrcRegex = /data:image\/(?:png|jpeg|jpg|gif);base64,([^'"]+)/g;
@@ -117,10 +114,12 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   };
 
 
-  const createNews = useCreateNews();
-  const updateNew = useUpdateNew();
+  const createLiveStream = useCreateLivestream();
+  const updateLivestream = useUpdateLivestream();
   const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log(data);
+
       const base64Array = extractBase64Src(data.content);
 
       const filesArray = base64ToFiles(base64Array, 'image/jpeg');
@@ -151,14 +150,14 @@ export default function NewsNewEditForm({ currentNew }: Props) {
 
       data.content = updatedContent;
 
-      if (currentNew) {
-        await updateNew(data);
+      if (currentLivestream) {
+        await createLiveStream(data);
       } else {
-        await createNews(data);
+        await updateLivestream(data);
       }
-      mutate(endpoints.news.list);
-      enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
-      router.push(paths.dashboard.news.root);
+      mutate(endpoints.livestream.base);
+      enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
+      router.push(paths.dashboard.livestream.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -173,10 +172,10 @@ export default function NewsNewEditForm({ currentNew }: Props) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            Chi tiết
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Title, short description, image...
+            Chủ đề, mô tả, livestream,...
           </Typography>
         </Grid>
       )}
@@ -186,7 +185,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField inputColor='#fff' name="title" label="Post Title" />
+            <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Nội dung</Typography>
@@ -203,7 +202,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const renderActions = (
     <Box sx={{ mt: 3, width: "100%", textAlign: "end" }}>
       <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-        {currentNew ? "Cập nhật" : "Tạo mới"}
+        {currentLivestream ? "Cập nhật" : "Tạo mới"}
       </LoadingButton>
     </Box>
   );

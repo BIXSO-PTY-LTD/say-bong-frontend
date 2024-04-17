@@ -6,6 +6,7 @@ import ExcitingHighlightItem from './exciting-highlight-item';
 import { Typography } from '@mui/material';
 import { IVideoItem } from '#/types/video';
 import EmptyContent from '#/components/empty-content/empty-content';
+import { StackPostSkeleton } from '#/sections/skeletons/stack-post-skeleton';
 
 
 
@@ -50,8 +51,13 @@ export default function ExcitingHighlightList({ videos,
     <>
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Những pha bóng thú vị</Typography>
 
-      {empty && renderNotFound}
-      {loading ? <Typography>Loading...</Typography> : renderList}
+      {loading ? (
+        <StackPostSkeleton count={8} />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderList
+      )}
       <Pagination
         count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
         page={currentPage}

@@ -5,7 +5,7 @@ import { _careerPosts } from '#/_mock/_blog';
 import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
 import { IUserItem, IUserTableFilters } from '#/types/user';
-import { TableHeadCustom, TableSelectedAction, TableSkeleton, getComparator, useTable } from '#/components/table';
+import { TableHeadCustom, TableSelectedAction, getComparator, useTable } from '#/components/table';
 import { useEffect, useState } from 'react';
 import { _userList } from '#/_mock/_user';
 import Iconify from '#/components/iconify';
@@ -13,6 +13,7 @@ import Scrollbar from '#/components/scrollbar';
 import UserTableRow from '../user-table-row';
 import { useBoolean } from '#/hooks/use-boolean';
 import { useGetUsers } from '#/api/user';
+import TableSkeleton from '#/sections/skeletons/table-skeleton';
 
 // ----------------------------------------------------------------------
 

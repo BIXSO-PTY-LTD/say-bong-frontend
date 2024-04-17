@@ -5,21 +5,30 @@ import Stack from '@mui/material/Stack';
 
 import Image from '#/components/image';
 import TextMaxLine from '#/components/text-max-line';
-import { fDate } from '#/utils/format-time';
-import { IBlogPostProps } from '#/types/blog';
-import { ITourProps } from '#/types/tour';
 import { paths } from '#/routes/paths';
 import { Link } from '@mui/material';
 import { RouterLink } from '#/routes/components';
+import { ILivestreamItem } from '#/types/livestream';
+import { useEffect, useState } from 'react';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tour: ITourProps;
+  livestream: ILivestreamItem;
   onSiderbar?: boolean;
 };
 
-export default function LivestreamLatestPostMobile({ tour, onSiderbar }: Props) {
+export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: Props) {
+  const [firstImageUrl, setFirstImageUrl] = useState('');
+
+  useEffect(() => {
+    const regex = /<img.*?src="(.*?)".*?>/;
+    const match = livestream.content.match(regex);
+    if (match && match[1]) {
+      setFirstImageUrl(match[1]);
+    }
+  }, [livestream.content]);
   return (
     <Stack
       spacing={2}
@@ -28,8 +37,8 @@ export default function LivestreamLatestPostMobile({ tour, onSiderbar }: Props) 
       sx={{ width: 1 }}
     >
       <Image
-        alt={tour.slug}
-        src={tour.coverUrl}
+        alt={livestream.title}
+        src={firstImageUrl ? firstImageUrl : _mock.image.cover(4)}
         sx={{
           width: 80,
           height: 80,
@@ -39,8 +48,8 @@ export default function LivestreamLatestPostMobile({ tour, onSiderbar }: Props) 
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link component={RouterLink} color="inherit" href={paths.livestream.details(tour.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{tour.slug}</TextMaxLine>
+        <Link component={RouterLink} color="inherit" href={paths.livestream.details(livestream.id)}>
+          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{livestream.title}</TextMaxLine>
         </Link>
 
       </Stack>

@@ -11,16 +11,17 @@ import Iconify from '#/components/iconify';
 import { ITourProps } from '#/types/tour';
 import LivestreamLatestItem from './livestream-latest-item';
 import LivestreamLatestPostMobile from './livestream-latest-mobile';
+import { ILivestreamItem } from '#/types/livestream';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tours: ITourProps[];
+  livestreams: ILivestreamItem[];
 };
 
-export default function LivestreamLastest({ tours }: Props) {
+export default function LivestreamLastest({ livestreams }: Props) {
   const mdUp = useResponsive('up', 'md');
 
 
@@ -71,8 +72,8 @@ export default function LivestreamLastest({ tours }: Props) {
       >
         {mdUp ? (
           <>
-            {tours.slice(0, 4).map((tour, index) => (
-              <LivestreamLatestItem key={tour.id} tour={tour}
+            {livestreams.slice(0, 4).map((livestream, index) => (
+              <LivestreamLatestItem key={livestream.id} livestream={livestream}
               // order={index % 2}
               />
             ))}
@@ -80,8 +81,8 @@ export default function LivestreamLastest({ tours }: Props) {
           </>
         ) : (
           <>
-            {tours.slice(0, 4).map((tour) => (
-              <LivestreamLatestPostMobile key={tour.id} tour={tour} />
+            {livestreams.slice(0, 4).map((livestream) => (
+              <LivestreamLatestPostMobile key={livestream.id} livestream={livestream} />
             ))}
           </>
         )}

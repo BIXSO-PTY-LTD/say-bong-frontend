@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { IBlogPostProps } from '#/types/blog';
 import NewsItemHorizontal from './news-item-horizontal';
 import { INewsItem } from '#/types/news';
-import { MatchItemSkeleton } from '#/sections/match/match-item-skeleton';
+import { MatchItemSkeleton } from '#/sections/skeletons/match-item-skeleton';
 
 // ----------------------------------------------------------------------
 

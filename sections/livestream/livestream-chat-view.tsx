@@ -14,12 +14,13 @@ import { useDialogControls } from "#/hooks/use-dialog-controls";
 import LoginDialog from "../auth/login-dialog";
 import RegisterDialog from "../auth/register-dialog";
 import ChangePasswordDialog from "../auth/change-password-dialog";
+import { ILivestreamItem } from "#/types/livestream";
 
 type Props = {
-  currentTour?: ITourProps
+  currentLivestream?: ILivestreamItem
 }
 
-export default function LivestreamChatView({ currentTour }: Props) {
+export default function LivestreamChatView({ currentLivestream }: Props) {
   const router = useRouter();
   const { user } = useAuthContext();
 
@@ -28,7 +29,7 @@ export default function LivestreamChatView({ currentTour }: Props) {
   const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
 
 
-  const { conversation, conversationError } = useGetConversation(currentTour?.id);
+  const { conversation, conversationError } = useGetConversation(currentLivestream?.id);
 
   const participants: IChatParticipant[] = conversation
     ? conversation.participants.filter(
@@ -37,11 +38,11 @@ export default function LivestreamChatView({ currentTour }: Props) {
     : [];
 
   useEffect(() => {
-    if (conversationError || !currentTour) {
+    if (conversationError || !currentLivestream) {
       router.push(paths.livestream.root);
 
     }
-  }, [conversationError, router, currentTour]);
+  }, [conversationError, router, currentLivestream]);
 
   const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
     setRecipients(selected);
@@ -72,8 +73,8 @@ export default function LivestreamChatView({ currentTour }: Props) {
           recipients={recipients}
           onAddRecipients={handleAddRecipients}
           //
-          selectedConversationId={currentTour?.id}
-          disabled={!recipients.length && !currentTour}
+          selectedConversationId={currentLivestream?.id}
+          disabled={!recipients.length && !currentLivestream}
         />
       ) :
         (

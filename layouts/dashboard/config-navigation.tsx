@@ -55,10 +55,16 @@ export function useNavData() {
             ],
           },
           {
+            title: 'Livestream',
+            path: paths.dashboard.livestream.root,
+            icon: ICONS.video,
+          },
+          {
             title: 'Đổi mật khẩu',
             path: paths.dashboard.password,
             icon: ICONS.key,
           },
+
         ]
       }
 

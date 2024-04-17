@@ -12,6 +12,7 @@ import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,15 @@ type Props = {
 };
 
 export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
+  const [firstImageUrl, setFirstImageUrl] = useState('');
+
+  useEffect(() => {
+    const regex = /<img.*?src="(.*?)".*?>/;
+    const match = post.content.match(regex);
+    if (match && match[1]) {
+      setFirstImageUrl(match[1]);
+    }
+  }, [post.content]);
   return (
     <Stack
       spacing={2}
@@ -30,7 +40,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
     >
       <Image
         alt={post.title}
-        src={_mock.image.cover(0)}
+        src={firstImageUrl ? firstImageUrl : _mock.image.cover(5)}
         sx={{
           width: 80,
           height: 80,

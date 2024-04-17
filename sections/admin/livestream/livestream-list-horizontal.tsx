@@ -1,27 +1,26 @@
 import Box from '@mui/material/Box';
 
 
-import NewsItemHorizontal from './highlight-item-horizontal';
-import { ITourProps } from '#/types/tour';
-import ExcitingItemHorizontal from './highlight-item-horizontal';
-import HighlightItemHorizontal from './highlight-item-horizontal';
-import { IVideoItem } from '#/types/video';
 import { MatchItemSkeleton } from '#/sections/skeletons/match-item-skeleton';
+import { ILivestreamItem } from '#/types/livestream';
+import LivestreamItemHorizontal from './livestream-item-horizontal';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  highlights: IVideoItem[];
-  endpoints?: string;
+  livestreams: ILivestreamItem[];
   loading?: boolean;
+  endpoints?: string;
 };
 
-export default function HighlightListHorizontal({ highlights,
+export default function LiveStreamListHorizontal({ livestreams,
   loading, endpoints
 }: Props) {
+
+
   const renderSkeleton = (
     <>
-      {[...Array(16)].map((_, index) => (
+      {[...Array(8)].map((_, index) => (
         <MatchItemSkeleton key={index} variant="horizontal" />
       ))}
     </>
@@ -29,8 +28,8 @@ export default function HighlightListHorizontal({ highlights,
 
   const renderList = (
     <>
-      {highlights.map((highlight) => (
-        <HighlightItemHorizontal endpoints={endpoints} key={highlight.id} highlight={highlight} />
+      {livestreams.map((livestream) => (
+        <LivestreamItemHorizontal endpoints={endpoints} key={livestream.id} livestream={livestream} />
       ))}
     </>
   );

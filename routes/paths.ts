@@ -56,7 +56,11 @@ export const paths = {
       },
     },
     api: `${ROOTS.DASHBOARD}/api`,
-    livestream: `${ROOTS.DASHBOARD}/livestream`,
+    livestream: {
+      root: `${ROOTS.DASHBOARD}/livestream`,
+      new: `${ROOTS.DASHBOARD}/livestream/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/livestream/${id}`,
+    },
     password: `${ROOTS.DASHBOARD}/change-password`,
 
   }

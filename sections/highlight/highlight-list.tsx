@@ -5,6 +5,7 @@ import HighlightItem from './highlight-item';
 import { IVideoItem } from '#/types/video';
 import { Typography } from '@mui/material';
 import EmptyContent from '#/components/empty-content/empty-content';
+import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
 
 
 
@@ -44,8 +45,13 @@ export default function HighlightList({ videos,
   </Box>
   return (
     <>
-      {empty && renderNotFound}
-      {loading ? <Typography>Loading...</Typography> : renderList}
+      {loading ? (
+        <StackPostSkeleton count={12} />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderList
+      )}
 
 
       <Pagination

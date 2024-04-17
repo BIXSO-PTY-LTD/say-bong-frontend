@@ -13,6 +13,8 @@ import HomeLatestPostItem from './home-latest-post-item';
 import HomeLatestPostMobile from './home-latest-post-mobile';
 import { INewsItem } from '#/types/news';
 import EmptyContent from '#/components/empty-content/empty-content';
+import { LargerPostSkeleton } from '../skeletons/larger-post-skeleton';
+import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
 
 
 
@@ -100,8 +102,13 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
 
         {mdUp && viewAllBtn}
       </Stack>
-      {empty && renderNotFound}
-      {loading ? <Typography>Loading...</Typography> : renderList}
+      {loading ? (
+        <StackPostSkeleton count={4} />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderList
+      )}
 
     </Container>
   );
