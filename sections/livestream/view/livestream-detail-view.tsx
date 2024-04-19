@@ -6,13 +6,17 @@ import LivestreamLastest from "../livestream-latest"
 import LivestreamChatView from "../livestream-chat-view"
 import { ILivestreamItem } from "#/types/livestream"
 import { useGetLivestream, useGetLivestreams } from "#/api/livestream"
+import { StackPostSkeleton } from "#/sections/skeletons/stack-post-skeleton"
+import EmptyContent from "#/components/empty-content/empty-content"
 
 type Props = {
   id: string;
 }
 export default function LivestreamDetailView({ id }: Props) {
+
+
   const { livestream: currentLivestream, livestreamLoading } = useGetLivestream(id);
-  const { livestreams } = useGetLivestreams();
+  const { livestreams, livestreamsLoading, livestreamsEmpty } = useGetLivestreams();
 
   const filteredLivestreams = currentLivestream ? livestreams.filter(livestream => livestream.id !== currentLivestream.id) : livestreams;
 
@@ -20,7 +24,7 @@ export default function LivestreamDetailView({ id }: Props) {
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
       {livestreamLoading ? (
-        <>Loading...</>
+        <StackPostSkeleton count={1} />
       ) :
         (
           <Grid container spacing={{ xs: 1 }}>
@@ -33,7 +37,9 @@ export default function LivestreamDetailView({ id }: Props) {
           </Grid>
         )}
 
-      <LivestreamLastest livestreams={filteredLivestreams} />
+      <LivestreamLastest loading={livestreamLoading} empty={livestreamLoading} livestreams={filteredLivestreams} />
+
+
 
     </Container>
   )

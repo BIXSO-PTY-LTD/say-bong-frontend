@@ -1,10 +1,10 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-import { IChatMessage } from '#/types/chat';
+import { ICommentItem } from '#/types/chat';
 
 // ----------------------------------------------------------------------
 
-export default function useMessagesScroll(messages: IChatMessage[]) {
+export default function useMessagesScroll(messages: ICommentItem[]) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollMessagesToBottom = useCallback(() => {

@@ -12,6 +12,8 @@ import { ITourProps } from '#/types/tour';
 import LivestreamLatestItem from './livestream-latest-item';
 import LivestreamLatestPostMobile from './livestream-latest-mobile';
 import { ILivestreamItem } from '#/types/livestream';
+import EmptyContent from '#/components/empty-content';
+import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
 
 
 
@@ -19,11 +21,45 @@ import { ILivestreamItem } from '#/types/livestream';
 
 type Props = {
   livestreams: ILivestreamItem[];
+  loading?: boolean;
+  empty?: boolean;
 };
 
-export default function LivestreamLastest({ livestreams }: Props) {
+export default function LivestreamLastest({ livestreams, loading, empty }: Props) {
   const mdUp = useResponsive('up', 'md');
 
+  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+
+  const renderList = (
+    <Box
+      sx={{
+        display: 'grid',
+        gap: { xs: 3, md: 4 },
+        gridTemplateColumns: {
+          xs: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(4, 1fr)',
+        },
+      }}
+    >
+      {mdUp ? (
+        <>
+          {livestreams.slice(0, -4).map((livestream, index) => (
+            <LivestreamLatestItem key={livestream.id} livestream={livestream}
+            // order={index % 2}
+            />
+          ))}
+
+        </>
+      ) : (
+        <>
+          {livestreams.slice(0, 4).map((livestream) => (
+            <LivestreamLatestPostMobile key={livestream.id} livestream={livestream} />
+          ))}
+        </>
+      )}
+    </Box>
+  )
 
   const viewAllBtn = (
     <Button
@@ -59,34 +95,13 @@ export default function LivestreamLastest({ livestreams }: Props) {
         {mdUp && viewAllBtn}
       </Stack>
 
-      <Box
-        sx={{
-          display: 'grid',
-          gap: { xs: 3, md: 4 },
-          gridTemplateColumns: {
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
-            md: 'repeat(4, 1fr)',
-          },
-        }}
-      >
-        {mdUp ? (
-          <>
-            {livestreams.slice(0, 4).map((livestream, index) => (
-              <LivestreamLatestItem key={livestream.id} livestream={livestream}
-              // order={index % 2}
-              />
-            ))}
-
-          </>
-        ) : (
-          <>
-            {livestreams.slice(0, 4).map((livestream) => (
-              <LivestreamLatestPostMobile key={livestream.id} livestream={livestream} />
-            ))}
-          </>
-        )}
-      </Box>
+      {loading ? (
+        <StackPostSkeleton count={4} />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderList
+      )}
 
       {!mdUp && (
         <Stack alignItems="center" sx={{ mt: 8 }}>

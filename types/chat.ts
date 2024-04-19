@@ -12,7 +12,7 @@ export type ICommentItem = {
   title: number;
   content: string;
   postId: string;
-  author: IAuthor[];
+  author: IAuthor;
   createdAt: Date;
   updatedAt: Date;
 };

@@ -20,11 +20,11 @@ export function useGetLivestreamComments(liveStreamId: string | undefined) {
 
   const memoizedValue = useMemo(
     () => ({
-      comments: (data?.data as ICommentItem[]) || [],
+      comments: (data as ICommentItem[]) || [],
       commentsLoading: isLoading,
       commentsError: error,
       commentsValidating: isValidating,
-      commentsEmpty: !isLoading && !data?.data.length,
+      commentsEmpty: !isLoading && !data?.length,
       endpoint: URL
     }),
     [URL, data, error, isLoading, isValidating]
@@ -33,3 +33,23 @@ export function useGetLivestreamComments(liveStreamId: string | undefined) {
   return memoizedValue;
 }
 
+export function useSendMessage() {
+  const sendMessenger = async (messageData: {
+    content: string;
+    postId: string | undefined;
+    userId: string | undefined;
+  }) => {
+    const URL = `${endpoints.livestream.base}/comment`;
+
+    try {
+      const response = await axiosHost.post(URL, messageData);
+
+      return response.data.data;
+    } catch (error) {
+      console.error('Error creating HighlightVideo:', error);
+      throw new Error('Creation failed');
+    }
+  };
+
+  return sendMessenger;
+}

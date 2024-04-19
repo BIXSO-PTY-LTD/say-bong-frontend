@@ -10,100 +10,56 @@ import { useRouter } from '#/routes/hooks';
 
 import { useMockedUser } from '#/hooks/use-mocked-user';
 
-import uuidv4 from '#/utils/uuidv4';
-
-import { sendMessage, createConversation } from '#/api/chat';
 
 import Iconify from '#/components/iconify';
+import { IAuthor } from '#/types/chat';
+import { useAuthContext } from '#/auth/hooks';
+import { useSendMessage } from '#/api/chat';
 
-import { IChatParticipant } from '#/types/chat';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  recipients: IChatParticipant[];
-  onAddRecipients: (recipients: IChatParticipant[]) => void;
-  //
-  disabled: boolean;
-  selectedConversationId?: string;
+  currentLivestreamId: string | undefined;
+  userId: string | undefined;
 };
 
 export default function ChatMessageInput({
-  recipients,
-  onAddRecipients,
-  //
-  disabled,
-  selectedConversationId,
+  currentLivestreamId,
+  userId
 }: Props) {
 
 
   const router = useRouter();
 
-  const { user } = useMockedUser();
-
-  const fileRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuthContext();
 
   const [message, setMessage] = useState('');
-
-  const myContact = useMemo(
-    () => ({
-      id: `${user?.id}`,
-      role: `${user?.role}`,
-      email: `${user?.email}`,
-      address: `${user?.address}`,
-      name: `${user?.displayName}`,
-      lastActivity: new Date(),
-      avatarUrl: `${user?.avatarUrl}`,
-      phoneNumber: `${user?.phoneNumber}`,
-      status: 'online' as 'online' | 'offline' | 'alway' | 'busy',
-    }),
-    [user]
-  );
-
-  const messageData = useMemo(
-    () => ({
-      id: uuidv4(),
-      attachments: [],
-      body: message,
-      contentType: 'text',
-      createdAt: sub(new Date(), { minutes: 1 }),
-      senderId: myContact.id,
-    }),
-    [message, myContact.id]
-  );
-
-  const conversationData = useMemo(
-    () => ({
-      id: uuidv4(),
-      messages: [messageData],
-      participants: [...recipients, myContact],
-      type: recipients.length > 1 ? 'GROUP' : 'ONE_TO_ONE',
-      unreadCount: 0,
-    }),
-    [messageData, myContact, recipients]
-  );
-
 
   const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   }, []);
 
+  const messageData = useMemo(
+    () => ({
+      content: message,
+      postId: currentLivestreamId,
+      userId: userId
+    }),
+    [currentLivestreamId, message, userId]
+  );
+
+  const sendMessage = useSendMessage()
   const handleSendMessage = useCallback(async () => {
     try {
       if (message) {
-        if (selectedConversationId) {
-          await sendMessage(selectedConversationId, messageData);
-        } else {
-          const res = await createConversation(conversationData);
-          router.push(`${paths.livestream.root}?id=${res.conversation.id}`);
-          onAddRecipients([]);
-        }
+        await sendMessage(messageData)
         setMessage('');
       }
     } catch (error) {
       console.error(error);
     }
-  }, [conversationData, message, messageData, onAddRecipients, router, selectedConversationId]);
+  }, [message, messageData, sendMessage]);
 
   const handleKeyPress = useCallback(
     async (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -115,32 +71,28 @@ export default function ChatMessageInput({
   );
 
   return (
-    <>
-      <InputBase
-        value={message}
-        onKeyUp={handleKeyPress}
-        onChange={handleChangeMessage}
-        placeholder="Type a message"
-        disabled={disabled}
-        startAdornment={
-          <IconButton>
-            <Iconify icon="eva:smiling-face-fill" />
-          </IconButton>
-        }
-        endAdornment={
-          <IconButton onClick={handleSendMessage}>
-            <Iconify icon="solar:map-arrow-right-bold-duotone" />
-          </IconButton>
-        }
-        sx={{
-          px: 1,
-          height: 56,
-          flexShrink: 0,
-          borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
-        }}
-      />
+    <InputBase
+      value={message}
+      onKeyUp={handleKeyPress}
+      onChange={handleChangeMessage}
+      placeholder="Chat..."
+      startAdornment={
+        <IconButton>
+          <Iconify icon="eva:smiling-face-fill" />
+        </IconButton>
+      }
+      endAdornment={
+        <IconButton onClick={handleSendMessage}>
+          <Iconify icon="solar:map-arrow-right-bold-duotone" />
+        </IconButton>
+      }
+      sx={{
+        px: 1,
+        height: 56,
+        flexShrink: 0,
+        borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
+      }}
+    />
 
-      <input type="file" ref={fileRef} style={{ display: 'none' }} />
-    </>
   );
 }

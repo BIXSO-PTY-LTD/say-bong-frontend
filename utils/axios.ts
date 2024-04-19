@@ -32,7 +32,6 @@ export const assetsFetcher = async (args: string | [string, AxiosRequestConfig])
 };
 
 export const endpoints = {
-  chat: '/api/chat',
   auth: {
     me: '/api/v1/me',
     login: '/api/v1/login',

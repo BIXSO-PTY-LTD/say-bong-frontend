@@ -10,30 +10,27 @@ import { useMockedUser } from '#/hooks/use-mocked-user';
 
 import Iconify from '#/components/iconify';
 
-import { IChatMessage, IChatParticipant } from '#/types/chat';
+import { IAuthor, ICommentItem } from '#/types/chat';
 import useGetMessage from '#/hooks/use-get-message';
+import { useAuthContext } from '#/auth/hooks';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  message: IChatMessage;
-  participants: IChatParticipant[];
-  onOpenLightbox: (value: string) => void;
+  comment: ICommentItem;
+  authors: IAuthor[];
 };
 
-export default function ChatMessageItem({ message, participants, onOpenLightbox }: Props) {
-  const { user } = useMockedUser();
+export default function ChatMessageItem({ comment, authors }: Props) {
+  const { user } = useAuthContext();
 
-  const { me, senderDetails, hasImage } = useGetMessage({
-    message,
-    participants,
-    currentUserId: `${user?.id}`,
-  });
+  const isMe: boolean = user?.id === comment.author.id;
 
-  const { firstName } = senderDetails;
 
-  const { body, createdAt } = message;
+  // const { firstName } = senderDetails;
+
+  // const { body, createdAt } = message;
 
   const renderInfo = (
     <Typography
@@ -42,13 +39,13 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
       sx={{
         mb: 1,
         color: 'text.disabled',
-        ...(!me && {
+        ...(!isMe && {
           mr: 'auto',
         }),
       }}
     >
-      {!me && `${firstName},`} &nbsp;
-      {formatDistanceToNowStrict(new Date(createdAt), {
+      {!isMe && `${comment.author.userName},`} &nbsp;
+      {formatDistanceToNowStrict(new Date(comment.createdAt), {
         addSuffix: true,
       })}
     </Typography>
@@ -63,40 +60,21 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
         borderRadius: 1,
         typography: 'body2',
         bgcolor: 'background.neutral',
-        ...(me && {
+        ...(user && {
           color: 'grey.800',
           bgcolor: 'primary.lighter',
-        }),
-        ...(hasImage && {
-          p: 0,
-          bgcolor: 'transparent',
-        }),
+        })
       }}
     >
-      {hasImage ? (
-        <Box
-          component="img"
-          alt="attachment"
-          src={body}
-          onClick={() => onOpenLightbox(body)}
-          sx={{
-            minHeight: 220,
-            borderRadius: 1.5,
-            cursor: 'pointer',
-            '&:hover': {
-              opacity: 0.9,
-            },
-          }}
-        />
-      ) : (
-        body
-      )}
+
+      {comment.content}
+
     </Stack>
   );
 
 
   return (
-    <Stack direction="row" justifyContent={me ? 'flex-end' : 'unset'} sx={{ mb: 5 }}>
+    <Stack direction="row" justifyContent={isMe ? 'flex-end' : 'unset'} sx={{ mb: 5 }}>
       <Stack alignItems="flex-end">
         {renderInfo}
 

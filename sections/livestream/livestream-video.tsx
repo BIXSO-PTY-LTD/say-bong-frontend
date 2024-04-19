@@ -19,14 +19,9 @@ export default function LivestreamVideo({ currentLivestream }: Props) {
   }, [currentLivestream?.video])
   return (
     <>
-      {currentLivestreamVideo ? (
-        <Player controls url={currentLivestreamVideo} />
 
-      ) :
-        (
-          <Typography>Loading...</Typography>
-        )
-      }
+      <Player controls url={currentLivestreamVideo} />
+
     </>
   );
 }
