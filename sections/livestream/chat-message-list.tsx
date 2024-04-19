@@ -11,11 +11,11 @@ import ChatMessageItem from './chat-message-item';
 // ----------------------------------------------------------------------
 
 type Props = {
-  messages: IChatMessage[];
+  content: string;
   participants: IChatParticipant[];
 };
 
-export default function ChatMessageList({ messages = [], participants }: Props) {
+export default function ChatMessageList({ content, participants }: Props) {
   const { messagesEndRef } = useMessagesScroll(messages);
 
   const slides = messages

@@ -4,10 +4,9 @@
 
 import { _tours } from "#/_mock";
 import HighlightDetailView from "#/sections/highlight/highlight-detail-view";
-import LivestreamDetailView from "#/sections/livestream/view/livestream-detail-view";
 
 export const metadata = {
-  title: 'Dashboard: Post Details',
+  title: 'Dashboard: Highlight',
 };
 
 type Props = {

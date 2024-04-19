@@ -1,11 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
 import ChatMessageList from "./chat-message-list";
 import ChatMessageInput from "./chat-message-input";
-import { useGetConversation, useGetConversations } from "#/api/chat";
 import { useRouter } from '#/routes/hooks';
 import { useMockedUser } from "#/hooks/use-mocked-user";
 import { useCallback, useEffect, useState } from "react";
-import { IChatParticipant } from "#/types/chat";
 import { paths } from "#/routes/paths";
 import { ITourProps } from "#/types/tour";
 import { useAuthContext } from "#/auth/hooks";
@@ -15,38 +13,36 @@ import LoginDialog from "../auth/login-dialog";
 import RegisterDialog from "../auth/register-dialog";
 import ChangePasswordDialog from "../auth/change-password-dialog";
 import { ILivestreamItem } from "#/types/livestream";
+import { useGetLivestreamComments } from "#/api/chat";
+import { IAuthor, ICommentUser } from "#/types/chat";
 
 type Props = {
   currentLivestream?: ILivestreamItem
 }
 
 export default function LivestreamChatView({ currentLivestream }: Props) {
+
   const router = useRouter();
   const { user } = useAuthContext();
 
   const { dialogLoginOpen, dialogRegisterOpen } = useDialogControls();
 
-  const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
+
+  const { comments, commentsError } = useGetLivestreamComments(currentLivestream?.id);
+  // const authors: IAuthor[] = comments
+  //   ? comments.author.filter(
+  //     (author: IAuthor) => author.id !== `${user?.id}`
+  //   )
+  //   : [];
+
+  // useEffect(() => {
+  //   if (commentsError || !currentLivestream) {
+  //     console.log("error");
+
+  //   }
+  // }, [commentsError, router, currentLivestream]);
 
 
-  const { conversation, conversationError } = useGetConversation(currentLivestream?.id);
-
-  const participants: IChatParticipant[] = conversation
-    ? conversation.participants.filter(
-      (participant: IChatParticipant) => participant.id !== `${user?.id}`
-    )
-    : [];
-
-  useEffect(() => {
-    if (conversationError || !currentLivestream) {
-      router.push(paths.livestream.root);
-
-    }
-  }, [conversationError, router, currentLivestream]);
-
-  const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
-    setRecipients(selected);
-  }, []);
 
   const renderHead = (
     <Stack
@@ -58,33 +54,30 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
       Chat
     </Stack>
   );
-  const renderMessages = (
-    <Stack
-      sx={{
-        width: 1,
-        height: 1,
-        overflow: 'hidden',
-      }}
-    >
-      <ChatMessageList messages={conversation?.messages} participants={participants} />
+  // const renderMessages = (
+  //   <Stack
+  //     sx={{
+  //       width: 1,
+  //       height: 1,
+  //       overflow: 'hidden',
+  //     }}
+  //   >
+  //     <ChatMessageList messages={comments?.content} authors={authors} />
 
-      {user ? (
-        <ChatMessageInput
-          recipients={recipients}
-          onAddRecipients={handleAddRecipients}
-          //
-          selectedConversationId={currentLivestream?.id}
-          disabled={!recipients.length && !currentLivestream}
-        />
-      ) :
-        (
-          <Box textAlign="center" sx={{ p: 1 }}>
-            <Typography component='span' onClick={dialogLoginOpen.onTrue} sx={{ cursor: "pointer" }} color="primary">Đăng nhập</Typography><Typography component='span'> để chat</Typography>
-          </Box>
-        )}
+  //     {user ? (
+  //       <ChatMessageInput
+  //         selectedConversationId={currentLivestream?.id}
+  //         disabled={!currentLivestream}
+  //       />
+  //     ) :
+  //       (
+  //         <Box textAlign="center" sx={{ p: 1 }}>
+  //           <Typography component='span' onClick={dialogLoginOpen.onTrue} sx={{ cursor: "pointer" }} color="primary">Đăng nhập</Typography><Typography component='span'> để chat</Typography>
+  //         </Box>
+  //       )}
 
-    </Stack>
-  );
+  //   </Stack>
+  // );
 
   return (
     <>
@@ -106,7 +99,7 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
             borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
           }}
         >
-          {renderMessages}
+          {/* {renderMessages} */}
 
 
         </Stack>

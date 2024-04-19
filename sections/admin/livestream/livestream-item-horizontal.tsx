@@ -94,7 +94,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.livestream.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
                 {title}
               </TextMaxLine>
@@ -126,7 +126,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.details(id));
+            router.push(paths.dashboard.livestream.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />

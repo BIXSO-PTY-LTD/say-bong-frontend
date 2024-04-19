@@ -151,9 +151,9 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
       data.content = updatedContent;
 
       if (currentLivestream) {
-        await createLiveStream(data);
-      } else {
         await updateLivestream(data);
+      } else {
+        await createLiveStream(data);
       }
       mutate(endpoints.livestream.base);
       enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');

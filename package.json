@@ -39,8 +39,10 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "simplebar-react": "^3.2.4",
+    "socket.io-client": "^4.7.5",
     "stylis-plugin-rtl": "^2.1.1",
     "swr": "^2.2.5",
+    "ws": "^8.16.0",
     "yet-another-react-lightbox": "^3.17.1",
     "yup": "^1.4.0"
   },
@@ -53,6 +55,7 @@
     "@types/react": "18.2.72",
     "@types/react-dom": "^18",
     "@types/react-lazy-load-image-component": "^1.6.3",
+    "@types/socket.io-client": "^3.0.0",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.3",

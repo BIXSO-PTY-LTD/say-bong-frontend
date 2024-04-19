@@ -18,7 +18,6 @@ type Props = {
 
 export default function LivestreamDetailsPage({ params }: Props) {
   const { id } = params;
-  const { livestream: currentLivestream } = useGetLivestream(id);
-  const { livestreams } = useGetLivestreams();
-  return <LivestreamDetailView currentLivestream={currentLivestream} livestreams={livestreams} />;
+
+  return <LivestreamDetailView id={id} />;
 }
