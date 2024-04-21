@@ -21,7 +21,7 @@ export default function ChatMessageList({ comments, authors }: Props) {
 
 
   return (
-    <Box ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1, overflow: "auto" }}>
+    <Scrollbar ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1, overflow: "auto" }}>
       {comments.map((comment) => (
         <ChatMessageItem
           key={comment.id}
@@ -29,6 +29,6 @@ export default function ChatMessageList({ comments, authors }: Props) {
           authors={authors}
         />
       ))}
-    </Box>
+    </Scrollbar>
   );
 }

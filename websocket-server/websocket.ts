@@ -1,51 +1,38 @@
-import { ICommentItem } from '#/types/chat';
-import WebSocket from 'ws';
+import express, { Request, Response } from 'express';
+import http from 'http';
+import { Server, Socket } from 'socket.io';
 
-type Data = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  title: string | null;
-  content: string;
-  postId: string;
-  author: {
-    id: string;
-    userName: string;
-    fullName: string;
-    profileImage: string;
-  };
-}
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
-const wss = new WebSocket.Server({
-  port: 8001
+const PORT = process.env.PORT || 8001;
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Socket.IO server is running');
 });
 
-wss.on('connection', (ws: WebSocket, req: any) => {
-  // Extract authorization token from headers
-  const token = req.headers['accessToken'];
+io.on('connection', (socket: Socket) => {
+  console.log('A user connected');
 
-  // Check if token is valid, you should implement your own validation logic here
-
-  // If token is not valid, you can close the connection
-  if (!isValidToken(token)) {
-    ws.close();
-    return;
-  }
-
-  console.log('Client connected with token:', token);
-
-  ws.on('message', (message) => {
-    console.log('received: %s', message);
+  // Handle events from connected clients
+  socket.on('chat message', (message: string) => {
+    console.log('Message received:', message);
+    // Broadcast the message to all connected clients
+    io.emit('chat message', message);
   });
 
-  ws.on('close', () => {
-    console.log('Client disconnected');
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
   });
 });
 
-// Example function to validate token (replace with your own logic)
-function isValidToken(token: string) {
-  // Implement your token validation logic here
-  // For example, check if the token is present and not expired
-  return !!token;
-}
+// Error handling for Socket.IO server
+io.on('error', (error: Error) => {
+  console.error('Socket.IO server error:', error.message);
+});
+
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

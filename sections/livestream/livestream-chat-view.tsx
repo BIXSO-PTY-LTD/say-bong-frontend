@@ -1,26 +1,25 @@
+"use client"
+
 import { Box, Stack, Typography } from "@mui/material";
 import ChatMessageList from "./chat-message-list";
 import ChatMessageInput from "./chat-message-input";
-import { useRouter, useSearchParams } from '#/routes/hooks';
-import { useMockedUser } from "#/hooks/use-mocked-user";
-import { useCallback, useEffect, useState } from "react";
-import { paths } from "#/routes/paths";
-import { ITourProps } from "#/types/tour";
+import { useRouter } from '#/routes/hooks';
+import { useEffect, useState } from "react";
 import { useAuthContext } from "#/auth/hooks";
-import { RouterLink } from "#/routes/components";
 import { useDialogControls } from "#/hooks/use-dialog-controls";
 import LoginDialog from "../auth/login-dialog";
 import RegisterDialog from "../auth/register-dialog";
-import ChangePasswordDialog from "../auth/change-password-dialog";
 import { ILivestreamItem } from "#/types/livestream";
 import { useGetLivestreamComments } from "#/api/chat";
-import { IAuthor, ICommentItem, ICommentUser } from "#/types/chat";
+import { IAuthor, ICommentItem } from "#/types/chat";
+import io, { Socket } from "socket.io-client";
 
 type Props = {
   currentLivestream?: ILivestreamItem
 }
 
 export default function LivestreamChatView({ currentLivestream }: Props) {
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const router = useRouter();
 
@@ -36,47 +35,59 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
     .filter(author => author.id !== user?.id);
 
 
-  const [socketComments, setComments] = useState<ICommentItem[]>([]);
-
-  const [socketAuthors, setAuthors] = useState<IAuthor[]>([]);
-
-  const handleWebSocketMessage = (event: MessageEvent) => {
-    const newMessage = JSON.parse(event.data);
-    setComments(prevComments => [...prevComments, newMessage.comment]);
-    setAuthors(prevAuthors => [...prevAuthors, newMessage.author]);
-  };
-
-  // WebSocket setup
   useEffect(() => {
-    const socket = new WebSocket('ws://157.119.248.121:8001/');
-
-    socket.onopen = () => {
-      console.log('WebSocket connection established.');
+    const getAccessToken = () => {
+      // Function to get access token from localStorage (or sessionStorage)
+      const token = localStorage.getItem("accessToken");
+      return token ? token : null;
     };
 
-    socket.onmessage = handleWebSocketMessage;
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket connection closed.');
-    };
+    // Connect to the Socket.IO server
+    const socket = io("http://157.119.248.121:8001", {
+      // Pass access token in the Authorization header
+      extraHeaders: {
+        Authorization: `Bearer ${getAccessToken()}`
+      }
+    });
 
 
+    // Set the socket connection to state
+    setSocket(socket);
+
+    // Clean up function to disconnect the socket when component unmounts
     return () => {
-      socket.close();
+      socket.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    if (commentsError || !currentLivestream) {
-      console.log("error");
+    if (!socket) return;
 
-    }
-  }, [commentsError, router, currentLivestream]);
+    // Listen for the 'connect' event
+    socket.on('connect', () => {
+      console.log('Connected to the server');
 
+      // Send a test message to the server after connecting
+      socket.emit('chat message', 'Hello from the client');
+    });
+
+    // Listen for the 'chat message' event from the server
+    socket.on('chat message', (message) => {
+      console.log('Received message from server:', message);
+    });
+
+    // Listen for the 'disconnect' event
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
+    // Clean up event listeners when component unmounts
+    return () => {
+      socket.off('connect');
+      socket.off('chat message');
+      socket.off('disconnect');
+    };
+  }, [socket]);
 
 
   const renderHead = (
@@ -97,7 +108,7 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
         overflow: 'hidden',
       }}
     >
-      <ChatMessageList comments={socketComments} authors={socketAuthors} />
+      <ChatMessageList comments={comments} authors={authors} />
 
       {user ? (
         <ChatMessageInput
