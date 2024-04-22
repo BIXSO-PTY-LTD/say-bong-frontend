@@ -27,15 +27,8 @@ type Props = {
 export default function LivestreamItem({ livestream }: Props) {
   const { id, title, content } = livestream;
 
-  const [firstImageUrl, setFirstImageUrl] = useState('');
 
-  useEffect(() => {
-    const regex = /<img.*?src="(.*?)".*?>/;
-    const match = content.match(regex);
-    if (match && match[1]) {
-      setFirstImageUrl(match[1]);
-    }
-  }, [content]);
+
 
 
   return (
@@ -55,7 +48,7 @@ export default function LivestreamItem({ livestream }: Props) {
 
       </Box>
 
-      <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(2)} ratio="1/1" />
+      <Image alt={title} src={_mock.image.cover(2)} ratio="1/1" />
 
       <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit" >
         <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>

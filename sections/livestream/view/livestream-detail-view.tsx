@@ -16,7 +16,7 @@ export default function LivestreamDetailView({ id }: Props) {
 
 
   const { livestream: currentLivestream, livestreamLoading } = useGetLivestream(id);
-  const { livestreams, livestreamsLoading, livestreamsEmpty } = useGetLivestreams();
+  const { livestreams, livestreamsLoading, livestreamsEmpty } = useGetLivestreams(1, 4);
 
   const filteredLivestreams = currentLivestream ? livestreams.filter(livestream => livestream.id !== currentLivestream.id) : livestreams;
 
@@ -37,7 +37,7 @@ export default function LivestreamDetailView({ id }: Props) {
           </Grid>
         )}
 
-      <LivestreamLastest loading={livestreamLoading} empty={livestreamLoading} livestreams={filteredLivestreams} />
+      <LivestreamLastest loading={livestreamsLoading} empty={livestreamsEmpty} livestreams={filteredLivestreams} />
 
 
 

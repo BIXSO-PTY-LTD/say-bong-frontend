@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -38,7 +38,11 @@ type Props = {
 export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const router = useRouter();
 
-  // const [file, setFile] = useState<File | string | null>(currentVideo?.video || null);
+  const [file, setFile] = useState<File | null>(null);
+
+  const [videoSrc, setVideoSrc] = useState('')
+
+  const videoRef = useRef(null);
 
   const mdUp = useResponsive('up', 'md');
 
@@ -53,19 +57,18 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
   // }, [currentVideo?.video]);
 
   const NewPostSchema = Yup.object().shape({
-    id: Yup.string().required('id is required'),
+    id: Yup.string(),
 
-    title: Yup.string().required('title is required'),
-    // video: Yup.mixed<any>().nullable().required('Video is required'),
-    content: Yup.string().required('content is required'),
+    title: Yup.string().required('Phải có tiêu đề'),
+    content: Yup.mixed<any>().nullable().required('Phải có file video'),
+
   });
 
   const defaultValues = useMemo(
     () => ({
       id: currentVideo?.id || '',
       title: currentVideo?.title || '',
-      content: currentVideo?.content || '',
-      // video: currentVideo?.video || null,
+      content: currentVideo?.content || null,
     }),
     [currentVideo]
   );
@@ -78,11 +81,18 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const {
     reset,
     watch,
-    control,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const values = watch();
+
+  useEffect(() => {
+    const src = URL.createObjectURL(new Blob([file || ''], { type: 'video/mp4' }));
+    setVideoSrc(src)
+    setValue('content', file)
+  }, [file, setValue])
 
   useEffect(() => {
     if (currentVideo) {
@@ -90,16 +100,6 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
     }
   }, [currentVideo, defaultValues, reset]);
 
-  // const handleDrop = useCallback((acceptedFiles: File[]) => {
-  //   const newFile = acceptedFiles[0];
-  //   if (newFile) {
-  //     setFile(
-  //       Object.assign(newFile, {
-  //         preview: URL.createObjectURL(newFile),
-  //       })
-  //     );
-  //   }
-  // }, []);
 
 
   const createExcitingVideo = useCreateExcitingVideo()
@@ -107,6 +107,23 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const updateExcitingVideo = useUpdateExcitingVideo()
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const formData = new FormData();
+      formData.append('file', data.content);
+      formData.append('upload_preset', 'ml_default');
+
+      const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to upload image to Cloudinary');
+      }
+
+      const responseData = await response.json();
+      const uploadedUrl = responseData.secure_url;
+
+
+      data.content = uploadedUrl;
       if (currentVideo) {
         // console.log('Editing News with ID:', currentNew.id);
         await updateExcitingVideo(data)

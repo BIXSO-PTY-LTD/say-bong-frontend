@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -20,7 +20,7 @@ import FormProvider, {
   RHFTextField,
 } from '#/components/hook-form';
 
-import { CardHeader } from '@mui/material';
+import { Button, CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import { ITourProps } from '#/types/tour';
 import { Upload } from '#/components/upload';
@@ -38,34 +38,30 @@ type Props = {
 export default function HighlightNewEditForm({ currentVideo }: Props) {
   const router = useRouter();
 
-  // const [file, setFile] = useState<File | string | null>(currentVideo?.video || null);
 
   const mdUp = useResponsive('up', 'md');
 
-
   const { enqueueSnackbar } = useSnackbar();
 
+  const [file, setFile] = useState<File | null>(null);
 
-  // useEffect(() => {
-  //   if (currentVideo?.video) {
-  //     setFile(currentVideo.video);
-  //   }
-  // }, [currentVideo?.video]);
+  const [videoSrc, setVideoSrc] = useState('')
+
+  const videoRef = useRef(null);
+
+
 
   const NewPostSchema = Yup.object().shape({
     id: Yup.string(),
-    title: Yup.string().required('title is required'),
-    // video: Yup.mixed<any>().nullable().required('Video is required')
-    content: Yup.string().required('content is required'),
-
+    title: Yup.string().required('Phải có tiêu đề'),
+    content: Yup.mixed<any>().nullable().required('Phải có file video'),
   });
 
   const defaultValues = useMemo(
     () => ({
       id: currentVideo?.id || '',
       title: currentVideo?.title || '',
-      content: currentVideo?.content || '',
-      // video: currentVideo?.video || null,
+      content: currentVideo?.content || null,
     }),
     [currentVideo]
   );
@@ -77,9 +73,18 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
   const {
     reset,
+    watch,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const values = watch();
+
+  useEffect(() => {
+    const src = URL.createObjectURL(new Blob([file || ''], { type: 'video/mp4' }));
+    setVideoSrc(src)
+    setValue('content', file)
+  }, [file, setValue])
 
   useEffect(() => {
     if (currentVideo) {
@@ -87,29 +92,34 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
     }
   }, [currentVideo, defaultValues, reset]);
 
-  // const handleDrop = useCallback((acceptedFiles: File[]) => {
-  //   const newFile = acceptedFiles[0];
-  //   if (newFile) {
-  //     setFile(
-  //       Object.assign(newFile, {
-  //         preview: URL.createObjectURL(newFile),
-  //       })
-  //     );
-  //   }
-  // }, []);
+
+
 
 
   const createHighlight = useCreateHighlightVideo()
   const updateHighlight = useUpdateHighlightVideo()
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const formData = new FormData();
+      formData.append('file', data.content);
+      formData.append('upload_preset', 'ml_default');
+
+      const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to upload image to Cloudinary');
+      }
+
+      const responseData = await response.json();
+      const uploadedUrl = responseData.secure_url;
+
+
+      data.content = uploadedUrl;
       if (currentVideo) {
-        // console.log('Editing News with ID:', currentNew.id);
         updateHighlight(data)
-        // if (avatarFile) {
-        //   const uploadResult = await uploadAvatar( currentNew?.id,avatarFile);
-        //   console.log('Upload Result:', uploadResult);
-        // }
+
       } else {
         await createHighlight(data);
       }
@@ -128,10 +138,11 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            Chi tiết
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            slug, short content, image...
+            Chủ đề, mô tả, highlight,...
+
           </Typography>
         </Grid>
       )}
@@ -142,12 +153,38 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField inputColor='#fff' name="title" label="Chủ đề" />
-            <RHFTextField inputColor='#fff' name="content" label="Mô tả" />
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Video file</Typography>
+              <Button
+                variant="contained"
+                component="label"
+              >
+                Upload File
+                <input
+                  type="file"
+                  hidden
+                  size={600000}
+                  onChange={(e) => {
+                    const selectedFile = e.target.files?.[0];
+                    if (selectedFile) {
+                      setFile(selectedFile);
+                    }
+                  }}
+                  accept='video/*'
+                  ref={videoRef}
+                />
+              </Button>
+              {file !== null && (
+                <Box>
+                  <video id='video-summary' controls src={videoSrc} width="100%" height="350px" />
+                </Box>
+              )}
 
-            {/* <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Video</Typography>
-              <Upload file={file} onDrop={handleDrop} onDelete={() => setFile(null)} />
-            </Stack> */}
+
+
+            </Stack>
+
+
           </Stack>
         </Card>
       </Grid>

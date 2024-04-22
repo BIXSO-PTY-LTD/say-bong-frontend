@@ -25,15 +25,6 @@ export default function LivestreamLatestItem({ livestream,
   //  order,
   largelivestream }: Props) {
 
-  const [firstImageUrl, setFirstImageUrl] = useState('');
-
-  useEffect(() => {
-    const regex = /<img.*?src="(.*?)".*?>/;
-    const match = livestream.content.match(regex);
-    if (match && match[1]) {
-      setFirstImageUrl(match[1]);
-    }
-  }, [livestream.content]);
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Stack
@@ -61,7 +52,7 @@ export default function LivestreamLatestItem({ livestream,
 
         </Box>
         <Image
-          src={firstImageUrl ? firstImageUrl : _mock.image.cover(2)}
+          src={_mock.image.cover(2)}
           alt={livestream.title}
           ratio={(largelivestream && '3/4') ||
             // (order && '4/3') ||

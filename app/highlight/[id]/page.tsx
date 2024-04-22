@@ -18,7 +18,6 @@ type Props = {
 export default function HighlightDetailsPage({ params }: Props) {
   const { id } = params;
 
-  const currentTour = _tours.find(tour => tour.id === id);
 
-  return <HighlightDetailView currentTour={currentTour} />;
+  return <HighlightDetailView id={id} />;
 }

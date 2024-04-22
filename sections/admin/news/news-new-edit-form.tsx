@@ -27,7 +27,7 @@ import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
 import { useCreateNews, useUpdateNew } from '#/api/news';
 import { INewsItem } from '#/types/news';
-import cloudinary from '#/utils/cloudinaryConfig'
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -111,6 +111,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const base64ToFiles = (base64Array: string[], contentType = '') => {
     return base64Array.map((base64String) => {
       const blob = base64ToBlob(base64String, contentType);
+
       const fileName = `image_${Date.now()}`;
       return new File([blob], fileName, { type: contentType });
     });
@@ -122,7 +123,6 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const base64Array = extractBase64Src(data.content);
-      console.log(base64Array);
 
       const filesArray = base64ToFiles(base64Array, 'image/jpeg');
 

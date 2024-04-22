@@ -41,21 +41,11 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const [file, setFile] = useState<File | null>(null);
-
-  const [videoSrc, setVideoSrc] = useState('')
-
-
-  const videoRef = useRef(null);
-
   const { enqueueSnackbar } = useSnackbar();
-
-
-
 
   const LivestreamSchema = Yup.object().shape({
     id: Yup.string(),
-    title: Yup.string().required('Title is required'),
+    title: Yup.string().required('Phải có tiêu đề'),
     content: Yup.mixed<any>().nullable().required('Phải có file video'),
   });
 
@@ -63,7 +53,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
     () => ({
       id: currentLivestream?.id || '',
       title: currentLivestream?.title || '',
-      content: currentLivestream?.content || null,
+      content: currentLivestream?.content || '',
     }),
     [currentLivestream]
   );
@@ -75,18 +65,11 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
 
   const {
     reset,
-    watch,
     handleSubmit,
-    setValue,
     formState: { isSubmitting },
   } = methods;
-  const values = watch();
 
-  useEffect(() => {
-    const src = URL.createObjectURL(new Blob([file || ''], { type: 'video/mp4' }));
-    setVideoSrc(src)
-    setValue('content', src)
-  }, [file, setValue])
+
 
   useEffect(() => {
     if (currentLivestream) {
@@ -95,66 +78,11 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   }, [currentLivestream, defaultValues, reset]);
 
 
-  const extractBlobToFile = async (blobUrl: string, fileName: string) => {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', blobUrl, true);
-      xhr.responseType = 'blob';
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          const blob = xhr.response;
-          const file = new File([blob], fileName, { type: blob.type });
-          resolve(file);
-        } else {
-          reject(new Error('Failed to fetch blob'));
-        }
-      };
-
-      xhr.onerror = function () {
-        reject(new Error('XHR Error'));
-      };
-
-      xhr.send();
-    });
-  };
 
   const createLiveStream = useCreateLivestream();
   const updateLivestream = useUpdateLivestream();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data.content);
-
-      const videoFile = extractBlobToFile(data.content, 'video.mp4')
-      console.log(videoFile);
-
-      // const filesArray = base64ToFiles(base64Array, 'image/jpeg');
-
-      // Upload files to Cloudinary
-      // const uploadedUrls = await Promise.all(filesArray.map(async (file) => {
-      //   const formData = new FormData();
-      //   formData.append('file', file);
-      //   formData.append('upload_preset', 'ml_default');
-
-      //   const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
-      //     method: 'POST',
-      //     body: formData,
-      //   });
-
-      //   if (!response.ok) {
-      //     throw new Error('Failed to upload image to Cloudinary');
-      //   }
-
-      //   const responseData = await response.json();
-      //   return responseData.secure_url;
-      // }));
-
-      // let updatedContent = data.content;
-      // base64Array.forEach((base64String, index) => {
-      //   updatedContent = updatedContent.replace(base64String, uploadedUrls[index]);
-      // });
-
-      // data.content = updatedContent;
 
       if (currentLivestream) {
         await updateLivestream(data);
@@ -193,31 +121,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Video file</Typography>
-              <Button
-                variant="contained"
-                component="label"
-              >
-                Upload File
-                <input
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    const selectedFile = e.target.files?.[0];
-                    if (selectedFile) {
-                      setFile(selectedFile);
-                    }
-                  }}
-                  accept='video/*'
-                  ref={videoRef}
-                />
-              </Button>
-              <Box>
-                <video id='video-summary' controls src={videoSrc} width="100%" height="350px" />
-              </Box>
-
-            </Stack>
+            <RHFTextField inputColor='#fff' name="content" label="Link livestream" />
 
           </Stack>
         </Card>
@@ -238,6 +142,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
         {renderDetails}
 
         {renderActions}
+
       </Grid>
 
     </FormProvider>

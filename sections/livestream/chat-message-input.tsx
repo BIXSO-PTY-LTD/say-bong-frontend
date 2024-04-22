@@ -74,11 +74,6 @@ export default function ChatMessageInput({
       onKeyUp={handleKeyPress}
       onChange={handleChangeMessage}
       placeholder="Chat..."
-      startAdornment={
-        <IconButton>
-          <Iconify icon="eva:smiling-face-fill" />
-        </IconButton>
-      }
       endAdornment={
         <IconButton onClick={handleSendMessage}>
           <Iconify icon="solar:map-arrow-right-bold-duotone" />

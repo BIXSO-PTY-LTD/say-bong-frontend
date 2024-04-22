@@ -9,5 +9,6 @@ export type IVideoItem = {
   title: string;
   content: string
   video: string
+  createdAt: Date;
   meta: IVideoMetas[];
 };

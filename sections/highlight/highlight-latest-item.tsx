@@ -9,17 +9,20 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
+import { _marketingPosts } from '#/_mock/_blog';
+import { _mock } from '#/_mock';
+import { IVideoItem } from '#/types/video';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  video: IVideoItem;
   // order?: number;
   largePost?: boolean;
 };
 
-export default function HighlightLatestItem({ post,
+export default function HighlightLatestItem({ video,
   //  order,
   largePost }: Props) {
 
@@ -36,8 +39,8 @@ export default function HighlightLatestItem({ post,
         }}
       >
         <Image
-          src={post.coverUrl}
-          alt={post.title}
+          src={_mock.image.cover(2)}
+          alt={video.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -56,9 +59,9 @@ export default function HighlightLatestItem({ post,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
+          <Typography sx={{ px: 1 }} variant='caption'>{fDate(video.createdAt)}</Typography>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(video.id)} color="inherit">
+            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{video.title}</TextMaxLine>
           </Link>
 
 

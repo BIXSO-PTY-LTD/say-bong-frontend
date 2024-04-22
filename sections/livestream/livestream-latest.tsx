@@ -26,6 +26,7 @@ type Props = {
 };
 
 export default function LivestreamLastest({ livestreams, loading, empty }: Props) {
+
   const mdUp = useResponsive('up', 'md');
 
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
@@ -44,7 +45,7 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
     >
       {mdUp ? (
         <>
-          {livestreams.slice(0, -4).map((livestream, index) => (
+          {livestreams.map((livestream) => (
             <LivestreamLatestItem key={livestream.id} livestream={livestream}
             // order={index % 2}
             />
@@ -64,7 +65,7 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
   const viewAllBtn = (
     <Button
       component={RouterLink}
-      href={paths.news.root}
+      href={paths.livestream.root}
       color="inherit"
       endIcon={<Iconify icon="carbon:chevron-right" />}
     >
