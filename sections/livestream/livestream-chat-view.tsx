@@ -1,25 +1,28 @@
-"use client"
-
 import { Box, Stack, Typography } from "@mui/material";
 import ChatMessageList from "./chat-message-list";
 import ChatMessageInput from "./chat-message-input";
-import { useRouter } from '#/routes/hooks';
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from '#/routes/hooks';
+import { useMockedUser } from "#/hooks/use-mocked-user";
+import { useCallback, useEffect, useState } from "react";
+import { paths } from "#/routes/paths";
+import { ITourProps } from "#/types/tour";
 import { useAuthContext } from "#/auth/hooks";
+import { RouterLink } from "#/routes/components";
 import { useDialogControls } from "#/hooks/use-dialog-controls";
 import LoginDialog from "../auth/login-dialog";
 import RegisterDialog from "../auth/register-dialog";
+import ChangePasswordDialog from "../auth/change-password-dialog";
 import { ILivestreamItem } from "#/types/livestream";
 import { useGetLivestreamComments } from "#/api/chat";
-import { IAuthor, ICommentItem } from "#/types/chat";
-import io, { Socket } from "socket.io-client";
-
+import { IAuthor, ICommentItem, ICommentUser } from "#/types/chat";
+import { Socket } from "socket.io-client";
+import io from "socket.io-client";
+import { mutate } from "swr";
 type Props = {
   currentLivestream?: ILivestreamItem
 }
 
 export default function LivestreamChatView({ currentLivestream }: Props) {
-  const [socket, setSocket] = useState<Socket | null>(null);
 
   const router = useRouter();
 
@@ -27,8 +30,7 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
 
   const { dialogLoginOpen, dialogRegisterOpen } = useDialogControls();
 
-
-  const { comments, commentsError } = useGetLivestreamComments(currentLivestream?.id);
+  const { comments, commentsError, endpoint } = useGetLivestreamComments(currentLivestream?.id);
 
   const authors: IAuthor[] = comments
     .flatMap(comment => comment.author)
@@ -36,59 +38,53 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
 
 
   useEffect(() => {
-    const getAccessToken = () => {
-      // Function to get access token from localStorage (or sessionStorage)
-      const token = localStorage.getItem("accessToken");
-      return token ? token : null;
-    };
+    if (commentsError || !currentLivestream) {
+      console.log("error");
 
-    // Connect to the Socket.IO server
-    const socket = io("http://157.119.248.121:8001", {
-      // Pass access token in the Authorization header
-      extraHeaders: {
-        Authorization: `Bearer ${getAccessToken()}`
-      }
-    });
+    }
+  }, [commentsError, router, currentLivestream]);
 
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-    // Set the socket connection to state
-    setSocket(socket);
-
-    // Clean up function to disconnect the socket when component unmounts
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
 
   useEffect(() => {
-    if (!socket) return;
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.log("Access token not found in localStorage");
+      return;
+    }
 
-    // Listen for the 'connect' event
-    socket.on('connect', () => {
-      console.log('Connected to the server');
-
-      // Send a test message to the server after connecting
-      socket.emit('chat message', 'Hello from the client');
+    // Establish connection to the Socket.IO server
+    const newSocket = io("ws://157.119.248.121:8001", {
+      extraHeaders: { Authorization: accessToken }, // Use the stored token
     });
 
-    // Listen for the 'chat message' event from the server
-    socket.on('chat message', (message) => {
-      console.log('Received message from server:', message);
+    // Set up event listeners or any other initialization logic for the socket
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.IO server");
+      // You can perform any additional setup here
+    });
+    newSocket.on("1", (comment: { status: number, message: string, data: ICommentItem }) => {
+      // Handle the new comment received from the server
+      console.log("New comment received:", comment);
+      if (currentLivestream?.id === comment.data.postId) {
+
+        mutate(endpoint);
+      }
+      // Update the comments state with the new comment
     });
 
-    // Listen for the 'disconnect' event
-    socket.on('disconnect', () => {
-      console.log('Disconnected from the server');
-    });
+    // Save the socket instance to state
+    setSocket(newSocket);
 
-    // Clean up event listeners when component unmounts
+    // Clean up the socket connection when the component unmounts
     return () => {
-      socket.off('connect');
-      socket.off('chat message');
-      socket.off('disconnect');
+      if (newSocket.connected) {
+        console.log("Disconnecting from Socket.IO server");
+        newSocket.disconnect();
+      }
     };
-  }, [socket]);
-
+  }, [endpoint]);
 
   const renderHead = (
     <Stack

@@ -1,38 +1,25 @@
-import express, { Request, Response } from 'express';
-import http from 'http';
-import { Server, Socket } from 'socket.io';
+import { ICommentItem } from '#/types/chat';
+import { createServer } from "http";
+import { Server, Socket } from "socket.io";
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
-const PORT = process.env.PORT || 8001;
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Socket.IO server is running');
-});
+const httpServer = createServer();
+const io = new Server(httpServer);
 
 io.on('connection', (socket: Socket) => {
-  console.log('A user connected');
+  console.log('A client connected');
 
-  // Handle events from connected clients
-  socket.on('chat message', (message: string) => {
-    console.log('Message received:', message);
-    // Broadcast the message to all connected clients
-    io.emit('chat message', message);
-  });
-
-  // Handle disconnection
   socket.on('disconnect', () => {
-    console.log('User disconnected');
+    console.log('A client disconnected');
+  });
+
+  // Assume 'comment' event is emitted from the client
+  socket.on('1', (comment: ICommentItem) => {
+    console.log('New comment received:', comment);
+    // Broadcast the comment to all clients except the sender
+    io.emit('1', comment);
   });
 });
-
-// Error handling for Socket.IO server
-io.on('error', (error: Error) => {
-  console.error('Socket.IO server error:', error.message);
-});
-
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const PORT = process.env.PORT || 8001;
+httpServer.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });

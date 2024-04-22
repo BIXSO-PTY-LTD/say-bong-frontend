@@ -30,9 +30,7 @@ export default function ChatMessageInput({
 }: Props) {
 
 
-  const router = useRouter();
 
-  const { user } = useAuthContext();
 
   const [message, setMessage] = useState('');
 

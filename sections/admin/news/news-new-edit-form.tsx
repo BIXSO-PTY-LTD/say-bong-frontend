@@ -122,6 +122,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const base64Array = extractBase64Src(data.content);
+      console.log(base64Array);
 
       const filesArray = base64ToFiles(base64Array, 'image/jpeg');
 

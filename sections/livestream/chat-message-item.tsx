@@ -1,17 +1,10 @@
-import { formatDistanceToNowStrict } from 'date-fns';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { useMockedUser } from '#/hooks/use-mocked-user';
 
-import Iconify from '#/components/iconify';
 
 import { IAuthor, ICommentItem } from '#/types/chat';
-import useGetMessage from '#/hooks/use-get-message';
 import { useAuthContext } from '#/auth/hooks';
 
 
@@ -44,10 +37,8 @@ export default function ChatMessageItem({ comment, authors }: Props) {
         }),
       }}
     >
-      {!isMe && `${comment.author.userName},`} &nbsp;
-      {formatDistanceToNowStrict(new Date(comment.createdAt), {
-        addSuffix: true,
-      })}
+      {!isMe && `${comment.author.userName}`} &nbsp;
+
     </Typography>
   );
 

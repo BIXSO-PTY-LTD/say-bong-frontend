@@ -11,6 +11,8 @@ interface Props extends Omit<UploadProps, 'file'> {
   multiple?: boolean;
 }
 
+
+
 // ----------------------------------------------------------------------
 
 export function RHFUploadAvatar({ name, ...other }: Props) {

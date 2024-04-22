@@ -44,7 +44,7 @@ export default function AccountPopover({ onOpen }: Props) {
   };
   const OPTIONS = [
     {
-      label: 'Tài khoản',
+      label: user?.fullName,
       linkTo: paths.account.root,
     },
     {
