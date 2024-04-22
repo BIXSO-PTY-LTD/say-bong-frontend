@@ -24,7 +24,6 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             set -x #echo on
-            echo "Pull Digital Signature..."
             cd ${{ secrets.PROJECT_WORKING_DIR }}
             git clean -fd
             git pull
