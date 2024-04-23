@@ -27,7 +27,7 @@ jobs:
             cd ${{ secrets.PROJECT_WORKING_DIR }}
             git clean -fd
             git pull
-            git checkout master
+            git checkout features
             git pull
             npm install
             npm run build
