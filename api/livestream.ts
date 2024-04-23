@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import useSWR from "swr";
 
 export function useGetLivestreams(offset?: number, limit?: number) {
-  let URL = endpoints.livestream.base;
+  let URL = endpoints.livestream;
 
   if (offset !== undefined && limit !== undefined) {
     URL += `?offset=${offset}&limit=${limit}`;
@@ -30,7 +30,7 @@ export function useGetLivestreams(offset?: number, limit?: number) {
 
 export function useCreateLivestream() {
   const createLivestream = async (livestreamData: Partial<ILivestreamItem>) => {
-    const URL = endpoints.livestream.base;
+    const URL = endpoints.livestream;
 
     try {
       const response = await axiosHost.post(URL, livestreamData);
@@ -47,7 +47,7 @@ export function useCreateLivestream() {
 
 export function useUpdateLivestream() {
   const updateLivestream = async (updatedLivestreamData: Partial<ILivestreamItem>) => {
-    const URL = `${endpoints.livestream.base}`;
+    const URL = `${endpoints.livestream}`;
     try {
       await axiosHost.put(URL, updatedLivestreamData)
     } catch (error) {
@@ -59,7 +59,7 @@ export function useUpdateLivestream() {
   return updateLivestream
 }
 export function useGetLivestream(livestreamId: string | undefined) {
-  const URL = livestreamId ? `${endpoints.livestream.base}/${livestreamId}` : '';
+  const URL = livestreamId ? `${endpoints.livestream}/${livestreamId}` : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
 
@@ -77,7 +77,7 @@ export function useGetLivestream(livestreamId: string | undefined) {
 
 export function useDeleteLivestream() {
   const deleteLivestream = async (livestreamId: string) => {
-    const URL = `${endpoints.livestream.base}/${livestreamId}`;
+    const URL = `${endpoints.livestream}/${livestreamId}`;
 
     try {
       await axiosHost.delete(URL);

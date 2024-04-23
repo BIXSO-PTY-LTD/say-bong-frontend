@@ -18,7 +18,6 @@ type Props = {
 export default function ExcitingDetailsPage({ params }: Props) {
   const { id } = params;
 
-  const currentTour = _tours.find(tour => tour.id === id);
 
-  return <ExcitingDetailView currentTour={currentTour} />;
+  return <ExcitingDetailView id={id} />;
 }

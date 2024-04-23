@@ -20,7 +20,7 @@ import FormProvider, {
   RHFTextField,
 } from '#/components/hook-form';
 
-import { CardHeader } from '@mui/material';
+import { Button, CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import { ITourProps } from '#/types/tour';
 import { Upload } from '#/components/upload';
@@ -100,6 +100,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
     }
   }, [currentVideo, defaultValues, reset]);
 
+  console.log(videoSrc);
 
 
   const createExcitingVideo = useCreateExcitingVideo()
@@ -111,7 +112,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
       formData.append('file', data.content);
       formData.append('upload_preset', 'ml_default');
 
-      const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
+      const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/video/upload', {
         method: 'POST',
         body: formData,
       });
@@ -134,7 +135,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
       } else {
         await createExcitingVideo(data);
       }
-      mutate(endpoints.excitingVideo.list);
+      mutate(endpoints.excitingVideo);
       enqueueSnackbar(currentVideo ? 'Cập nhật thành công' : 'Tạo thành công');
       router.push(paths.dashboard.video.exciting.root);
       console.info('DATA', data);
@@ -152,9 +153,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
           <Typography variant="h6" sx={{ mb: 0.5 }}>
             Details
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            slug, short content, image...
-          </Typography>
+
         </Grid>
       )}
 
@@ -164,11 +163,34 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <RHFTextField inputColor='#fff' name="title" label="Chủ đề" />
-            <RHFTextField inputColor='#fff' name="content" label="Mô tả" />
-            {/* <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Video</Typography>
-              <Upload file={file} onDrop={handleDrop} onDelete={() => setFile(null)} />
-            </Stack> */}
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Video file</Typography>
+              <Button
+                variant="contained"
+                component="label"
+              >
+                Upload File
+                <input
+                  type="file"
+                  hidden
+                  onChange={(e) => {
+                    const selectedFile = e.target.files?.[0];
+                    if (selectedFile) {
+                      setFile(selectedFile);
+                    }
+                  }}
+                  accept='video/*'
+                  ref={videoRef}
+                />
+              </Button>
+              {currentVideo?.content || file ? (
+                <Box>
+                  <video id="video-summary" controls src={currentVideo?.content || videoSrc} width="100%" height="350px" />
+                </Box>
+              ) : null}
+
+
+            </Stack>
           </Stack>
         </Card>
       </Grid>

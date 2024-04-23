@@ -89,7 +89,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
       } else {
         await createLiveStream(data);
       }
-      mutate(endpoints.livestream.base);
+      mutate(endpoints.livestream);
       enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.livestream.root);
       console.info('DATA', data);
@@ -108,9 +108,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
           <Typography variant="h6" sx={{ mb: 0.5 }}>
             Chi tiết
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Chủ đề, mô tả, livestream,...
-          </Typography>
+
         </Grid>
       )}
 

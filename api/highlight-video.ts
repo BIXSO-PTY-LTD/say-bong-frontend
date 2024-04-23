@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import useSWR from "swr";
 
 export function useGetHighlightVideos(offset?: number, limit?: number) {
-  let URL = endpoints.highlightVideo.list;
+  let URL = endpoints.highlightVideo;
 
   if (offset !== undefined && limit !== undefined) {
     URL += `?offset=${offset}&limit=${limit}`;
@@ -29,7 +29,7 @@ export function useGetHighlightVideos(offset?: number, limit?: number) {
 }
 export function useCreateHighlightVideo() {
   const createHighlightVideo = async (highlightVideoData: Partial<IVideoItem>) => {
-    const URL = endpoints.highlightVideo.create;
+    const URL = endpoints.highlightVideo;
 
     try {
       const response = await axiosHost.post(URL, highlightVideoData);
@@ -45,7 +45,7 @@ export function useCreateHighlightVideo() {
 }
 
 export function useGetHighlightVideo(videoId: string | undefined) {
-  const URL = videoId ? `${endpoints.highlightVideo.details}/${videoId}` : '';
+  const URL = videoId ? `${endpoints.highlightVideo}/${videoId}` : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
 
@@ -62,7 +62,7 @@ export function useGetHighlightVideo(videoId: string | undefined) {
 }
 export function useUpdateHighlightVideo() {
   const updateHighlightVideo = async (updatedHighlightVideoData: Partial<IVideoItem>) => {
-    const URL = `${endpoints.highlightVideo.list}`;
+    const URL = `${endpoints.highlightVideo}`;
     try {
       await axiosHost.put(URL, updatedHighlightVideoData)
     } catch (error) {
@@ -76,7 +76,7 @@ export function useUpdateHighlightVideo() {
 
 export function useDeleteHighlightVideo() {
   const deleteHighlightVideo = async (highlightVideoId: string) => {
-    const URL = `${endpoints.highlightVideo.delete}/${highlightVideoId}`;
+    const URL = `${endpoints.highlightVideo}/delete/${highlightVideoId}`;
 
     try {
       await axiosHost.delete(URL);

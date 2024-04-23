@@ -45,9 +45,9 @@ export default function NewsNewEditForm({ currentNew }: Props) {
 
   const NewPostSchema = Yup.object().shape({
     id: Yup.string(),
-    title: Yup.string().required('Title is required'),
+    title: Yup.string().required('Phải có tiêu đề'),
 
-    content: Yup.string().required('content is required'),
+    content: Yup.string().required('Phải có nội dung'),
 
   });
 
@@ -157,7 +157,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
       } else {
         await createNews(data);
       }
-      mutate(endpoints.news.list);
+      mutate(endpoints.news);
       enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.news.root);
       console.info('DATA', data);
@@ -174,11 +174,9 @@ export default function NewsNewEditForm({ currentNew }: Props) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            Chi tiết
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Title, short description, image...
-          </Typography>
+
         </Grid>
       )}
 

@@ -14,6 +14,7 @@ import { useBoolean } from '#/hooks/use-boolean';
 import { varSlide } from '#/components/animate/variants';
 import { useAuthContext } from '#/auth/hooks';
 import { useSnackbar } from 'notistack';
+import { axiosHost, endpoints } from '#/utils/axios';
 
 // ----------------------------------------------------------------------
 type RegisterDialogProps = {
@@ -69,17 +70,11 @@ export default function RegisterDialog({ open, openLogin, onClose }: RegisterDia
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-
-      await register?.(data.fullName, data.userName, data.phone, data.password, data.confirmPassword);
+      await axiosHost.post(endpoints.auth.register, data);
       onClose()
       enqueueSnackbar("Đăng ký thành công")
-    } catch (error) {
-      if (error instanceof Yup.ValidationError) {
-        const errorMessage = error.errors[0];
-        setErrorMsg(errorMessage);
-      } else {
-        console.error(error);
-      }
+    } catch (error: any) {
+      setErrorMsg(error.message);
     }
   });
 

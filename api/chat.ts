@@ -14,7 +14,7 @@ import { ICommentItem } from '#/types/chat';
 
 export function useGetLivestreamComments(liveStreamId: string | undefined) {
 
-  const URL = `${endpoints.livestream.base}/${liveStreamId}/comment`;
+  const URL = `${endpoints.livestream}/${liveStreamId}/comment`;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
 
@@ -39,7 +39,7 @@ export function useSendMessage() {
     postId: string | undefined;
     userId: string | undefined;
   }) => {
-    const URL = `${endpoints.livestream.base}/comment`;
+    const URL = `${endpoints.livestream}/comment`;
 
     try {
       const response = await axiosHost.post(URL, messageData);

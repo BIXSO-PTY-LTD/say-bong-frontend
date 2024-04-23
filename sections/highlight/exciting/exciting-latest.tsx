@@ -13,16 +13,17 @@ import HighlightLatestItem from './exciting-latest-item';
 import HighlightLatestMobile from './exciting-latest-mobile';
 import ExcitingLatestItem from './exciting-latest-item';
 import ExcitingLatestMobile from './exciting-latest-mobile';
+import { IVideoItem } from '#/types/video';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IBlogPostProps[];
+  filteredExcitings: IVideoItem[];
 };
 
-export default function ExcitingLatest({ posts }: Props) {
+export default function ExcitingLatest({ filteredExcitings }: Props) {
   const mdUp = useResponsive('up', 'md');
 
   const viewAllBtn = (
@@ -69,8 +70,8 @@ export default function ExcitingLatest({ posts }: Props) {
       >
         {mdUp ? (
           <>
-            {posts.slice(0, 4).map((post, index) => (
-              <ExcitingLatestItem key={post.id} post={post}
+            {filteredExcitings.slice(0, 4).map((video, index) => (
+              <ExcitingLatestItem key={video.id} video={video}
               // order={index % 2}
               />
             ))}
@@ -78,8 +79,8 @@ export default function ExcitingLatest({ posts }: Props) {
           </>
         ) : (
           <>
-            {posts.slice(0, 4).map((post) => (
-              <ExcitingLatestMobile key={post.id} post={post} />
+            {filteredExcitings.slice(0, 4).map((video) => (
+              <ExcitingLatestMobile key={video.id} video={video} />
             ))}
           </>
         )}

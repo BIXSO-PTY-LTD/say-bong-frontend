@@ -19,7 +19,6 @@ import { ActionMapType, AuthStateType, AuthUserType } from '../types';
 enum Types {
   INITIAL = 'INITIAL',
   LOGIN = 'LOGIN',
-  REGISTER = 'REGISTER',
   LOGOUT = 'LOGOUT',
 }
 
@@ -28,9 +27,6 @@ type Payload = {
     user: AuthUserType;
   };
   [Types.LOGIN]: {
-    user: AuthUserType;
-  };
-  [Types.REGISTER]: {
     user: AuthUserType;
   };
   [Types.LOGOUT]: undefined;
@@ -53,12 +49,6 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
     };
   }
   if (action.type === Types.LOGIN) {
-    return {
-      ...state,
-      user: action.payload.user,
-    };
-  }
-  if (action.type === Types.REGISTER) {
     return {
       ...state,
       user: action.payload.user,
@@ -148,35 +138,6 @@ export function AuthProvider({ children }: Props) {
     });
   }, []);
 
-  // REGISTER
-  const register = useCallback(
-    async (fullName: string, userName: string, phone: string, password: string, confirmPassword: string) => {
-      const data = {
-        fullName,
-        userName,
-        phone,
-        password,
-        confirmPassword
-      };
-
-      const res = await axiosHost.post(endpoints.auth.register, data);
-
-      const { accessToken, user } = res.data;
-
-      localStorage.setItem(STORAGE_KEY, accessToken);
-
-      dispatch({
-        type: Types.REGISTER,
-        payload: {
-          user: {
-            ...user,
-            accessToken,
-          },
-        },
-      });
-    },
-    []
-  );
 
   // LOGOUT
   const logout = useCallback(async () => {
@@ -202,10 +163,9 @@ export function AuthProvider({ children }: Props) {
       unauthenticated: status === 'unauthenticated',
       //
       login,
-      register,
       logout,
     }),
-    [login, logout, register, state.user, status]
+    [login, logout, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

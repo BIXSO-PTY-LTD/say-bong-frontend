@@ -40,7 +40,6 @@ export default function NavAccount() {
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
           <Avatar
-            src={user?.profileImage}
             alt={user?.userName}
             sx={{
               width: 45,

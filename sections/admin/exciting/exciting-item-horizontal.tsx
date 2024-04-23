@@ -65,6 +65,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
   const {
     id,
     title,
+    content
   } = video;
 
   return (
@@ -89,7 +90,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.video.exciting.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {title}
+                {content}
               </TextMaxLine>
             </Link>
           </Stack>

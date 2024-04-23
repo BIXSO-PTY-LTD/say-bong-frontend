@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import useSWR from "swr";
 
 export function useGetNews(offset?: number, limit?: number) {
-  let URL = endpoints.news.list;
+  let URL = endpoints.news;
 
   if (offset !== undefined && limit !== undefined) {
     URL += `?offset=${offset}&limit=${limit}`;
@@ -30,7 +30,7 @@ export function useGetNews(offset?: number, limit?: number) {
 
 export function useCreateNews() {
   const createNews = async (newsData: Partial<INewsItem>) => {
-    const URL = endpoints.news.create;
+    const URL = endpoints.news;
 
     try {
       const response = await axiosHost.post(URL, newsData);
@@ -47,7 +47,7 @@ export function useCreateNews() {
 
 export function useUpdateNew() {
   const updateNew = async (updatedNewData: Partial<INewsItem>) => {
-    const URL = `${endpoints.news.update}`;
+    const URL = `${endpoints.news}`;
     try {
       await axiosHost.put(URL, updatedNewData)
     } catch (error) {
@@ -59,7 +59,7 @@ export function useUpdateNew() {
   return updateNew
 }
 export function useGetNew(newId: string | undefined) {
-  const URL = newId ? `${endpoints.news.details}/${newId}` : '';
+  const URL = newId ? `${endpoints.news}/${newId}` : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
 
@@ -77,7 +77,7 @@ export function useGetNew(newId: string | undefined) {
 
 export function useDeleteNew() {
   const deleteNew = async (newId: string) => {
-    const URL = `${endpoints.news.delete}/${newId}`;
+    const URL = `${endpoints.news}/${newId}`;
 
     try {
       await axiosHost.delete(URL);

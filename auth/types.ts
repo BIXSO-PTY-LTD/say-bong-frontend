@@ -53,11 +53,7 @@ export type ContextType = CanRemove & {
   authenticated: boolean;
   unauthenticated: boolean;
   login: (phoneOrUserName: string, password: string) => Promise<void>;
-  register: (fullName: string,
-    userName: string,
-    phone: string,
-    password: string,
-    confirmPassword: string) => Promise<void>;
+
   logout: () => Promise<void>;
 };
 

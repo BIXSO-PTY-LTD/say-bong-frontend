@@ -40,7 +40,6 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
   useEffect(() => {
     if (commentsError || !currentLivestream) {
       console.log("error");
-
     }
   }, [commentsError, router, currentLivestream]);
 
@@ -65,8 +64,9 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
       // You can perform any additional setup here
     });
     newSocket.on("1", (comment: { status: number, message: string, data: ICommentItem }) => {
+      console.log(currentLivestream?.id, comment.data.postId);
+
       // Handle the new comment received from the server
-      console.log("New comment received:", comment);
       if (currentLivestream?.id === comment.data.postId) {
 
         mutate(endpoint);
@@ -84,7 +84,7 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
         newSocket.disconnect();
       }
     };
-  }, [endpoint]);
+  }, [currentLivestream?.id, endpoint]);
 
   const renderHead = (
     <Stack

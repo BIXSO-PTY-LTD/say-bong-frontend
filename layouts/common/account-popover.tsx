@@ -91,7 +91,6 @@ export default function AccountPopover({ onOpen }: Props) {
         }}
       >
         <Avatar
-          src={user?.profileImage}
           alt={user?.userName}
           sx={{
             width: 36,
@@ -106,8 +105,8 @@ export default function AccountPopover({ onOpen }: Props) {
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0, background: "#fff", color: "#000" }}>
 
         <Stack sx={{ p: 1 }}>
-          {OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={() => handleClickItem(option.linkTo)}>
+          {OPTIONS.map((option, index) => (
+            <MenuItem key={index} onClick={() => handleClickItem(option.linkTo)}>
               {option.label}
             </MenuItem>
           ))}

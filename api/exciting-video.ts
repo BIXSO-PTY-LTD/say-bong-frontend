@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import useSWR from "swr";
 
 export function useGetExcitingVideos(offset?: number, limit?: number) {
-  let URL = endpoints.excitingVideo.list;
+  let URL = endpoints.excitingVideo;
 
   if (offset !== undefined && limit !== undefined) {
     URL += `?offset=${offset}&limit=${limit}`;
@@ -29,7 +29,7 @@ export function useGetExcitingVideos(offset?: number, limit?: number) {
 }
 export function useCreateExcitingVideo() {
   const createExcitingVideo = async (excitingVideoData: Partial<IVideoItem>) => {
-    const URL = endpoints.excitingVideo.create;
+    const URL = endpoints.excitingVideo;
 
     try {
       const response = await axiosHost.post(URL, excitingVideoData);
@@ -45,7 +45,7 @@ export function useCreateExcitingVideo() {
 }
 
 export function useGetExcitingVideo(videoId: string | undefined) {
-  const URL = videoId ? `${endpoints.excitingVideo.details}/${videoId}` : '';
+  const URL = videoId ? `${endpoints.excitingVideo}/${videoId}` : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
 
@@ -62,7 +62,7 @@ export function useGetExcitingVideo(videoId: string | undefined) {
 }
 export function useUpdateExcitingVideo() {
   const updateExcitingVideo = async (updatedExcitingVideoData: Partial<IVideoItem>) => {
-    const URL = `${endpoints.excitingVideo.update}`;
+    const URL = `${endpoints.excitingVideo}`;
     try {
       await axiosHost.put(URL, updatedExcitingVideoData)
     } catch (error) {
@@ -77,7 +77,7 @@ export function useUpdateExcitingVideo() {
 
 export function useDeleteExcitingVideo() {
   const deleteExcitingVideo = async (excitingVideoId: string) => {
-    const URL = `${endpoints.excitingVideo.list}/${excitingVideoId}`;
+    const URL = `${endpoints.excitingVideo}/${excitingVideoId}`;
 
     try {
       await axiosHost.delete(URL);
