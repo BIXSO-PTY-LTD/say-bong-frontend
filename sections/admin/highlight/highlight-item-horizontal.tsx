@@ -45,7 +45,6 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
 
   const router = useRouter();
 
-  const smUp = useResponsive('up', 'sm');
   const deleteVideo = useDeleteHighlightVideo();
 
   const handleDeleteVideo = useCallback(
@@ -94,19 +93,6 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
           </Stack>
         </Stack>
 
-        {smUp && (
-          <Box
-            sx={{
-              position: 'relative',
-              p: 1,
-              width: "164px"
-            }}
-          >
-            <Image alt={title} src={_mock.image.cover(0)} sx={{
-              borderRadius: 1.5,
-            }} />
-          </Box>
-        )}
       </Stack>
 
       <CustomPopover

@@ -91,6 +91,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
   useEffect(() => {
     if (currentVideo) {
       reset(defaultValues);
+      setVideoSrc(currentVideo?.content)
     }
   }, [currentVideo, defaultValues, reset]);
 

@@ -12,8 +12,6 @@ import { RouterLink } from '#/routes/components';
 
 import { useResponsive } from '#/hooks/use-responsive';
 
-import { fDate } from '#/utils/format-time';
-import { fShortenNumber } from '#/utils/format-number';
 
 import Label from '#/components/label';
 import Image from '#/components/image';
@@ -46,7 +44,6 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
   const confirm = useBoolean();
 
 
-  const smUp = useResponsive('up', 'sm');
 
   const deleteExcitingVideo = useDeleteExcitingVideo();
 
@@ -96,19 +93,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
           </Stack>
         </Stack>
 
-        {smUp && (
-          <Box
-            sx={{
-              position: 'relative',
-              p: 1,
-              width: "164px"
-            }}
-          >
-            <Image alt={title} src={_mock.image.cover(1)} sx={{
-              borderRadius: 1.5,
-            }} />
-          </Box>
-        )}
+
       </Stack>
 
       <CustomPopover
