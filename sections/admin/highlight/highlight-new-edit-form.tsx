@@ -85,7 +85,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
       setVideoSrc(URL.createObjectURL(file));
       setValue('content', file);
     }
-  }, [file, setValue, currentVideo]);
+  }, [file, setValue]);
 
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
       data.content = uploadedUrl;
       if (currentVideo) {
-        updateHighlight(data)
+        await updateHighlight(data)
 
       } else {
         await createHighlight(data);
@@ -164,7 +164,6 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
                   hidden
                   onChange={(e) => {
                     const selectedFile = e.target.files?.[0];
-
                     if (selectedFile) {
                       setFile(selectedFile);
                     }

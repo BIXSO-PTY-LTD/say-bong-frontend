@@ -20,7 +20,7 @@ import FormProvider, {
   RHFTextField,
 } from '#/components/hook-form';
 
-import { Button, CardHeader } from '@mui/material';
+import { Alert, Button, CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import { ITourProps } from '#/types/tour';
 import { Upload } from '#/components/upload';
@@ -46,6 +46,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -86,12 +87,12 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   useEffect(() => {
-    const src = URL.createObjectURL(new Blob([file || ''], { type: 'video/mp4' }));
-    setVideoSrc(src)
-    setValue('content', file)
+    if (file) {
+      setVideoSrc(URL.createObjectURL(file));
+      setValue('content', file);
+    }
   }, [file, setValue])
 
   useEffect(() => {
@@ -127,12 +128,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
 
       data.content = uploadedUrl;
       if (currentVideo) {
-        // console.log('Editing News with ID:', currentNew.id);
         await updateExcitingVideo(data)
-        // if (avatarFile) {
-        //   const uploadResult = await uploadAvatar( currentNew?.id,avatarFile);
-        //   console.log('Upload Result:', uploadResult);
-        // }
       } else {
         await createExcitingVideo(data);
       }
@@ -140,8 +136,9 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
       enqueueSnackbar(currentVideo ? 'Cập nhật thành công' : 'Tạo thành công');
       router.push(paths.dashboard.video.exciting.root);
       console.info('DATA', data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message)
     }
   });
 
@@ -152,7 +149,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            Chi tiết
           </Typography>
 
         </Grid>
@@ -163,6 +160,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
           {!mdUp && <CardHeader slug="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
             <RHFTextField inputColor='#fff' name="title" label="Chủ đề" />
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Video file</Typography>
@@ -186,11 +184,9 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
               </Button>
               {currentVideo?.content || file ? (
                 <Box>
-                  <video id="video-summary" controls src={currentVideo?.content || videoSrc} width="100%" height="350px" />
+                  <video id="video-summary" controls src={videoSrc} width="100%" height="350px" />
                 </Box>
               ) : null}
-
-
             </Stack>
           </Stack>
         </Card>
