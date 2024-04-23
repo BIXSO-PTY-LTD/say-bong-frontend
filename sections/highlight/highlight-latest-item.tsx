@@ -39,7 +39,7 @@ export default function HighlightLatestItem({ video,
         }}
       >
         <Image
-          src={_mock.image.cover(2)}
+          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={video.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||

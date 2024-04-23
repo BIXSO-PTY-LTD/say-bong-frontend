@@ -52,7 +52,7 @@ export default function LivestreamLatestItem({ livestream,
 
         </Box>
         <Image
-          src={_mock.image.cover(2)}
+          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={livestream.title}
           ratio={(largelivestream && '3/4') ||
             // (order && '4/3') ||

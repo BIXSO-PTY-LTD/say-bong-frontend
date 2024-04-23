@@ -39,7 +39,7 @@ export default function NewsPostItem({ post }: Props) {
     >
       <m.div variants={varHover(1.25)} transition={varTranHover()}>
         <Image
-          src={_mock.image.cover(0)}
+          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={post.title}
           ratio="3/4"
           overlay={`linear-gradient(to top, ${alpha(theme.palette.common.black, 0)} 0%, ${theme.palette.common.black

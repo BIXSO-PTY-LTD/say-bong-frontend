@@ -115,7 +115,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
               width: "164px"
             }}
           >
-            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(3)} sx={{
+            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
               borderRadius: 1.5, height: 1
             }} />
           </Box>

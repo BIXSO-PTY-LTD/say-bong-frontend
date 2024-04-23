@@ -25,9 +25,9 @@ type Props = {
 export default function HomeHighlightItem({ video,
   //  order,
   largePost }: Props) {
-
   return (
     <Card sx={{
+      minHeight: '280px',
       background: theme => theme.palette.grey[800],
     }}>
       <Stack
@@ -41,12 +41,11 @@ export default function HomeHighlightItem({ video,
         }}
       >
         <Image
-          src={_mock.image.cover(0)}
+          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={video?.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
-
         />
 
         <Stack

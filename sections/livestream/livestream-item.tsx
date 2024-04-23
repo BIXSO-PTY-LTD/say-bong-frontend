@@ -48,7 +48,7 @@ export default function LivestreamItem({ livestream }: Props) {
 
       </Box>
 
-      <Image alt={title} src={_mock.image.cover(2)} ratio="1/1" />
+      <Image alt={title} src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
 
       <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit" >
         <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>

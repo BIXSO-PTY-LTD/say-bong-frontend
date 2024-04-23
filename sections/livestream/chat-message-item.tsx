@@ -47,8 +47,9 @@ export default function ChatMessageItem({ comment, authors }: Props) {
       sx={{
         p: 1.5,
         minWidth: 48,
-        maxWidth: 320,
+        maxWidth: 200,
         borderRadius: 1,
+        wordWrap: 'break-word',
         typography: 'body2',
         bgcolor: 'background.neutral',
         ...(user && {
@@ -57,9 +58,7 @@ export default function ChatMessageItem({ comment, authors }: Props) {
         })
       }}
     >
-
       {comment.content}
-
     </Stack>
   );
 

@@ -40,7 +40,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
     >
       <Image
         alt={post.title}
-        src={firstImageUrl ? firstImageUrl : _mock.image.cover(5)}
+        src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,

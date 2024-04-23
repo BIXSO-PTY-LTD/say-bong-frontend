@@ -28,7 +28,7 @@ export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
     >
       <Image
         alt={video.title}
-        src={_mock.image.cover(0)}
+        src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,

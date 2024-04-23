@@ -49,7 +49,7 @@ export default function ExcitingHighlightItem({ video }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={title} src={_mock.image.cover(3)} ratio="1/1" />
+        <Image alt={title} src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
 
       </Box>
 

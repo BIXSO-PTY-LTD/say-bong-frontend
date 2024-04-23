@@ -38,7 +38,7 @@ export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: P
     >
       <Image
         alt={livestream.title}
-        src={firstImageUrl ? firstImageUrl : _mock.image.cover(4)}
+        src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,
