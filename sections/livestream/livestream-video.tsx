@@ -12,16 +12,10 @@ type Props = {
 };
 
 export default function LivestreamVideo({ currentLivestream }: Props) {
-  const [currentLivestreamVideo, setcurrentLivestreamVideo] = useState<string | undefined>()
 
-  useEffect(() => {
-    setcurrentLivestreamVideo(currentLivestream?.content)
-  }, [currentLivestream?.content])
   return (
     <>
-
-      <Player controls autoPlay url={currentLivestreamVideo} />
-
+      <Player controls autoPlay url={currentLivestream?.content} />
     </>
   );
 }

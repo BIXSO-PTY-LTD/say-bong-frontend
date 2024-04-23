@@ -14,7 +14,7 @@ type Props = {
 }
 export default function HighlightDetailView({ id }: Props) {
   const { video: currentVideo, videoLoading } = useGetHighlightVideo(id)
-  const { highlightVideos, highlightVideosLoading } = useGetHighlightVideos()
+  const { highlightVideos, highlightVideosLoading } = useGetHighlightVideos(1, 4)
   const filteredHighlights = currentVideo ? highlightVideos.filter(video => video.id !== currentVideo.id) : highlightVideos;
 
   return (
@@ -23,7 +23,7 @@ export default function HighlightDetailView({ id }: Props) {
       {videoLoading ? <>Loading...</> :
         <HighlightVideo currentVideo={currentVideo} />
       }
-      <HighlightLatest highlightVideos={filteredHighlights} loading={highlightVideosLoading} />
+      <HighlightLatest highlightVideos={filteredHighlights === null ? filteredHighlights : highlightVideos} loading={highlightVideosLoading} />
     </Container>
   )
 }

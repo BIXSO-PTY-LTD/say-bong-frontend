@@ -185,7 +185,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField inputColor='#fff' name="title" label="Post Title" />
+            <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Nội dung</Typography>

@@ -19,7 +19,7 @@ type Props = {
 
 export default function NewsDetailsView({ id }: Props) {
   const { new: currentPost } = useGetNew(id);
-  const { news, newsLoading, newsEmpty } = useGetNews();
+  const { news, newsLoading, newsEmpty } = useGetNews(1, 4);
   return (
     <>
 
@@ -34,7 +34,7 @@ export default function NewsDetailsView({ id }: Props) {
 
           <Grid xs={12} md={4}>
             <NewsSidebar
-              recentPosts={news.slice(-4)}
+              recentPosts={news}
               loading={newsLoading} empty={newsEmpty}
             />
           </Grid>

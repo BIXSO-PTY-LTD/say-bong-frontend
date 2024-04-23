@@ -1,6 +1,6 @@
 "use client"
 
-import { Container, Grid, Typography } from "@mui/material"
+import { Container, Grid, Skeleton, Typography } from "@mui/material"
 import LivestreamVideo from "../livestream-video"
 import LivestreamLastest from "../livestream-latest"
 import LivestreamChatView from "../livestream-chat-view"
@@ -23,19 +23,29 @@ export default function LivestreamDetailView({ id }: Props) {
   return (
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
-      {livestreamLoading ? (
-        <StackPostSkeleton count={1} />
-      ) :
-        (
-          <Grid container spacing={{ xs: 1 }}>
+      <Grid container spacing={{ xs: 1 }}>
+        {livestreamLoading ? (
+          <>
+            <Grid item xs={12} md={8}>
+              <Skeleton variant="rectangular" height="500px" />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Skeleton variant="rectangular" height="500px" />
+            </Grid>
+          </>
+        ) : (
+          <>
             <Grid item xs={12} md={8}>
               <LivestreamVideo currentLivestream={currentLivestream} />
             </Grid>
             <Grid item xs={12} md={4}>
               <LivestreamChatView currentLivestream={currentLivestream} />
             </Grid>
-          </Grid>
+          </>
         )}
+
+      </Grid>
+
 
       <LivestreamLastest loading={livestreamsLoading} empty={livestreamsEmpty} livestreams={filteredLivestreams} />
 

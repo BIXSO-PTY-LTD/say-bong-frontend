@@ -39,12 +39,10 @@ function Container({ children }: Props) {
 
     if (!user?.roles.length) {
       router.replace("/");
-      setTimeout(() => {
-        enqueueSnackbar("Bạn chưa đăng nhập hoặc tài khoản phải có quyền admin", {
-          variant: 'error', // Loại thông báo (ví dụ: success, error, warning)
-          autoHideDuration: 3000 // Thời gian hiển thị thông báo (đơn vị: ms)
-        });
-      }, 2000);
+      enqueueSnackbar("Bạn chưa đăng nhập hoặc tài khoản phải có quyền admin", {
+        variant: 'error',
+        autoHideDuration: 3000
+      });
     } else {
       setChecked(true);
 

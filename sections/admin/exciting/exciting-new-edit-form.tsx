@@ -102,7 +102,6 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
     }
   }, [currentVideo, defaultValues, reset]);
 
-  console.log(videoSrc);
 
 
   const createExcitingVideo = useCreateExcitingVideo()
