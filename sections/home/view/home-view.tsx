@@ -14,8 +14,8 @@ import { useGetHighlightVideos } from '#/api/highlight-video';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
-  const { news, newsLoading, newsEmpty } = useGetNews()
-  const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos();
+  const { news, newsLoading, newsEmpty } = useGetNews(1, 7)
+  const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 7);
 
   return (
     <MainLayout>
@@ -23,8 +23,8 @@ export default function HomeView() {
         <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">Trực tiếp bóng đá</Typography>
         <MatchList />
 
-        <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={highlightVideos.length >= 7 ? highlightVideos.slice(0, 7) : highlightVideos} />
-        <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={news.length >= 7 ? news.slice(0, 7) : news} />
+        <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={highlightVideos} />
+        <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={news} />
       </Container>
     </MainLayout>
   );
