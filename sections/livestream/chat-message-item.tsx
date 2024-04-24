@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 
 import { IAuthor, ICommentItem } from '#/types/chat';
 import { useAuthContext } from '#/auth/hooks';
+import { Avatar } from '@mui/material';
+import { ThemeContext } from '@emotion/react';
 
 
 // ----------------------------------------------------------------------
@@ -26,20 +28,34 @@ export default function ChatMessageItem({ comment, authors }: Props) {
   // const { body, createdAt } = message;
 
   const renderInfo = (
-    <Typography
-      noWrap
-      variant="caption"
-      sx={{
-        mb: 1,
-        color: 'text.disabled',
-        ...(!isMe && {
-          mr: 'auto',
-        }),
-      }}
-    >
-      {!isMe && `${comment.author.userName}`} &nbsp;
+    <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
+      {!isMe && <Avatar
+        alt={user?.userName}
+        sx={{
+          mr: 1,
+          width: 27,
+          height: 27,
+          border: (theme) => `solid 2px ${theme.palette.background.default}`,
+          fontSize: (theme) => theme.typography.body2
+        }}
+      >
+        {user?.fullName?.charAt(0).toUpperCase()}
+      </Avatar>
+      }
+      <Typography
+        noWrap
+        variant="caption"
+        sx={{
+          color: 'text.disabled',
+          ...(!isMe && {
+            mr: 'auto',
+          }),
+        }}
+      >
+        {!isMe && `${comment.author.userName}`} &nbsp;
 
-    </Typography>
+      </Typography>
+    </Stack>
   );
 
   const renderBody = (
@@ -65,7 +81,8 @@ export default function ChatMessageItem({ comment, authors }: Props) {
 
   return (
     <Stack direction="row" justifyContent={isMe ? 'flex-end' : 'unset'} sx={{ mb: 5 }}>
-      <Stack alignItems="flex-end">
+
+      <Stack>
         {renderInfo}
 
         <Stack
