@@ -26,11 +26,6 @@ type Props = {
 
 export default function LivestreamItem({ livestream }: Props) {
   const { id, title, content } = livestream;
-
-
-
-
-
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Box

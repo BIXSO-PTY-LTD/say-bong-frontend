@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -16,6 +16,7 @@ import TextMaxLine from '#/components/text-max-line';
 import { IVideoItem } from '#/types/video';
 import Label from '#/components/label';
 import { _mock } from '#/_mock';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -24,9 +25,16 @@ type Props = {
 };
 
 export default function ExcitingHighlightItem({ video }: Props) {
-  const { id, title } = video;
+  const { id, title, content } = video;
 
-
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
@@ -49,7 +57,7 @@ export default function ExcitingHighlightItem({ video }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={title} src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
+        <Image alt={title} src={videoThumbnail} ratio="1/1" />
 
       </Box>
 

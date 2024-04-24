@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { IBlogPostProps } from '#/types/blog';
 import { useResponsive } from '#/hooks/use-responsive';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
@@ -12,9 +11,10 @@ import Iconify from '#/components/iconify';
 import HomeHighlightItem from './home-highlight-item';
 import HomeHighlightMobile from './home-highlight-mobile';
 import { IVideoItem } from '#/types/video';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EmptyContent from '#/components/empty-content/empty-content';
 import { LargerPostSkeleton } from '../skeletons/larger-post-skeleton';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 
 
@@ -28,8 +28,8 @@ type Props = {
 
 export default function HomeHighlight({ highlightVideos, loading, empty }: Props) {
   const mdUp = useResponsive('up', 'md');
-
   const latestVideo = highlightVideos[0];
+
 
   const viewAllBtn = (
     <Button

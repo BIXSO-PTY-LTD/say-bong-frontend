@@ -11,6 +11,8 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 
 // ----------------------------------------------------------------------
@@ -25,6 +27,14 @@ type Props = {
 export default function HomeHighlightItem({ video,
   //  order,
   largePost }: Props) {
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (video?.content) {
+      captureThumbnailFromCloudinary(video.content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [video]);
   return (
     <Card sx={{
       minHeight: '280px',
@@ -41,11 +51,12 @@ export default function HomeHighlightItem({ video,
         }}
       >
         <Image
-          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+          src={videoThumbnail}
           alt={video?.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
+          sx={{ filter: "brightness(0.7)" }}
         />
 
         <Stack
