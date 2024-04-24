@@ -27,6 +27,7 @@ import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
 import { useCreateNews, useUpdateNew } from '#/api/news';
 import { INewsItem } from '#/types/news';
+import { useUpload } from '#/api/upload';
 
 // ----------------------------------------------------------------------
 
@@ -117,7 +118,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
     });
   };
 
-
+  const upload = useUpload()
   const createNews = useCreateNews();
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
@@ -128,21 +129,9 @@ export default function NewsNewEditForm({ currentNew }: Props) {
 
       // Upload files to Cloudinary
       const uploadedUrls = await Promise.all(filesArray.map(async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default');
 
-        const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
 
-        if (!response.ok) {
-          throw new Error('Failed to upload image to Cloudinary');
-        }
-
-        const responseData = await response.json();
-        return responseData.secure_url;
+        return upload(file);
       }));
 
       let updatedContent = data.content;

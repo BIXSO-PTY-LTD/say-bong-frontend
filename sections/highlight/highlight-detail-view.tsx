@@ -1,7 +1,7 @@
 "use client"
 
 import { ITourProps } from "#/types/tour"
-import { Box, Container, Grid, Typography } from "@mui/material"
+import { Box, Container, Grid, Stack, Typography } from "@mui/material"
 import { _tours } from "#/_mock"
 import HighlightVideo from "./highlight-video"
 import { _careerPosts } from "#/_mock/_blog"
@@ -18,10 +18,15 @@ export default function HighlightDetailView({ id }: Props) {
   const filteredHighlights = currentVideo ? highlightVideos.filter(video => video.id !== currentVideo.id) : highlightVideos;
 
   return (
-    <Container>
-      <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">Highlight</Typography>
-      <HighlightVideo loading={videoLoading} currentVideo={currentVideo} />
-      <HighlightLatest highlightVideos={filteredHighlights === null ? filteredHighlights : highlightVideos} loading={highlightVideosLoading} />
-    </Container>
+    <>
+
+      <Stack direction="column">
+
+        <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">Highlight</Typography>
+
+        <HighlightVideo loading={videoLoading} currentVideo={currentVideo} />
+        <HighlightLatest highlightVideos={filteredHighlights === null ? filteredHighlights : highlightVideos} loading={highlightVideosLoading} />
+      </Stack>
+    </>
   )
 }

@@ -7,6 +7,7 @@ import { HEADER } from '../config-layout';
 import { usePathname } from 'next/navigation';
 import Image from '#/components/image';
 import { Stack } from '@mui/material';
+import { useResponsive } from '#/hooks/use-responsive';
 // ----------------------------------------------------------------------
 
 
@@ -18,7 +19,7 @@ type Props = {
 
 export default function MainLayout({ children }: Props) {
   const pathname = usePathname();
-
+  const mdUp = useResponsive("up", "md")
   const actionPage = (arr: string[]) =>
     arr.map((path) => pathname === path || pathname === `${path}/`);
 
@@ -38,17 +39,20 @@ export default function MainLayout({ children }: Props) {
         }}
       >
         {actionPage(spacingLayout) && <Spacing />}
-        <Stack direction="row">
-          <Image alt="banner-left" src="/assets/banner-left.svg" sx={{
-            objectFit: "cover",
-            objectPosition: "center",
-          }} />
-          {children}
-          <Image alt="banner-right" src="/assets/banner-right.svg" sx={{
-            objectFit: "cover",
-            objectPosition: "center",
-          }} />
-        </Stack>
+        {mdUp && (
+          <Stack direction="row">
+            <Image alt="banner-left" src="/assets/banner-left.svg" sx={{
+              objectFit: "cover",
+              objectPosition: "center",
+            }} />
+            {children}
+            <Image alt="banner-right" src="/assets/banner-right.svg" sx={{
+              objectFit: "cover",
+              objectPosition: "center",
+            }} />
+          </Stack>
+        )}
+        {children}
 
 
       </Box>
