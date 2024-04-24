@@ -39,7 +39,7 @@ export default function MatchItemHorizontal({ match }: Props) {
 
   }, [date_time]); // 
   return (
-    <Stack component={Card} sx={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${image})`, p: 1, backgroundSize: 'cover' }} direction="column">
+    <Stack component={Card} sx={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/assets/images/match/background-match.svg)`, p: 1, backgroundSize: 'cover' }} direction="column">
       <Stack sx={{ py: 0.5, px: '20px', mb: 1 }} direction="row" justifyContent="space-between">
         <Typography variant="body1">{competition}</Typography>
         <Typography variant="body1">{formattedDateTime}</Typography>

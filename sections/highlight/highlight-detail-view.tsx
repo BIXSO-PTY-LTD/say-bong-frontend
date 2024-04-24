@@ -20,9 +20,7 @@ export default function HighlightDetailView({ id }: Props) {
   return (
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">Highlight</Typography>
-      {videoLoading ? <>Loading...</> :
-        <HighlightVideo currentVideo={currentVideo} />
-      }
+      <HighlightVideo loading={videoLoading} currentVideo={currentVideo} />
       <HighlightLatest highlightVideos={filteredHighlights === null ? filteredHighlights : highlightVideos} loading={highlightVideosLoading} />
     </Container>
   )
