@@ -60,7 +60,7 @@ export default function BXHList() {
           //
           competitionOptions={COMPETITION_OPTIONS} />
       </Stack>
-      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "md" }}>
+      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "lg" }}>
 
 
         <Box sx={{ overflow: 'auto' }} >

@@ -12,6 +12,8 @@ import { Card } from '@mui/material';
 import { _marketingPosts } from '#/_mock/_blog';
 import { _mock } from '#/_mock';
 import { IVideoItem } from '#/types/video';
+import { useEffect, useState } from 'react';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 
 // ----------------------------------------------------------------------
@@ -25,6 +27,16 @@ type Props = {
 export default function HighlightLatestItem({ video,
   //  order,
   largePost }: Props) {
+  const { id, title, createdAt, content } = video;
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
@@ -39,8 +51,8 @@ export default function HighlightLatestItem({ video,
         }}
       >
         <Image
-          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
-          alt={video.title}
+          src={videoThumbnail}
+          alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -59,9 +71,9 @@ export default function HighlightLatestItem({ video,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(video.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(video.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{video.title}</TextMaxLine>
+          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(id)} color="inherit">
+            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{title}</TextMaxLine>
           </Link>
 
 

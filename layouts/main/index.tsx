@@ -31,7 +31,7 @@ export default function MainLayout({ children }: Props) {
         component="main"
         sx={{
           flexGrow: 1,
-          backgroundImage: `url("/assets/background.svg")`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("/assets/background.svg")`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -39,19 +39,8 @@ export default function MainLayout({ children }: Props) {
         }}
       >
         {actionPage(spacingLayout) && <Spacing />}
-        {mdUp ? (
-          <Stack direction="row">
-            <Image alt="banner-left" src="/assets/banner-left.svg" sx={{
-            }} />
 
-            {children}
-            <Image alt="banner-right" src="/assets/banner-right.svg" sx={{
-            }} />
-          </Stack>
-        ) : (
-          children
-
-        )}
+        {children}
 
 
       </Box>

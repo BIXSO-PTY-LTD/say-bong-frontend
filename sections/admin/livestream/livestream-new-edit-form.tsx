@@ -30,6 +30,8 @@ import { endpoints } from '#/utils/axios';
 import { ILivestreamItem } from '#/types/livestream';
 import { useCreateLivestream, useUpdateLivestream } from '#/api/livestream';
 import { Upload } from '#/components/upload';
+import { useUpload } from '#/api/upload';
+import { HOST_API } from '#/config-global';
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -41,19 +43,26 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
+
   const { enqueueSnackbar } = useSnackbar();
 
   const LivestreamSchema = Yup.object().shape({
     id: Yup.string(),
     title: Yup.string().required('Phải có tiêu đề'),
-    content: Yup.mixed<any>().nullable().required('Phải có file video'),
+    content: Yup.string().required('Phải có link livestream'),
+    metas: Yup.array().of(
+      Yup.object().shape({
+        key: Yup.string().required(),
+        content: Yup.mixed<any>().nullable().required('Phải có hình ảnh hiển thị')
+      })
+    )
   });
-
   const defaultValues = useMemo(
     () => ({
       id: currentLivestream?.id || '',
       title: currentLivestream?.title || '',
-      content: currentLivestream?.content || '',
+      content: currentLivestream?.content || "",
+      metas: currentLivestream?.meta || [{ key: 'thumbnail', content: '' }],
     }),
     [currentLivestream]
   );
@@ -79,27 +88,51 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   }, [currentLivestream, defaultValues, reset]);
 
 
-
+  const upload = useUpload()
   const createLiveStream = useCreateLivestream();
   const updateLivestream = useUpdateLivestream();
   const onSubmit = handleSubmit(async (data) => {
     try {
 
+      if (data.metas && data.metas.length > 0) {
+        const fileData = await upload(data.metas[0].content)
 
-      // if (currentLivestream) {
-      //   await updateLivestream(data);
-      // } else {
-      //   await createLiveStream(data);
-      // }
-      // mutate(endpoints.livestream);
-      // enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
-      // router.push(paths.dashboard.livestream.root);
-      // console.info('DATA', data);
+        data.metas[0].content = `${HOST_API}/api/v1/${fileData[0].filename}`
+      } else {
+        console.log('No metas found or metas array is empty');
+      }
+      if (currentLivestream) {
+        await updateLivestream(data);
+      } else {
+        await createLiveStream(data);
+      }
+      mutate(endpoints.livestream);
+      enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
+      router.push(paths.dashboard.livestream.root);
+      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
   });
 
+  const handleDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+
+      if (file) {
+        setValue('metas.0.content', newFile, { shouldValidate: true });
+      }
+    },
+    [setValue]
+  );
+
+  const handleRemoveFile = useCallback(() => {
+    setValue('metas.0.content', null);
+  }, [setValue]);
 
 
 
@@ -123,7 +156,14 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
 
             <RHFTextField inputColor='#fff' name="content" label="Link livestream" />
 
-
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Hình hiển thị</Typography>
+              <RHFUpload
+                name="metas.0.content"
+                onDrop={handleDrop}
+                onDelete={handleRemoveFile}
+              />
+            </Stack>
 
           </Stack>
         </Card>
