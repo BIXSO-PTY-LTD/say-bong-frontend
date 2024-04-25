@@ -66,6 +66,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   const {
     reset,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
@@ -84,15 +85,16 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
 
-      if (currentLivestream) {
-        await updateLivestream(data);
-      } else {
-        await createLiveStream(data);
-      }
-      mutate(endpoints.livestream);
-      enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
-      router.push(paths.dashboard.livestream.root);
-      console.info('DATA', data);
+
+      // if (currentLivestream) {
+      //   await updateLivestream(data);
+      // } else {
+      //   await createLiveStream(data);
+      // }
+      // mutate(endpoints.livestream);
+      // enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
+      // router.push(paths.dashboard.livestream.root);
+      // console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -120,6 +122,8 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
             <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <RHFTextField inputColor='#fff' name="content" label="Link livestream" />
+
+
 
           </Stack>
         </Card>

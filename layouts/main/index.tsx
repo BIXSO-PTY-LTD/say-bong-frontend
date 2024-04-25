@@ -39,20 +39,19 @@ export default function MainLayout({ children }: Props) {
         }}
       >
         {actionPage(spacingLayout) && <Spacing />}
-        {mdUp && (
+        {mdUp ? (
           <Stack direction="row">
             <Image alt="banner-left" src="/assets/banner-left.svg" sx={{
-              objectFit: "cover",
-              objectPosition: "center",
             }} />
+
             {children}
             <Image alt="banner-right" src="/assets/banner-right.svg" sx={{
-              objectFit: "cover",
-              objectPosition: "center",
             }} />
           </Stack>
+        ) : (
+          children
+
         )}
-        {children}
 
 
       </Box>

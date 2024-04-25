@@ -27,8 +27,10 @@ import { Upload } from '#/components/upload';
 import { IVideoItem } from '#/types/video';
 import { useCreateHighlightVideo, useUpdateHighlightVideo } from '#/api/highlight-video';
 import { mutate } from 'swr';
-import { endpoints } from '#/utils/axios';
+import { axiosHost, endpoints } from '#/utils/axios';
 import { useUpload } from '#/api/upload';
+import Image from '#/components/image';
+import { HOST_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -102,9 +104,10 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
 
-      const uploadedUrl = await upload(data.content)
+      const updatedContent = await upload(data.content)
 
-      data.content = uploadedUrl;
+      data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
+
       if (currentVideo) {
         await updateHighlight(data)
 
@@ -162,7 +165,11 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
               </Button>
               {currentVideo?.content || file ? (
                 <Box>
-                  <video id="video-summary" controls src={videoSrc} width="100%" height="350px" />
+                  <video
+                    id="video-summary"
+                    controls
+                    src={videoSrc}
+                    width="100%" height="350px" />
                 </Box>
               ) : null}
             </Stack>

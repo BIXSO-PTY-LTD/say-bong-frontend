@@ -1,17 +1,25 @@
 import { axiosHost, endpoints } from '#/utils/axios';
 
 export function useUpload() {
-  const upload = async (file: File) => {
+  const upload = async (files: File | File[]) => {
     const uploadUrl = endpoints.upload;
 
     try {
       const formData = new FormData();
-      formData.append('file1', file);
+
+      if (Array.isArray(files)) {
+        files.forEach((file, index) => {
+          formData.append(`file${index + 1}`, file);
+        });
+      } else {
+        formData.append('file1', files);
+      }
+
+
 
       const response = await axiosHost.post(uploadUrl, formData);
-      console.log(response);
 
-      const updatedCustomerData = response.data;
+      const updatedCustomerData = response.data.data;
 
       return updatedCustomerData;
     } catch (error) {
