@@ -24,9 +24,11 @@ import { CardHeader, FormHelperText } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
 import { mutate } from 'swr';
-import { endpoints } from '#/utils/axios';
+import { axiosHost, endpoints } from '#/utils/axios';
 import { useCreateNews, useUpdateNew } from '#/api/news';
 import { INewsItem } from '#/types/news';
+import { useUpload } from '#/api/upload';
+import { HOST_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -89,65 +91,46 @@ export default function NewsNewEditForm({ currentNew }: Props) {
     return base64SrcArray;
   };
 
-  const base64ToBlob = (base64String: string, contentType = '') => {
-    const base64WithoutPrefix = base64String.replace(/^data:image\/[a-z]+;base64,/, '');
+  function base64ToFiles(base64Array: string[]) {
+    const filesArray = [];
 
-    const byteCharacters = atob(base64WithoutPrefix);
-    const byteArrays = [];
-    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-      const slice = byteCharacters.slice(offset, offset + 512);
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
+    for (let i = 0; i < base64Array.length; i++) {
+      const base64String = base64Array[i];
+      const base64Data = base64String.split(',')[1]; // Remove prefix
+      const binaryData = atob(base64Data); // Decode base64 string to binary
+      const arrayBuffer = new ArrayBuffer(binaryData.length);
+      const uint8Array = new Uint8Array(arrayBuffer);
+
+      for (let j = 0; j < binaryData.length; j++) {
+        uint8Array[j] = binaryData.charCodeAt(j); // Convert to UTF-16 code units
       }
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
+
+      const blob = new Blob([uint8Array]); // Create blob from binary data
+      const file = new File([blob], `file${i}.png`, { type: 'image/png' }); // Create File object
+
+      filesArray.push(file);
     }
-    const blob = new Blob(byteArrays, { type: contentType });
 
-    return blob;
-  };
+    return filesArray;
+  }
 
-  const base64ToFiles = (base64Array: string[], contentType = '') => {
-    return base64Array.map((base64String) => {
-      const blob = base64ToBlob(base64String, contentType);
-
-      const fileName = `image_${Date.now()}`;
-      return new File([blob], fileName, { type: contentType });
-    });
-  };
-
-
+  const upload = useUpload();
   const createNews = useCreateNews();
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
       const base64Array = extractBase64Src(data.content);
 
-      const filesArray = base64ToFiles(base64Array, 'image/jpeg');
+      const filesArray = base64ToFiles(base64Array);
 
-      // Upload files to Cloudinary
-      const uploadedUrls = await Promise.all(filesArray.map(async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'ml_default');
 
-        const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to upload image to Cloudinary');
-        }
-
-        const responseData = await response.json();
-        return responseData.secure_url;
-      }));
+      const FilesContent = await upload(filesArray)
+      const fileNames = FilesContent.map((file: any) => file.filename);
 
       let updatedContent = data.content;
+
       base64Array.forEach((base64String, index) => {
-        updatedContent = updatedContent.replace(base64String, uploadedUrls[index]);
+        updatedContent = updatedContent.replace(base64String, `${HOST_API}/api/v1/${fileNames[index]}`);
       });
 
       data.content = updatedContent;
@@ -191,6 +174,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
               <Typography variant="subtitle2">Nội dung</Typography>
               <RHFEditor simple name="content" />
               <FormHelperText>Hình ảnh đẹp nhất khi ở 630x500</FormHelperText>
+              <FormHelperText>Chỉ upload tối đa 5 hình</FormHelperText>
             </Stack>
 
           </Stack>

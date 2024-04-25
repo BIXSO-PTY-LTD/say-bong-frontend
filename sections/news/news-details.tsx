@@ -18,6 +18,7 @@ type Props = {
 }
 
 export default function NewsDetails({ currentPost }: Props) {
+
   return (
     <>
 
@@ -29,7 +30,6 @@ export default function NewsDetails({ currentPost }: Props) {
           {fDate(currentPost?.createdAt)}
         </Typography>
       </Stack>
-
 
       <Markdown content={currentPost?.content ? currentPost?.content : "loading..."} />
     </>

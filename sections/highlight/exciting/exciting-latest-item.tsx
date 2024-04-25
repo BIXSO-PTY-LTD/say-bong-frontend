@@ -11,6 +11,8 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 
 // ----------------------------------------------------------------------
@@ -24,7 +26,17 @@ type Props = {
 export default function ExcitingLatestItem({ video,
   //  order,
   largePost }: Props) {
+  const { id, title, content, createdAt } = video;
 
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+
+  useEffect(() => {
+    if (content) {
+      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Stack
@@ -38,8 +50,8 @@ export default function ExcitingLatestItem({ video,
         }}
       >
         <Image
-          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
-          alt={video.title}
+          src={videoThumbnail}
+          alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -58,9 +70,9 @@ export default function ExcitingLatestItem({ video,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(video.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.exciting.details(video.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{video.title}</TextMaxLine>
+          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.exciting.details(id)} color="inherit">
+            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{title}</TextMaxLine>
           </Link>
 
 

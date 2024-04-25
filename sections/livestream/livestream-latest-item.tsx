@@ -24,7 +24,7 @@ type Props = {
 export default function LivestreamLatestItem({ livestream,
   //  order,
   largelivestream }: Props) {
-
+  const { title, createdAt, id, content, meta } = livestream;
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Stack
@@ -52,8 +52,8 @@ export default function LivestreamLatestItem({ livestream,
 
         </Box>
         <Image
-          src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
-          alt={livestream.title}
+          src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+          alt={title}
           ratio={(largelivestream && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -72,9 +72,9 @@ export default function LivestreamLatestItem({ livestream,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(livestream.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.livestream.details(livestream.id)} color="inherit">
-            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{livestream.title}</TextMaxLine>
+          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.livestream.details(id)} color="inherit">
+            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{title}</TextMaxLine>
           </Link>
 
 

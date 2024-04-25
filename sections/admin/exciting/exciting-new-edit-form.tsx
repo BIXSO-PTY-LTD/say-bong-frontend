@@ -28,6 +28,8 @@ import { IVideoItem } from '#/types/video';
 import { useCreateExcitingVideo, useUpdateExcitingVideo } from '#/api/exciting-video';
 import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
+import { useUpload } from '#/api/upload';
+import { HOST_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -105,27 +107,13 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
 
 
   const createExcitingVideo = useCreateExcitingVideo()
-
+  const upload = useUpload()
   const updateExcitingVideo = useUpdateExcitingVideo()
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const formData = new FormData();
-      formData.append('file', data.content);
-      formData.append('upload_preset', 'ml_default');
+      const updatedContent = await upload(data.content)
 
-      const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/video/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error('Failed to upload image to Cloudinary');
-      }
-
-      const responseData = await response.json();
-      const uploadedUrl = responseData.secure_url;
-
-
-      data.content = uploadedUrl;
+      data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
       if (currentVideo) {
         await updateExcitingVideo(data)
       } else {

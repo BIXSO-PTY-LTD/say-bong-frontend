@@ -1,16 +1,16 @@
-import { Stack, Table, TableBody, TableContainer, Typography } from "@mui/material";
+import { Box, Stack, Table, TableBody, TableContainer, Typography } from "@mui/material";
 import { COMPETITION_SORT_OPTIONS } from "#/_mock";
 import { useCallback, useState } from "react";
-import { IMatchFilterValue, IMatchFilters } from "#/types/match";
+import { IMatchFilterValue } from "#/types/match";
 import Scrollbar from "#/components/scrollbar";
-import { TableEmptyRows, TableHeadCustom, TableNoData, emptyRows, getComparator, useTable } from "#/components/table";
+import { TableHeadCustom, getComparator, useTable } from "#/components/table";
 import { _teamList } from "#/_mock/_team";
 import { ITeamItem, ITeamTableFilters } from "#/types/team";
 import CompetitionSort from "../competition/competition-sort";
 import BXHTableRow from "./bxh-table-row";
 
 const TABLE_HEAD = [
-  { id: 'team', label: 'TEAM', width: 1000, },
+  { id: 'team', label: 'TEAM', width: 400, },
   { id: 'matchs', label: 'ST', },
   { id: 'win', label: 'T', color: "#007AFF" },
   { id: 'draw', label: 'H', color: "#01B243" },
@@ -60,11 +60,11 @@ export default function BXHList() {
           //
           competitionOptions={COMPETITION_OPTIONS} />
       </Stack>
-      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 } }}>
+      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "lg" }}>
 
 
-        <Scrollbar>
-          <Table sx={{ minWidth: 960 }}>
+        <Box sx={{ overflow: 'auto' }} >
+          <Table >
             <TableHeadCustom
               order={table.order}
               orderBy={table.orderBy}
@@ -85,7 +85,7 @@ export default function BXHList() {
               {/* <TableNoData notFound={notFound} /> */}
             </TableBody>
           </Table>
-        </Scrollbar>
+        </Box>
       </TableContainer>
     </>
   )

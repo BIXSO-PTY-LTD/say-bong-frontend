@@ -27,7 +27,10 @@ import { Upload } from '#/components/upload';
 import { IVideoItem } from '#/types/video';
 import { useCreateHighlightVideo, useUpdateHighlightVideo } from '#/api/highlight-video';
 import { mutate } from 'swr';
-import { endpoints } from '#/utils/axios';
+import { axiosHost, endpoints } from '#/utils/axios';
+import { useUpload } from '#/api/upload';
+import Image from '#/components/image';
+import { HOST_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -94,29 +97,17 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
       setVideoSrc(currentVideo?.content)
     }
   }, [currentVideo, defaultValues, reset]);
-
+  const upload = useUpload()
   const createHighlight = useCreateHighlightVideo()
   const updateHighlight = useUpdateHighlightVideo()
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const formData = new FormData();
-      formData.append('file', data.content);
-      formData.append('upload_preset', 'ml_default');
 
-      const response = await fetch('https://api.cloudinary.com/v1_1/dxopjzpvw/video/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error('Failed to upload video to Cloudinary');
-      }
+      const updatedContent = await upload(data.content)
 
-      const responseData = await response.json();
-      const uploadedUrl = responseData.secure_url;
+      data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
 
-
-      data.content = uploadedUrl;
       if (currentVideo) {
         await updateHighlight(data)
 
@@ -174,7 +165,11 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
               </Button>
               {currentVideo?.content || file ? (
                 <Box>
-                  <video id="video-summary" controls src={videoSrc} width="100%" height="350px" />
+                  <video
+                    id="video-summary"
+                    controls
+                    src={videoSrc}
+                    width="100%" height="350px" />
                 </Box>
               ) : null}
             </Stack>

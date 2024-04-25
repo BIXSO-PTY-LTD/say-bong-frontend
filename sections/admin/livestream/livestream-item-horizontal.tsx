@@ -41,15 +41,6 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
 
   const confirm = useBoolean();
 
-  const [firstImageUrl, setFirstImageUrl] = useState('');
-
-  useEffect(() => {
-    const regex = /<img.*?src="(.*?)".*?>/;
-    const match = livestream.content.match(regex);
-    if (match && match[1]) {
-      setFirstImageUrl(match[1]);
-    }
-  }, [livestream.content]);
 
   const smUp = useResponsive('up', 'sm');
   const deleteLivestream = useDeleteLivestream();
@@ -71,6 +62,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
     id,
     title,
     content,
+    meta,
     createdAt,
   } = livestream;
 
@@ -110,7 +102,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
               width: "164px"
             }}
           >
-            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
+            <Image alt={title} src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
               borderRadius: 1.5, height: 1
             }} />
           </Box>

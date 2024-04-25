@@ -28,6 +28,7 @@ export default function HighlightItem({ video }: Props) {
   const { id, title, content } = video;
 
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+
   useEffect(() => {
     if (content) {
       captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
