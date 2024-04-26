@@ -11,6 +11,7 @@ import { INewsItem } from '#/types/news';
 import { Dispatch, SetStateAction } from 'react';
 import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
 import EmptyContent from '#/components/empty-content';
+import NewsItem from './news-item';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ export default function NewsPosts({ news, paginate, setCurrentPage, currentPage,
       }}
     >
       {news.map((post) => (
-        <HomeLatestPostItem transparent key={post.id} post={post} />
+        <NewsItem transparent key={post.id} post={post} />
       ))}
     </Box>
   )
