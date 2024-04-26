@@ -3,7 +3,7 @@
 import { COMPETITION_SORT_OPTIONS, MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS, _matchList } from "#/_mock/_match";
 import Label from "#/components/label";
 import { IMatchFilterValue, IMatchFilters, IMatchItem } from "#/types/match";
-import { Button, Pagination, Stack, Tab, Tabs, Typography, alpha, paginationClasses } from "@mui/material";
+import { Button, Pagination, Stack, Tab, Tabs, Typography, alpha, paginationClasses, useTheme } from "@mui/material";
 import { useCallback, useState } from "react";
 import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "./match-list-horizontal";
@@ -26,7 +26,7 @@ export default function MatchList() {
   const STATUS_OPTIONS = pathname === "/" || pathname === "/schedule" ? [...MATCH_STATUS_OPTIONS, { value: 'all', label: 'Tất cả' }] : [...MATCH_RESULT_OPTIONS, { value: 'all', label: 'Tất cả' }];
 
   const COMPETITION_OPTIONS = [...COMPETITION_SORT_OPTIONS];
-  const allOption = { value: 'all', label: 'Tất cả trận đấu' };
+  const allOption = { value: 'all', label: 'TẤT CẢ GIẢI ĐẤU' };
   COMPETITION_OPTIONS.unshift(allOption);
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -38,6 +38,7 @@ export default function MatchList() {
     }));
 
   }, []);
+  const theme = useTheme();
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -70,11 +71,22 @@ export default function MatchList() {
               onChange={handleFilterStatus}
               sx={{
                 background: (theme) => theme.palette.grey[800],
+                minWidth: { md: "600px", lg: "833px" },
                 px: 2,
                 py: 0.5,
                 borderRadius: 1,
                 my: { xs: 3, md: 5 },
               }}
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: (filters.status === 'live' && theme.palette.info.main) ||
+                    (filters.status === 'hot' && theme.palette.primary.main) ||
+                    (filters.status === 'today' && theme.palette.warning.main) ||
+                    (filters.status === 'tomorrow' && theme.palette.error.main) ||
+                    (theme.palette.success.main)
+                }
+              }}
+
             >
               {STATUS_OPTIONS.map((tab) => (
                 <Tab
@@ -87,6 +99,7 @@ export default function MatchList() {
                       variant={
                         ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                       }
+
                       color={
                         (tab.value === 'live' && 'info') ||
                         (tab.value === 'hot' && 'primary') ||
@@ -108,7 +121,11 @@ export default function MatchList() {
 
                     </Label>
                   }
-                  sx={{ textTransform: 'capitalize' }}
+                  sx={{
+                    textTransform: 'uppercase',
+                    color: (theme) => theme.palette[tab.value === 'live' ? 'info' : tab.value === 'hot' ? 'primary' : tab.value === 'today' ? 'warning' : tab.value === 'tomorrow' ? 'error' : 'success'].main,
+
+                  }}
                 />
               ))}
             </Tabs>

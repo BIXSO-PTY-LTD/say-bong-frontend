@@ -9,6 +9,7 @@ export function tabs(theme: Theme) {
       styleOverrides: {
         indicator: {
           backgroundColor: theme.palette.text.primary,
+
         },
         scrollButtons: {
           width: 48,

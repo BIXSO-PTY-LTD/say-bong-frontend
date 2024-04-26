@@ -30,7 +30,7 @@ export default function HighlightView() {
   };
   return (
     <Container>
-      <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Highlight</Typography>
+      <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList
         videos={highlightVideos}
         loading={highlightVideosLoading}

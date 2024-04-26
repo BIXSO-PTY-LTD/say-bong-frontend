@@ -49,7 +49,7 @@ export default function ExcitingHighlightList({ videos,
   </Box>
   return (
     <>
-      <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Những pha bóng thú vị</Typography>
+      <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Những pha bóng thú vị</Typography>
 
       {loading ? (
         <StackPostSkeleton count={8} />

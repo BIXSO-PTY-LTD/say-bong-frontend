@@ -74,41 +74,40 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
   );
 
   return (
-    <Container
-      sx={{
-        pt: { xs: 5, md: 10 },
-        pb: 10,
-      }}
-    >
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent={{ xs: 'center', md: 'space-between' }}
-        sx={{
-          mb: { xs: 8, md: 10 },
-          textAlign: { xs: 'center', md: 'left' },
-        }}
-      >
-        <Typography variant="h3" sx={{ my: 3, textTransform: "uppercase" }}>
-          Các trận đấu đang diễn ra
-        </Typography>
+    <>
+  <Stack
+    direction="row"
+    alignItems="center"
+    justifyContent={{ xs: 'center', md: 'space-between' }}
+    sx={{
+      mb: { xs: 8, md: 10 },
+      textAlign: { xs: 'center', md: 'left' },
+    }}
+  >
+    <Typography variant="h3" sx={{ my: 3, textTransform: "uppercase" }}>
+      Các trận đấu đang diễn ra
+    </Typography>
 
-        {mdUp && viewAllBtn}
-      </Stack>
+    {mdUp && viewAllBtn}
+  </Stack>
 
-      {loading ? (
-        <StackPostSkeleton count={4} />
-      ) : empty ? (
-        renderNotFound
-      ) : (
-        renderList
-      )}
+{
+  loading ? (
+    <StackPostSkeleton count={4} />
+  ) : empty ? (
+    renderNotFound
+  ) : (
+    renderList
+  )
+}
 
-      {!mdUp && (
-        <Stack alignItems="center" sx={{ mt: 8 }}>
-          {viewAllBtn}
-        </Stack>
-      )}
-    </Container>
+{
+  !mdUp && (
+    <Stack alignItems="center" sx={{ mt: 8 }}>
+      {viewAllBtn}
+    </Stack>
+  )
+}
+    </>
   );
 }

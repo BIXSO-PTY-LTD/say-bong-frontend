@@ -60,7 +60,7 @@ export default function Header() {
       )}
 
       {!user ? (
-        <Stack spacing={2} direction="row" alignItems="center" justifyContent="flex-end">
+        <Stack spacing={3} direction="row" alignItems="center" justifyContent="flex-end">
 
 
           {mdUp && (

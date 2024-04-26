@@ -29,17 +29,6 @@ type Props = {
 export default function HomeLastestPosts({ posts, loading, empty }: Props) {
   const mdUp = useResponsive('up', 'md');
 
-
-  const viewAllBtn = (
-    <Button
-      component={RouterLink}
-      href={paths.news.root}
-      color="inherit"
-      endIcon={<Iconify icon="carbon:chevron-right" />}
-    >
-      Xem tất cả
-    </Button>
-  );
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
   const renderList = <><Box
     sx={{
@@ -69,14 +58,6 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
       </>
     )}
   </Box>
-
-    {
-      !mdUp && (
-        <Stack alignItems="center" sx={{ mt: 8 }}>
-          {viewAllBtn}
-        </Stack>
-      )
-    }
   </>
   return (
     <Container
@@ -100,7 +81,6 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
 
         </Typography>
 
-        {mdUp && viewAllBtn}
       </Stack>
       {loading ? (
         <StackPostSkeleton count={4} />

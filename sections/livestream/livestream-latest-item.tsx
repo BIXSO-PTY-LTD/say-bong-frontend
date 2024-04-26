@@ -11,6 +11,7 @@ import { ILivestreamItem } from '#/types/livestream';
 import Label from '#/components/label';
 import { useEffect, useState } from 'react';
 import { _mock } from '#/_mock';
+import Iconify from '#/components/iconify';
 
 
 // ----------------------------------------------------------------------
@@ -51,14 +52,31 @@ export default function LivestreamLatestItem({ livestream,
           <Label variant='filled' color='error'>Trực tiếp</Label>
 
         </Box>
-        <Image
-          src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
-          alt={title}
-          ratio={(largelivestream && '3/4') ||
-            // (order && '4/3') ||
-            '1/1'}
 
-        />
+        <Box sx={{ position: "relative" }}>
+          <Image
+            src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+            alt={title}
+            ratio={(largelivestream && '3/4') ||
+              // (order && '4/3') ||
+              '1/1'}
+
+          />
+          <Label sx={{
+            width: "30px",
+            height: "30px",
+            ml: 1,
+            mb: 1,
+            left: 0,
+            bottom: 0,
+            zIndex: 9,
+            position: 'absolute',
+            borderRadius: "100%"
+          }} variant='filled' color='default'>
+            <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+          </Label>
+        </Box>
+
 
         <Stack
           spacing={largelivestream ? 2 : 1}
