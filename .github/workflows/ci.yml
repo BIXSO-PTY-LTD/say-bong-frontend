@@ -1,0 +1,35 @@
+name: Fancy CI
+
+on:
+  push:
+    branches: ["features"]
+  pull_request:
+    branches: ["features"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Execute remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VSP_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            set -x #echo on
+            cd ${{ secrets.PROJECT_WORKING_DIR }}
+            git clean -fd
+            git pull
+            git checkout features
+            git pull
+            npm install
+            npm run build
+            pm2 reload ecosystem.config.js
+            echo "Deployment successful!"

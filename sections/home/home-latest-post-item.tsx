@@ -9,22 +9,35 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
+import { INewsItem } from '#/types/news';
+import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  post: INewsItem;
   // order?: number;
   largePost?: boolean;
+  transparent?: boolean;
 };
 
-export default function HomeLatestPostItem({ post,
+export default function HomeLatestPostItem({ post, transparent,
   //  order,
   largePost }: Props) {
 
+  const [firstImageUrl, setFirstImageUrl] = useState('');
+
+  useEffect(() => {
+    const regex = /<img.*?src="(.*?)".*?>/;
+    const match = post.content.match(regex);
+    if (match && match[1]) {
+      setFirstImageUrl(match[1]);
+    }
+  }, [post.content]);
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
       <Stack
         spacing={2}
         sx={{
@@ -36,8 +49,7 @@ export default function HomeLatestPostItem({ post,
         }}
       >
         <Image
-          disabledEffect
-          src={post.coverUrl}
+          src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={post.title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
@@ -58,7 +70,7 @@ export default function HomeLatestPostItem({ post,
           }}
         >
           <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details} color="inherit">
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
             <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
           </Link>
 

@@ -5,7 +5,9 @@ import Header from './header';
 import Footer from './footer';
 import { HEADER } from '../config-layout';
 import { usePathname } from 'next/navigation';
-
+import Image from '#/components/image';
+import { Stack } from '@mui/material';
+import { useResponsive } from '#/hooks/use-responsive';
 // ----------------------------------------------------------------------
 
 
@@ -17,9 +19,9 @@ type Props = {
 
 export default function MainLayout({ children }: Props) {
   const pathname = usePathname();
-
+  const mdUp = useResponsive("up", "md")
   const actionPage = (arr: string[]) =>
-    arr.some((path) => pathname === path || pathname === `${path}/`);
+    arr.map((path) => pathname === path || pathname === `${path}/`);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
@@ -29,10 +31,18 @@ export default function MainLayout({ children }: Props) {
         component="main"
         sx={{
           flexGrow: 1,
+          backgroundImage: `url("/assets/background.svg")`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
         }}
       >
         {actionPage(spacingLayout) && <Spacing />}
+
         {children}
+
+
       </Box>
 
       <Footer />

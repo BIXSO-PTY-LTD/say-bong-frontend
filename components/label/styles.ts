@@ -27,7 +27,7 @@ export const StyledLabel = styled(Box)(({
     ...(ownerState.color === 'default' && {
       // FILLED
       ...(filledVariant && {
-        color: lightMode ? theme.palette.common.white : theme.palette.grey[800],
+        color: theme.palette.common.white,
         backgroundColor: theme.palette.text.primary,
       }),
       // OUTLINED
@@ -48,19 +48,19 @@ export const StyledLabel = styled(Box)(({
     ...(ownerState.color !== 'default' && {
       // FILLED
       ...(filledVariant && {
-        color: theme.palette[ownerState.color].contrastText,
+        color: theme.palette.common.white,
         backgroundColor: theme.palette[ownerState.color].main,
       }),
       // OUTLINED
       ...(outlinedVariant && {
-        backgroundColor: 'transparent',
-        color: theme.palette[ownerState.color].main,
+        backgroundColor: theme.palette[ownerState.color].main,
+        color: theme.palette.common.white,
         border: `2px solid ${theme.palette[ownerState.color].main}`,
       }),
       // SOFT
       ...(softVariant && {
-        color: theme.palette[ownerState.color][lightMode ? 'dark' : 'light'],
-        backgroundColor: alpha(theme.palette[ownerState.color].main, 0.16),
+        color: theme.palette.common.white,
+        backgroundColor: theme.palette[ownerState.color].main,
       }),
     }),
   };

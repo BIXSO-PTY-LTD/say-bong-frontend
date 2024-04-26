@@ -1,7 +1,6 @@
 import Link from '@mui/material/Link';
 import Masonry from '@mui/lab/Masonry';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -27,7 +26,6 @@ export default function Footer() {
 
   const mainFooter = (
     <>
-      <Divider />
 
       <Container
         sx={{
@@ -94,7 +92,12 @@ export function ListDesktop({ list }: { list: NavSubListProps }) {
       <Typography variant="h6">{list.subheader}</Typography>
 
       {list.items?.map((link) => {
-        const active = pathname === link.path || pathname === `${link.path}/`;
+        let active = false;
+        if (link.path === '/') {
+          active = pathname === link.path;
+        } else {
+          active = pathname.startsWith(link.path);
+        }
 
         return (
           <Link

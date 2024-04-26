@@ -6,17 +6,19 @@ import Stack from '@mui/material/Stack';
 
 import Image from '#/components/image';
 import TextMaxLine from '#/components/text-max-line';
-import { fDate } from '#/utils/format-time';
-import { IBlogPostProps } from '#/types/blog';
+import { paths } from '#/routes/paths';
+import { RouterLink } from '#/routes/components';
+import { IVideoItem } from '#/types/video';
+import { _mock } from '#/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  video: IVideoItem;
   onSiderbar?: boolean;
 };
 
-export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
+export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
   return (
     <Stack
       spacing={2}
@@ -25,9 +27,8 @@ export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
       sx={{ width: 1 }}
     >
       <Image
-        disabledEffect
-        alt={post.title}
-        src={post.coverUrl}
+        alt={video.title}
+        src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,
@@ -37,8 +38,8 @@ export default function HomeHighlightMobile({ post, onSiderbar }: Props) {
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit">
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{post.title}</TextMaxLine>
+        <Link color="inherit" component={RouterLink} href={paths.highlight.details(video.id)}>
+          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{video.title}</TextMaxLine>
         </Link>
 
       </Stack>

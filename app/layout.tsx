@@ -1,38 +1,53 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { SettingsProvider } from "#/components/settings";
-import ThemeProvider from "#/theme";
-import { MotionLazy } from "#/components/animate/motion-lazy";
-import ProgressBar from "#/components/progress-bar/progress-bar";
+import './global.css';
 
 
-export const metadata: Metadata = {
-  title: "Say Bóng",
-  description: "Say Bóng",
+// ----------------------------------------------------------------------
+
+import ThemeProvider from '#/theme';
+import { primaryFont } from '#/theme/typography';
+
+import ProgressBar from '#/components/progress-bar';
+import { MotionLazy } from '#/components/animate/motion-lazy';
+import SnackbarProvider from '#/components/snackbar/snackbar-provider';
+import { SettingsProvider } from '#/components/settings';
+
+
+import { AuthProvider } from '#/auth/context';
+// ----------------------------------------------------------------------
+
+export const metadata = {
+  title: 'Say Bóng',
+  description:
+    'Say Bóng',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+type Props = {
   children: React.ReactNode;
-}>) {
+};
+
+export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
+    <html lang="en" className={primaryFont.className}>
       <body>
-        <SettingsProvider
-          defaultSettings={{
-            themeDirection: 'ltr', //  'rtl' | 'ltr'
-            themeColorPresets: 'default', // 'default' | 'preset01' | 'preset02' | 'preset03' | 'preset04' | 'preset05'
-          }}
-        >
-          <ThemeProvider>
-            <MotionLazy>
-              <ProgressBar />
-              {children}
-            </MotionLazy>
-          </ThemeProvider>
-        </SettingsProvider>
+        <AuthProvider>
+          <SettingsProvider
+            defaultSettings={{
+              themeDirection: 'ltr', //  'rtl' | 'ltr'
+              themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+              themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+              themeStretch: false,
+            }}
+          >
+            <ThemeProvider>
+              <MotionLazy>
+                <SnackbarProvider>
+                  <ProgressBar />
+                  {children}
+                </SnackbarProvider>
+              </MotionLazy>
+            </ThemeProvider>
+          </SettingsProvider>
+        </AuthProvider>
       </body>
     </html>
   );

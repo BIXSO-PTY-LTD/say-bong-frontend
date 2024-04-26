@@ -83,6 +83,43 @@ export const _soccerTeams = [
   'Porto'
 ];
 
+export const _phoneNumbers = [
+  '365-374-4961',
+  '904-966-2836',
+  '399-757-9909',
+  '692-767-2903',
+  '990-588-5716',
+  '955-439-2578',
+  '226-924-4058',
+  '552-917-1454',
+  '285-840-9338',
+  '306-269-2446',
+  '883-373-6253',
+  '476-509-8866',
+  '201-465-1954',
+  '538-295-9408',
+  '531-492-6028',
+  '981-699-7588',
+  '500-268-4826',
+  '205-952-3828',
+  '222-255-5190',
+  '408-439-8033',
+  '272-940-8266',
+  '812-685-8057',
+  '353-801-5212',
+  '606-285-8928',
+];
+
+export const _ratings = [
+  4.2, 3.7, 4.5, 3.5, 0.5, 3.0, 2.5, 2.8, 4.9, 3.6, 2.5, 1.7, 3.9, 2.8, 4.1, 4.5, 2.2, 3.2, 0.6,
+  1.3, 3.8, 3.8, 3.8, 2.0,
+];
+
+export const _prices = [
+  83.74, 97.14, 68.71, 85.21, 52.17, 25.18, 43.84, 60.98, 98.42, 53.37, 72.75, 56.61, 64.55, 77.32,
+  60.62, 79.81, 93.68, 47.44, 76.24, 92.87, 72.91, 20.54, 94.25, 37.51,
+];
+
 
 // ----------------------------------------------------------------------
 
@@ -145,6 +182,34 @@ export const _tags = [
 
 // ----------------------------------------------------------------------
 
+export const _tourNames = [
+  'Adventure Seekers Expedition',
+  'Historic Heritage Tour',
+  'Culinary Delights Exploration',
+  "Nature's Wonders Escapade",
+  'Cultural Immersion Journey',
+  'Wildlife Safari Expedition',
+  "Urban Explorer's City Tour",
+  'Coastal Paradise Getaway',
+  'Wine Tasting Experience',
+  'Spiritual Retreat Tour',
+  'Outdoor Adventure Trek',
+  'Photography Expedition',
+  'Music and Arts Discovery Tour',
+  'Wellness and Yoga Retreat',
+  'Hidden Gems Discovery Tour',
+  'Volcano and Geothermal Exploration',
+  "Foodie's Gastronomic Tour",
+  'Hiking and Camping Adventure',
+  'Architecture and Design Tour',
+  'Coastal Cruise and Island Hopping',
+  'Scenic Train Ride Experience',
+  'Historical Landmarks Expedition',
+  'Surfing and Beach Adventure',
+  'Nightlife and Entertainment Tour',
+];
+
+
 export const _postTitles = [
   '10 Essential Tips for Healthy Living',
   'The Ultimate Guide to Productivity Hacks',
@@ -171,6 +236,34 @@ export const _postTitles = [
   'The Influence of Music on Mood and Emotions',
   'Travel Photography Tips: Capturing Memories Around the World',
 ];
+
+export const _sentences = [
+  'The sun slowly set over the horizon, painting the sky in vibrant hues of orange and pink.',
+  'She eagerly opened the gift, her eyes sparkling with excitement.',
+  'The old oak tree stood tall and majestic, its branches swaying gently in the breeze.',
+  'The aroma of freshly brewed coffee filled the air, awakening my senses.',
+  'The children giggled with joy as they ran through the sprinklers on a hot summer day.',
+  'He carefully crafted a beautiful sculpture out of clay, his hands skillfully shaping the intricate details.',
+  'The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.',
+  'The waves crashed against the shore, creating a soothing symphony of sound.',
+  'The scent of blooming flowers wafted through the garden, creating a fragrant paradise.',
+  'She gazed up at the night sky, marveling at the twinkling stars that dotted the darkness.',
+  'The professor delivered a captivating lecture, engaging the students with thought-provoking ideas.',
+  'The hiker trekked through the dense forest, guided by the soft glow of sunlight filtering through the trees.',
+  'The delicate butterfly gracefully fluttered from flower to flower, sipping nectar with its slender proboscis.',
+  'The aroma of freshly baked cookies filled the kitchen, tempting everyone with its irresistible scent.',
+  "The majestic waterfall cascaded down the rocks, creating a breathtaking display of nature's power.",
+  'The actor delivered a powerful performance, moving the audience to tears with his emotional portrayal.',
+  'The book transported me to a magical world, where imagination knew no bounds.',
+  'The scent of rain filled the air as dark clouds gathered overhead, promising a refreshing downpour.',
+  'The chef skillfully plated the dish, turning simple ingredients into a work of culinary art.',
+  'The newborn baby let out a tiny cry, announcing its arrival to the world.',
+  'The athlete sprinted across the finish line, arms raised in victory as the crowd erupted in applause.',
+  'The ancient ruins stood as a testament to a civilization long gone, their grandeur still awe-inspiring.',
+  'The artist dipped the brush into vibrant paint, bringing the canvas to life with bold strokes and vivid colors.',
+  'The laughter of children echoed through the playground, filling the atmosphere with pure joy.',
+];
+
 
 export const _descriptions = [
   `Occaecati est et illo quibusdam accusamus qui. Incidunt aut et molestiae ut facere aut. Est quidem iusto praesentium excepturi harum nihil tenetur facilis. Ut omnis voluptates nihil accusantium doloribus eaque debitis.`,

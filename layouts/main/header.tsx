@@ -11,19 +11,19 @@ import { useTheme } from '@mui/material/styles';
 import { useOffSetTop } from '#/hooks/use-off-set-top';
 import { useResponsive } from '#/hooks/use-responsive';
 
-import { bgBlur } from '#/theme/css';
-
 
 import NavMobile from './nav/mobile';
 import NavDesktop from './nav/desktop';
 import { HEADER } from '../config-layout';
 import { navConfig } from './config-navigation';
-import { paths } from '#/routes/paths';
 import Logo from '#/components/logo';
 import HeaderShadow from '../common/header-shadow';
-import { useBoolean } from '#/hooks/use-boolean';
 import LoginDialog from '#/sections/auth/login-dialog';
 import RegisterDialog from '#/sections/auth/register-dialog';
+import AccountPopover from '../common/account-popover';
+import ChangePasswordDialog from '#/sections/auth/change-password-dialog';
+import { useAuthContext } from '#/auth/hooks';
+import { useDialogControls } from '#/hooks/use-dialog-controls';
 
 // ----------------------------------------------------------------------
 
@@ -31,9 +31,11 @@ import RegisterDialog from '#/sections/auth/register-dialog';
 export default function Header() {
   const theme = useTheme();
 
-  const dialogLoginOpen = useBoolean();
+  const { user } = useAuthContext();
 
-  const dialogRegisterOpen = useBoolean();
+  const { dialogLoginOpen, dialogChangePasswordOpen, dialogRegisterOpen } = useDialogControls();
+
+
 
   const offset = useOffSetTop();
 
@@ -57,26 +59,33 @@ export default function Header() {
         <Box sx={{ flexGrow: 1 }} />
       )}
 
-      <Stack spacing={2} direction="row" alignItems="center" justifyContent="flex-end">
+      {!user ? (
+        <Stack spacing={3} direction="row" alignItems="center" justifyContent="flex-end">
 
 
-        {mdUp && (
-          <Button
-            variant='contained'
-            onClick={dialogRegisterOpen.onTrue}
-          >
-            ĐĂNG KÍ
-          </Button>
+          {mdUp && (
+            <Button
+              variant='contained'
+              onClick={dialogRegisterOpen.onTrue}
+            >
+              ĐĂNG KÍ
+            </Button>
+          )}
+          {mdUp && (
+            <Button
+              variant='contained'
+              onClick={dialogLoginOpen.onTrue}
+            >
+              ĐĂNG NHẬP
+            </Button>
+          )}
+        </Stack>
+
+      ) :
+        (
+          <AccountPopover onOpen={dialogChangePasswordOpen.onTrue} />
         )}
-        {mdUp && (
-          <Button
-            variant='contained'
-            onClick={dialogLoginOpen.onTrue}
-          >
-            ĐĂNG NHẬP
-          </Button>
-        )}
-      </Stack>
+
 
       {!mdUp && <NavMobile data={navConfig} />}
     </>
@@ -120,6 +129,7 @@ export default function Header() {
 
       {dialogLoginOpen.value && <LoginDialog openRegister={dialogRegisterOpen.onTrue} open={dialogLoginOpen.value} onClose={dialogLoginOpen.onFalse} />}
       {dialogRegisterOpen.value && <RegisterDialog openLogin={dialogLoginOpen.onTrue} open={dialogRegisterOpen.value} onClose={dialogRegisterOpen.onFalse} />}
+      {dialogChangePasswordOpen.value && <ChangePasswordDialog open={dialogChangePasswordOpen.value} onClose={dialogChangePasswordOpen.onFalse} />}
     </>
   );
 }

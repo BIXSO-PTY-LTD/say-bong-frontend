@@ -4,37 +4,67 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { IBlogPostProps } from '#/types/blog';
 import { useResponsive } from '#/hooks/use-responsive';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import Iconify from '#/components/iconify';
 import HomeHighlightItem from './home-highlight-item';
 import HomeHighlightMobile from './home-highlight-mobile';
+import { IVideoItem } from '#/types/video';
+import { useEffect, useState } from 'react';
+import EmptyContent from '#/components/empty-content/empty-content';
+import { LargerPostSkeleton } from '../skeletons/larger-post-skeleton';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IBlogPostProps[];
+  highlightVideos: IVideoItem[];
+  loading?: boolean;
+  empty?: boolean;
 };
 
-export default function HomeHighlight({ posts }: Props) {
+export default function HomeHighlight({ highlightVideos, loading, empty }: Props) {
   const mdUp = useResponsive('up', 'md');
+  const latestVideo = highlightVideos[0];
 
-  const latestPost = posts[0];
 
-  const viewAllBtn = (
-    <Button
-      component={RouterLink}
-      href={paths.news.root}
-      color="inherit"
-      endIcon={<Iconify icon="carbon:chevron-right" />}
-    >
-      Xem tất cả
-    </Button>
-  );
+
+  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+  const renderList = <> <Box
+    sx={{
+      display: 'grid',
+      gap: { xs: 3, md: 4 },
+      gridTemplateColumns: {
+        xs: 'repeat(1, 1fr)',
+        sm: 'repeat(2, 1fr)',
+        md: 'repeat(12, 1fr)',
+      },
+    }}
+  >
+    {mdUp ? (
+      <>
+        <Box sx={{ gridColumn: 'span 5' }}>
+          <HomeHighlightItem video={latestVideo} largePost />
+        </Box>
+        <Masonry columns={{ xs: 1, md: 3 }} spacing={3} sx={{ justifyContent: "space-between", gridColumn: 'span 7', alignItems: "center" }}>
+          {highlightVideos.slice(1, 7).map((video) => (
+            <HomeHighlightItem key={video.id} video={video} />
+          ))}
+        </Masonry>
+      </>
+    ) : (
+      <>
+        {highlightVideos.slice(0, 5).map((video) => (
+          <HomeHighlightMobile key={video.id} video={video} />
+        ))}
+      </>
+    )}
+  </Box>
+
+  </>
 
   return (
     <Container
@@ -58,45 +88,17 @@ export default function HomeHighlight({ posts }: Props) {
 
         </Typography>
 
-        {mdUp && viewAllBtn}
       </Stack>
-
-      <Box
-        sx={{
-          display: 'grid',
-          gap: { xs: 3, md: 4 },
-          gridTemplateColumns: {
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
-          },
-        }}
-      >
-        {mdUp ? (
-          <>
-            <HomeHighlightItem post={latestPost} largePost />
-
-            <Masonry columns={{ xs: 1, md: 3 }} spacing={4}>
-              {posts.slice(1, 7).map((post, index) => (
-                <HomeHighlightItem key={post.id} post={post}
-                // order={index % 2}
-                />
-              ))}
-            </Masonry>
-          </>
-        ) : (
-          <>
-            {posts.slice(0, 5).map((post) => (
-              <HomeHighlightMobile key={post.id} post={post} />
-            ))}
-          </>
-        )}
-      </Box>
-
-      {!mdUp && (
-        <Stack alignItems="center" sx={{ mt: 8 }}>
-          {viewAllBtn}
-        </Stack>
+      {loading ? (
+        <LargerPostSkeleton />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderList
       )}
+
+
+
     </Container>
   );
 }
