@@ -60,7 +60,7 @@ export default function HighlightList({ videos,
         onChange={handlePageChange}
         color="primary"
         sx={{
-          my: 10,
+          mt: 5,
           [`& .${paginationClasses.ul}`]: {
             justifyContent: 'center',
           },

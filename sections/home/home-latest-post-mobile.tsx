@@ -13,6 +13,7 @@ import { RouterLink } from '#/routes/components';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
 import { useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +54,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
         <Link color="inherit" component={RouterLink} href={paths.news.details(post.id)}>
           <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{post.title}</TextMaxLine>
         </Link>
-
+        <Typography variant='caption'>{fDate(post.createdAt)}</Typography>
       </Stack>
     </Stack>
   );

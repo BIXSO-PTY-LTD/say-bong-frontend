@@ -31,16 +31,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
   const latestVideo = highlightVideos[0];
 
 
-  const viewAllBtn = (
-    <Button
-      component={RouterLink}
-      href={paths.highlight.root}
-      color="inherit"
-      endIcon={<Iconify icon="carbon:chevron-right" />}
-    >
-      Xem tất cả
-    </Button>
-  );
+
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
   const renderList = <> <Box
     sx={{
@@ -72,12 +63,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
       </>
     )}
   </Box>
-    {!mdUp && (
-      <Stack alignItems="center" sx={{ mt: 8 }}>
-        {viewAllBtn}
-      </Stack>
-    )
-    }
+
   </>
 
   return (
@@ -102,7 +88,6 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
 
         </Typography>
 
-        {mdUp && viewAllBtn}
       </Stack>
       {loading ? (
         <LargerPostSkeleton />

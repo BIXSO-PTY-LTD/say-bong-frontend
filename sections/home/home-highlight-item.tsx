@@ -8,11 +8,13 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
 import { useEffect, useState } from 'react';
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import Label from '#/components/label';
+import Iconify from '#/components/iconify';
 
 
 // ----------------------------------------------------------------------
@@ -46,19 +48,35 @@ export default function HomeHighlightItem({ video,
           ...(largePost && {
             borderRadius: 2,
             overflow: 'hidden',
-            position: 'relative',
           }),
         }}
       >
-        <Image
-          src={videoThumbnail}
-          alt={video?.title}
-          ratio={(largePost && '3/4') ||
-            // (order && '4/3') ||
-            '1/1'}
-          sx={{ filter: "brightness(0.7)" }}
-        />
+        <Box sx={{ position: "relative" }}>
+          <Image
+            src={videoThumbnail}
+            alt={video?.title}
+            ratio={(largePost && '3/4') ||
+              // (order && '4/3') ||
+              '1/1'}
+            sx={{ filter: "brightness(0.7)" }}
+          />
+          {!largePost && (
+            <Label sx={{
+              width: "30px",
+              height: "30px",
+              ml: 1,
+              mb: 1,
+              left: 0,
+              bottom: 0,
+              zIndex: 9,
+              position: 'absolute',
+              borderRadius: "100%"
+            }} variant='filled' color='default'>
+              <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+            </Label>
+          )}
 
+        </Box>
         <Stack
           spacing={largePost ? 2 : 1}
           sx={{
@@ -71,10 +89,30 @@ export default function HomeHighlightItem({ video,
             }),
           }}
         >
+          {largePost ? (
+            <Stack direction="column">
+              <Label sx={{
+                width: "30px",
+                height: "30px",
+                mb: 4.5,
+                left: 0,
+                bottom: 0,
+                zIndex: 9,
+                borderRadius: "100%"
+              }} variant='filled' color='default'>
+                <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+              </Label>
+              <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+                <TextMaxLine line={3} variant="subtitle2">{video?.title}</TextMaxLine>
+              </Link>
+            </Stack>
+          ) : (
+            <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+              <TextMaxLine line={3} variant="subtitle2">{video?.title}</TextMaxLine>
+            </Link>
+          )}
 
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{video?.title}</TextMaxLine>
-          </Link>
+
 
 
         </Stack>

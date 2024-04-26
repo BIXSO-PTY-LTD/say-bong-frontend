@@ -35,7 +35,7 @@ export default function CompetitionSort({ filters, onFilters, competitionOptions
         hiddenLabel
         sx={{
           flexShrink: 0,
-          width: { xs: 1, md: 200 },
+          width: { xs: 1, md: "239px" },
           background: theme => theme.palette.grey[800],
           borderRadius: 1,
         }}

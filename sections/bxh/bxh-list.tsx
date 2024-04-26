@@ -10,7 +10,7 @@ import CompetitionSort from "../competition/competition-sort";
 import BXHTableRow from "./bxh-table-row";
 
 const TABLE_HEAD = [
-  { id: 'team', label: 'TEAM', width: 400, },
+  { id: 'team', label: 'TEAM', width: 1000, },
   { id: 'matchs', label: 'ST', },
   { id: 'win', label: 'T', color: "#007AFF" },
   { id: 'draw', label: 'H', color: "#01B243" },
@@ -54,7 +54,7 @@ export default function BXHList() {
         alignItems={{ sm: 'center' }}
         direction={{ sm: 'column', md: 'row' }}
       >
-        <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h4">Bảng xếp hạng bóng đá mới nhất - bảng xếp hạng của mọi giải đấu</Typography>
+        <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h4">Bảng xếp hạng bóng đá mới nhất - BXH của mọi giải đấu</Typography>
         <CompetitionSort filters={filters}
           onFilters={handleFilters}
           //

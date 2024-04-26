@@ -43,7 +43,23 @@ export default function LivestreamItem({ livestream }: Props) {
 
       </Box>
 
-      <Image alt={title} src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
+      <Box sx={{ position: "relative" }}>
+        <Image alt={title} src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
+        <Label sx={{
+          width: "30px",
+          height: "30px",
+          ml: 1,
+          mb: 1,
+          left: 0,
+          bottom: 0,
+          zIndex: 9,
+          position: 'absolute',
+          borderRadius: "100%"
+        }} variant='filled' color='default'>
+          <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+        </Label>
+      </Box>
+
 
       <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit" >
         <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>

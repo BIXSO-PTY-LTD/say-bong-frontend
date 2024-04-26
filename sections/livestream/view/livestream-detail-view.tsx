@@ -22,12 +22,12 @@ export default function LivestreamDetailView({ id }: Props) {
 
   return (
     <Container>
-      <Stack direction="column" sx={{ px: 0.5 }}>
+      <Stack direction="column">
         <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
         <Grid container spacing={{ xs: 1 }}>
           {livestreamLoading ? (
             <>
-              <Grid item xs={12} md={9}>
+              <Grid item xs={12} md={9} >
                 <Skeleton variant="rectangular" height="500px" />
               </Grid>
               <Grid item xs={12} md={3}>
@@ -38,10 +38,12 @@ export default function LivestreamDetailView({ id }: Props) {
             <>
               <Grid item xs={12} md={9}>
                 <LivestreamVideo currentLivestream={currentLivestream} />
+               
               </Grid>
               <Grid item xs={12} md={3}>
                 <LivestreamChatView currentLivestream={currentLivestream} />
               </Grid>
+
             </>
           )}
 
