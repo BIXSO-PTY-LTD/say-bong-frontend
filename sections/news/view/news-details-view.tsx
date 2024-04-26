@@ -10,6 +10,7 @@ import NewsSidebar from '../news-sidebar';
 import { _travelPosts } from '#/_mock/_blog';
 import { useGetNew, useGetNews } from '#/api/news';
 import NewsDetails from '../news-details';
+import { Skeleton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -18,17 +19,14 @@ type Props = {
 }
 
 export default function NewsDetailsView({ id }: Props) {
-  const { new: currentPost } = useGetNew(id);
+  const { new: currentPost, newLoading } = useGetNew(id);
   const { news, newsLoading, newsEmpty } = useGetNews(1, 4);
   return (
     <>
-
       <Container sx={{ mt: 5 }}>
         <Grid container columnSpacing={{ xs: 0, md: 8 }} >
           <Grid xs={12} md={8}>
-            <NewsDetails currentPost={currentPost} />
-
-
+            <NewsDetails currentPost={currentPost} loading={newLoading} />
 
           </Grid>
 
