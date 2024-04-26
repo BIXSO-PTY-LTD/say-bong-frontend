@@ -44,7 +44,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
         src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
-          height: 80,
+          height: onSiderbar ? 48: 80,
           flexShrink: 0,
           borderRadius: 1.5,
         }}
