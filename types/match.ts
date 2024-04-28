@@ -4,24 +4,35 @@
 export type IMatchFilterValue = string | string[];
 
 export type IMatchFilters = {
-  competition: string;
-  status: string;
+  league_title: string;
+  matchStatus: string;
+};
+export type IRankFilters = {
+  league_title: string;
 };
 
 export type IMatchItem = {
-  id: string;
-  competition: string;
-  status: string;
-  date_time: Date;
-  home_team: string;
-  home_image: string;
-  away_team: string;
-  away_image: string;
-  home_score: number;
-  away_score: number;
-  round: number;
-  minute: number;
-  image: string;
+  matchId: string;
+  status: number;
+  key_sync: string;
+  hide: number;
+  startTime: string;
+  startTimez: string;
+  timestamp: number;
+  league_id: string;
+  league_title: string;
+  localteam_title: string;
+  localteam_logo: string;
+  visitorteam_title: string;
+  visitorteam_logo: string;
+  hot: string;
+  score: string;
+  flv: string;
+  m3u8: string;
+  links1: string;
+  links2: string;
+  links3: string;
+  h5: string;
 }
 
 // ----------------------------------------------------------------------

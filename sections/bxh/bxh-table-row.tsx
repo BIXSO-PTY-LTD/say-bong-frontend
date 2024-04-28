@@ -4,43 +4,43 @@ import TableCell from '@mui/material/TableCell';
 
 import Label from '#/components/label';
 
-import { ITeamItem } from '#/types/team';
 import { Typography } from '@mui/material';
+import { IMatchItem } from '#/types/match';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: ITeamItem;
+  row: IMatchItem;
 };
 
 export default function BXHTableRow({
   row,
 }: Props) {
-  const { name, status, avatarUrl, phoneNumber } = row;
+  const { visitorteam_title, visitorteam_logo, timestamp, status } = row;
 
   return (
     <>
       <TableRow sx={{ borderBottom: "1px solid", borderColor: theme => theme.palette.grey[800] }}>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center', border: "none" }}>
-          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+          <Avatar alt={visitorteam_title} src={visitorteam_logo} sx={{ mr: 2 }} />
 
-          <Typography>{name}</Typography>
+          <Typography>{visitorteam_title}</Typography>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}  >{phoneNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}  >{status}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{phoneNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{status}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{phoneNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{status}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{phoneNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{status}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{phoneNumber}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{phoneNumber}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{status}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>{status}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap', border: "none" }}>
-          {status.map((item, index) => (
+          {/* {status.map((item, index) => (
             <Label sx={{ mx: 0.2 }} variant='filled'
               color={
                 (item === 'W' && 'success') ||
@@ -48,7 +48,8 @@ export default function BXHTableRow({
                 'warning'
               }
               key={index}>{item}</Label>
-          ))}
+          ))} */}
+          {timestamp}
         </TableCell>
       </TableRow>
 

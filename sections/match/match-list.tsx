@@ -1,6 +1,6 @@
 'use client';
 
-import { COMPETITION_SORT_OPTIONS, MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS, _matchList } from "#/_mock/_match";
+import { COMPETITION_SORT_OPTIONS, MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS } from "#/_mock/_match";
 import Label from "#/components/label";
 import { IMatchFilterValue, IMatchFilters, IMatchItem } from "#/types/match";
 import { Button, Pagination, Stack, Tab, Tabs, Typography, alpha, paginationClasses, useTheme } from "@mui/material";
@@ -9,24 +9,34 @@ import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "./match-list-horizontal";
 import { usePathname } from "next/navigation";
 import { paths } from "#/routes/paths";
+import { fTimestamp, formatStringToDateTime } from "#/utils/format-time";
+import { filterLiveMatches, filterMatchesByLeagueTitle, filterTodayMatches, filterTomorrowMatches } from "#/utils/matchFilter";
 
 // ----------------------------------------------------------------------
 
 
 
 const defaultFilters: IMatchFilters = {
-  competition: 'all',
-  status: 'all',
+  league_title: 'all',
+  matchStatus: 'all',
 };
 
+type Props = {
+  matches: IMatchItem[];
+}
+
 // ----------------------------------------------------------------------
-export default function MatchList() {
+export default function MatchList({ matches }: Props) {
   const pathname = usePathname();
+
+  const matchesPerPage = 10;
 
   const STATUS_OPTIONS = pathname === "/" || pathname === "/schedule" ? [...MATCH_STATUS_OPTIONS, { value: 'all', label: 'Tất cả' }] : [...MATCH_RESULT_OPTIONS, { value: 'all', label: 'Tất cả' }];
 
-  const COMPETITION_OPTIONS = [...COMPETITION_SORT_OPTIONS];
-  const allOption = { value: 'all', label: 'TẤT CẢ GIẢI ĐẤU' };
+  const COMPETITION_OPTIONS_SET = new Set(matches.map(match => match.league_title.trim().toLowerCase()));
+  const COMPETITION_OPTIONS = Array.from(COMPETITION_OPTIONS_SET).sort();
+
+  const allOption = 'all';
   COMPETITION_OPTIONS.unshift(allOption);
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -42,17 +52,23 @@ export default function MatchList() {
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
+      handleFilters('matchStatus', newValue);
     },
     [handleFilters]
   );
+  const [page, setPage] = useState<number>(1)
 
-
-
+  const handlePageChange = (event: React.ChangeEvent<any>, newPage: number) => {
+    setPage(newPage);
+  };
   const dataFiltered = applyFilter({
-    inputData: _matchList,
+    inputData: matches,
     filters,
+    page,
+    matchesPerPage
   });
+
+
   return (
     <>
 
@@ -67,7 +83,7 @@ export default function MatchList() {
         {
           (
             <Tabs
-              value={filters.status}
+              value={filters.matchStatus}
               onChange={handleFilterStatus}
               sx={{
                 background: (theme) => theme.palette.grey[800],
@@ -79,10 +95,9 @@ export default function MatchList() {
               }}
               TabIndicatorProps={{
                 style: {
-                  backgroundColor: (filters.status === 'live' && theme.palette.info.main) ||
-                    (filters.status === 'hot' && theme.palette.primary.main) ||
-                    (filters.status === 'today' && theme.palette.warning.main) ||
-                    (filters.status === 'tomorrow' && theme.palette.error.main) ||
+                  backgroundColor: (filters.matchStatus === 'live' && theme.palette.info.main) ||
+                    (filters.matchStatus === 'today' && theme.palette.warning.main) ||
+                    (filters.matchStatus === 'tomorrow' && theme.palette.error.main) ||
                     (theme.palette.success.main)
                 }
               }}
@@ -97,28 +112,27 @@ export default function MatchList() {
                   icon={
                     <Label
                       variant={
-                        ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                        ((tab.value === 'all' || tab.value === filters.matchStatus) && 'filled') || 'soft'
                       }
 
                       color={
                         (tab.value === 'live' && 'info') ||
-                        (tab.value === 'hot' && 'primary') ||
                         (tab.value === 'today' && 'warning') ||
                         (tab.value === 'tomorrow' && 'error') ||
                         'success'
                       }
                     >
 
-                      {tab.value === 'live' && _matchList.filter((match) => match.status === 'live').length}
+                      {tab.value === 'live' &&
+                        (filterLiveMatches(filterMatchesByLeagueTitle(matches, filters.league_title)).length)}
 
-                      {tab.value === 'hot' && _matchList.filter((match) => match.status === 'hot').length}
+                      {tab.value === 'tomorrow' &&
+                        (filterTomorrowMatches(filterMatchesByLeagueTitle(matches, filters.league_title)).length)}
+                      {tab.value === 'today' &&
+                        (filterTodayMatches(filterMatchesByLeagueTitle(matches, filters.league_title)).length)}
 
-                      {tab.value === 'today' && _matchList.filter((match) => match.status === 'today').length}
-
-                      {tab.value === 'tomorrow' && _matchList.filter((match) => match.status === 'tomorrow').length}
-
-                      {tab.value === 'all' && _matchList.length}
-
+                      {tab.value === 'all' &&
+                        (filterMatchesByLeagueTitle(matches, filters.league_title)).length}
                     </Label>
                   }
                   sx={{
@@ -154,8 +168,10 @@ export default function MatchList() {
         ) :
         (
           <Pagination
-            count={10}
+            count={Math.ceil(filterMatchesByLeagueTitle(matches, filters.league_title).length / matchesPerPage)}
             color="primary"
+            page={page}
+            onChange={handlePageChange}
             sx={{
               my: 10,
               [`& .${paginationClasses.ul}`]: {
@@ -173,20 +189,40 @@ export default function MatchList() {
 const applyFilter = ({
   inputData,
   filters,
+  page,
+  matchesPerPage
 }: {
+  matchesPerPage: number,
+  page: number,
   inputData: IMatchItem[];
   filters: IMatchFilters;
 }) => {
-  const { status, competition } = filters;
+  const { matchStatus, league_title } = filters;
+  const startIndex = (page - 1) * matchesPerPage;
+  const endIndex = startIndex + matchesPerPage;
+  // Filtering based on league_title
+  let filteredData = inputData;
 
-
-  if (status !== 'all') {
-    inputData = inputData.filter((match) => match.status === status);
+  if (league_title !== 'all') {
+    const leagueTitleLower = league_title.toLowerCase();
+    filteredData = filteredData.filter(match => match.league_title.toLowerCase().includes(leagueTitleLower));
+  }
+  // Filtering based on matchStatus
+  if (matchStatus !== 'all') {
+    switch (matchStatus) {
+      case 'today':
+        filteredData = filterTodayMatches(filteredData);
+        break;
+      case 'tomorrow':
+        filteredData = filterTomorrowMatches(filteredData);
+        break;
+      case 'live':
+        filteredData = filterLiveMatches(filteredData);
+        break;
+      default:
+        break;
+    }
   }
 
-  if (competition !== 'all') {
-    inputData = inputData.filter((match) => match.competition === competition);
-  }
-
-  return inputData;
+  return filteredData.sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime()).slice(startIndex, endIndex);
 };
