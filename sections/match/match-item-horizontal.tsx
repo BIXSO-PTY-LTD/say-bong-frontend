@@ -2,7 +2,7 @@
 
 import { Typography, Stack, Avatar, Card } from '@mui/material';
 import Label from '#/components/label';
-import { fDateTime } from '#/utils/format-time';
+import { fDateTime, formatStringToDateTime } from '#/utils/format-time';
 import { IMatchItem } from '#/types/match';
 import { useEffect, useState } from 'react';
 import { useResponsive } from '#/hooks/use-responsive';
@@ -18,51 +18,48 @@ type Props = {
 export default function MatchItemHorizontal({ match }: Props) {
   const mdUp = useResponsive("up", "md");
   const {
-    competition,
-    date_time,
-    home_team,
-    away_team,
-    home_image,
-    away_image,
-    home_score,
-    away_score,
-    round,
-    minute,
-    image,
-    status
+    startTime,
+    league_title,
+    localteam_logo,
+    localteam_title,
+    visitorteam_logo,
+    visitorteam_title,
+    score,
+    startTimez
   } = match;
-
-  const [formattedDateTime, setFormattedDateTime] = useState('');
-
-  useEffect(() => {
-    setFormattedDateTime(fDateTime(date_time));
-
-
-  }, [date_time]); // 
   return (
     <Stack component={Card} sx={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/assets/images/match/background-match.svg)`, p: 1, backgroundSize: 'cover' }} direction="column">
       <Stack sx={{ py: 0.5, px: '20px' }} direction="row" justifyContent="space-between">
-        <Typography variant="body2">{competition}</Typography>
-        <Typography variant="body2">{formattedDateTime}</Typography>
+        <Typography variant="body2">{league_title}</Typography>
+        <Typography variant="body2">{startTime}</Typography>
       </Stack>
       <Stack direction="row" justifyContent="space-around" spacing={0.5} alignItems="center">
-        <TeamInfo image={home_image} team={home_team} />
-        {status === "live" ? (
-          <Stack direction="column" spacing={2}>
-            <Label sx={{ width: { md: "94px" }, height: { md: "32px" } }} color="success" variant="filled" >
-              <Typography variant={mdUp ? "body2" : "caption"}>{`Hiệp ${round} : ${minute}'`}</Typography>
-            </Label>
-            <Label sx={{ background: BACKGROUND_GRADIENT, width: { md: "94px" }, height: { md: "47px" } }} variant="filled" >
-              <Typography variant={mdUp ? "h3" : "body2"}>{`${home_score} - ${away_score}`}</Typography>
+        <TeamInfo image={localteam_logo} team={localteam_title} />
+        <Stack direction="column" spacing={2}>
+          {formatStringToDateTime(startTimez) < new Date() ? (
+            <>
+              {/* <Label sx={{ width: { md: "94px" }, height: { md: "32px" } }} color="success" variant="filled" >
+                <Typography variant={mdUp ? "body2" : "caption"}>{`Hiệp 1 : 12'`}</Typography>
+              </Label> */}
+              <Label sx={{ background: BACKGROUND_GRADIENT, width: { md: "94px" }, height: { md: "47px" } }} variant="filled" >
 
-            </Label>
-          </Stack>
-        ) :
-          (
-            <Typography sx={{ mb: 3 }} variant='h2'>VS</Typography>
+
+                <Typography variant={mdUp ? "h3" : "body2"}>{score}</Typography>
+
+              </Label>
+            </>
+          ) : (
+            <>
+
+              <Typography sx={{ mb: 3 }} variant='h2'>VS</Typography>
+            </>
           )}
 
-        <TeamInfo image={away_image} team={away_team} />
+
+        </Stack>
+
+
+        <TeamInfo image={visitorteam_logo} team={visitorteam_title} />
       </Stack>
     </Stack>
   );

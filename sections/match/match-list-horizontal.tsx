@@ -27,20 +27,11 @@ export default function MatchListHorizontal({ matchs,
   //   </>
   // );
 
-  const homeList = (
+  const renderList = (
     <>
-      {matchs.slice(0, 8).map((match) => (
-        <MatchItemHorizontal key={match.id} match={match} />
+      {matchs.slice(0, 8).map((match, index) => (
+        <MatchItemHorizontal key={index} match={match} />
       ))}
-    </>
-  );
-  const resultList = (
-    <>
-      {matchs
-        .filter(match => match.status === "live")
-        .map((match) => (
-          <MatchItemHorizontal key={match.id} match={match} />
-        ))}
     </>
   );
 
@@ -55,8 +46,7 @@ export default function MatchListHorizontal({ matchs,
           md: 'repeat(2, 1fr)',
         }}
       >
-        {/* {loading ? renderSkeleton : renderList} */}
-        {pathname === '/result' ? resultList : homeList}
+        {renderList}
       </Box>
 
 
