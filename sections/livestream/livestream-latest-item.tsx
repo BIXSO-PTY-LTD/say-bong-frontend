@@ -55,7 +55,7 @@ export default function LivestreamLatestItem({ livestream,
 
         <Box sx={{ position: "relative" }}>
           <Image
-            src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+            src={meta?.[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
             alt={title}
             ratio={(largelivestream && '3/4') ||
               // (order && '4/3') ||
