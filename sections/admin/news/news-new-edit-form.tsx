@@ -119,22 +119,23 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const base64Array = extractBase64Src(data.content);
+      if (data.content.includes('data:image')) {
+        const base64Array = extractBase64Src(data.content);
 
-      const filesArray = base64ToFiles(base64Array);
+        const filesArray = base64ToFiles(base64Array);
 
 
-      const FilesContent = await upload(filesArray)
-      const fileNames = FilesContent.map((file: any) => file.filename);
+        const FilesContent = await upload(filesArray)
+        const fileNames = FilesContent.map((file: any) => file.filename);
 
-      let updatedContent = data.content;
+        let updatedContent = data.content;
 
-      base64Array.forEach((base64String, index) => {
-        updatedContent = updatedContent.replace(base64String, `${HOST_API}/api/v1/${fileNames[index]}`);
-      });
+        base64Array.forEach((base64String, index) => {
+          updatedContent = updatedContent.replace(base64String, `${HOST_API}/api/v1/${fileNames[index]}`);
+        });
 
-      data.content = updatedContent;
-
+        data.content = updatedContent;
+      }
       if (currentNew) {
         await updateNew(data);
       } else {

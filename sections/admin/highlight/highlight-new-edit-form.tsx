@@ -103,11 +103,11 @@ export default function HighlightNewEditForm({ currentVideo }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      if (data.content instanceof File) {
+        const updatedContent = await upload(data.content)
 
-      const updatedContent = await upload(data.content)
-
-      data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
-
+        data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
+      }
       if (currentVideo) {
         await updateHighlight(data)
 
