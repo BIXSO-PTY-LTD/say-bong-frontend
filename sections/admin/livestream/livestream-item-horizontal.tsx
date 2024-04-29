@@ -102,7 +102,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
               width: "164px"
             }}
           >
-            <Image alt={title} src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
+            <Image alt={title} src={meta?.[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
               borderRadius: 1.5, height: 1
             }} />
           </Box>

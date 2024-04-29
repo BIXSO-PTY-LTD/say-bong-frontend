@@ -44,7 +44,7 @@ export default function LivestreamItem({ livestream }: Props) {
       </Box>
 
       <Box sx={{ position: "relative" }}>
-        <Image alt={title} src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
+        <Image alt={title} src={meta?.[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
         <Label sx={{
           width: "30px",
           height: "30px",
