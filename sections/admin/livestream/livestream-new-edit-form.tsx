@@ -52,8 +52,8 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
     content: Yup.string().required('Phải có link livestream'),
     metas: Yup.array().of(
       Yup.object().shape({
-        key: Yup.string().required(),
-        content: Yup.mixed<any>().nullable().required('Phải có hình ảnh hiển thị')
+        key: Yup.string(),
+        content: Yup.mixed<any>().nullable()
       })
     )
   });
@@ -95,12 +95,17 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
     try {
 
       if (data.metas && data.metas.length > 0) {
-        const fileData = await upload(data.metas[0].content)
+        if (data.metas[0].content instanceof File) {
 
-        data.metas[0].content = `${HOST_API}/api/v1/${fileData[0].filename}`
+          const fileData = await upload(data.metas[0].content)
+
+          data.metas[0].content = `${HOST_API}/api/v1/${fileData[0].filename}`
+        }
+
       } else {
         console.log('No metas found or metas array is empty');
       }
+
       if (currentLivestream) {
         await updateLivestream(data);
       } else {
