@@ -34,6 +34,25 @@ export type IMatchItem = {
   links3: string;
   h5: string;
 }
+export type IResult = {
+  away: string;
+  date: string;
+  home: string;
+  leagues: string;
+  match_time: string;
+  result: string;
+  score: string;
+  score_half: string;
+}
+export type IMatchResults = {
+  away: string;
+  home: string;
+  future_away: IResult[];
+  future_home: IResult[];
+  history_away: IResult[];
+  history_home: IResult[];
+  history_vs: IResult[];
+}
 
 // ----------------------------------------------------------------------
 
