@@ -37,7 +37,7 @@ type Props = {
   currentNew?: INewsItem;
 };
 
-export default function NewsNewEditForm({ currentNew }: Props) {
+export default function SpecialNewsNewEditForm({ currentNew }: Props) {
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
@@ -49,9 +49,13 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const NewPostSchema = Yup.object().shape({
     id: Yup.string(),
     title: Yup.string().required('Phải có tiêu đề'),
-
     content: Yup.string().required('Phải có nội dung'),
-
+    meta: Yup.array().of(
+      Yup.object().shape({
+        key: Yup.string().required(),
+        content: Yup.mixed<any>().nullable().required()
+      })
+    )
   });
 
   const defaultValues = useMemo(
@@ -59,6 +63,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
       id: currentNew?.id || '',
       title: currentNew?.title || '',
       content: currentNew?.content || '',
+      meta: currentNew?.meta || [{ key: 'special', content: 'special' }],
     }),
     [currentNew]
   );
@@ -81,12 +86,12 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   }, [currentNew, defaultValues, reset]);
 
   
-
   const upload = useUpload();
   const createNews = useCreateNews();
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
+
       if (data.content.includes('data:image')) {
         const base64Array = extractBase64Src(data.content);
 
