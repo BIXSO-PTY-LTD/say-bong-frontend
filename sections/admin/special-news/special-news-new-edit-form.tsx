@@ -40,6 +40,7 @@ type Props = {
 export default function SpecialNewsNewEditForm({ currentNew }: Props) {
   const router = useRouter();
 
+
   const mdUp = useResponsive('up', 'md');
 
 
@@ -50,20 +51,14 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
     id: Yup.string(),
     title: Yup.string().required('Phải có tiêu đề'),
     content: Yup.string().required('Phải có nội dung'),
-    meta: Yup.array().of(
-      Yup.object().shape({
-        key: Yup.string().required(),
-        content: Yup.mixed<any>().nullable().required()
-      })
-    )
+
   });
 
   const defaultValues = useMemo(
     () => ({
       id: currentNew?.id || '',
-      title: currentNew?.title || '',
+      title: currentNew?.title.startsWith("*") ? currentNew?.title.replace("*", "") : currentNew?.title || '',
       content: currentNew?.content || '',
-      meta: currentNew?.meta || [{ key: 'special', content: 'special' }],
     }),
     [currentNew]
   );
@@ -85,18 +80,21 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
     }
   }, [currentNew, defaultValues, reset]);
 
-  
+
   const upload = useUpload();
   const createNews = useCreateNews();
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
-
+      if (data.title.startsWith("*")) {
+        return data.title;
+      } else {
+        data.title = `*${data.title}`
+      }
       if (data.content.includes('data:image')) {
         const base64Array = extractBase64Src(data.content);
 
         const filesArray = base64ToFiles(base64Array);
-
 
         const FilesContent = await upload(filesArray)
         const fileNames = FilesContent.map((file: any) => file.filename);
@@ -108,6 +106,7 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
         });
 
         data.content = updatedContent;
+
       }
       if (currentNew) {
         await updateNew(data);
@@ -116,7 +115,7 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
       }
       mutate(endpoints.news);
       enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
-      router.push(paths.dashboard.news.normal.root);
+      router.push(paths.dashboard.news.special.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

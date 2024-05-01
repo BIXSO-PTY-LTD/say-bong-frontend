@@ -1,12 +1,8 @@
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
-import { IBlogPostProps } from '#/types/blog';
 
-import MarketingPostItem from './news-post-item';
-import NewsPostItem from './news-post-item';
 import { _careerPosts } from '#/_mock/_blog';
-import HomeLatestPostItem from '../home/home-latest-post-item';
 import { INewsItem } from '#/types/news';
 import { Dispatch, SetStateAction } from 'react';
 import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
@@ -16,15 +12,15 @@ import NewsItem from './news-item';
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: INewsItem[];
-  paginate: any;
+  news: INewsItem[]
+  paginateNews: INewsItem[];
   setCurrentPage: Dispatch<SetStateAction<number>>;
   currentPage: number;
   loading: boolean;
   empty: boolean;
 };
 
-export default function NewsPosts({ news, paginate, setCurrentPage, currentPage, loading, empty }: Props) {
+export default function NewsPosts({ news, paginateNews, setCurrentPage, currentPage, loading, empty }: Props) {
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
@@ -57,7 +53,7 @@ export default function NewsPosts({ news, paginate, setCurrentPage, currentPage,
       )}
 
       <Pagination
-        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        count={Math.ceil(paginateNews.length / 6)}
         page={currentPage}
         onChange={handlePageChange}
         color="primary"

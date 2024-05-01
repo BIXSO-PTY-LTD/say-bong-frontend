@@ -17,7 +17,7 @@ export default function NewsCreateView() {
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Typography variant="h3" sx={{
         mb: { xs: 3, md: 5 },
-      }}>Thêm tin tức</Typography>
+      }}>Thêm tin tức thường</Typography>
 
       <NewsNewEditForm />
     </Container>

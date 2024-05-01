@@ -33,7 +33,7 @@ export default function SpecialNewsListView() {
   };
 
   useEffect(() => {
-    setSpecialNews(news.filter(item => item.meta !== null))
+    setSpecialNews(news.filter(item => item.title.startsWith("*")))
   }, [news])
 
   // Paginate specialNews
@@ -45,7 +45,7 @@ export default function SpecialNewsListView() {
       <Stack direction="row" justifyContent="space-between" sx={{
         mb: { xs: 3, md: 5 }
       }}>
-        <Typography variant="h3">Danh sách tin tức</Typography>
+        <Typography variant="h3">Danh sách tin tức đặc biệt</Typography>
         <Button
           component={RouterLink}
           href={paths.dashboard.news.special.new}

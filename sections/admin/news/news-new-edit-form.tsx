@@ -57,7 +57,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const defaultValues = useMemo(
     () => ({
       id: currentNew?.id || '',
-      title: currentNew?.title || '',
+      title: currentNew?.title.startsWith("#") ? currentNew?.title.replace("#", "") : currentNew?.title || '',
       content: currentNew?.content || '',
     }),
     [currentNew]
@@ -80,18 +80,22 @@ export default function NewsNewEditForm({ currentNew }: Props) {
     }
   }, [currentNew, defaultValues, reset]);
 
-  
+
 
   const upload = useUpload();
   const createNews = useCreateNews();
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
+      if (data.title.startsWith("#")) {
+        return data.title;
+      } else {
+        data.title = `#${data.title}`
+      }
       if (data.content.includes('data:image')) {
         const base64Array = extractBase64Src(data.content);
 
         const filesArray = base64ToFiles(base64Array);
-
 
         const FilesContent = await upload(filesArray)
         const fileNames = FilesContent.map((file: any) => file.filename);

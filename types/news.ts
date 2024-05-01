@@ -8,5 +8,4 @@ export type INewsItem = {
   content: string;
   createdAt: Date;
   images: string[];
-  meta: INewsMetas[];
 };

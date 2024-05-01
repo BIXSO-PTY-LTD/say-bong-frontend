@@ -28,7 +28,7 @@ export default function SpecialNewsEditView({ id }: Props) {
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Typography variant="h3" sx={{
         mb: { xs: 3, md: 5 },
-      }}>Thông tin tin tức</Typography>
+      }}>Thông tin tin tức đặc biệt</Typography>
       <SpecialNewsNewEditForm currentNew={currentNew} />
     </Container>
   );

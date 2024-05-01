@@ -78,7 +78,7 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
     content,
     createdAt,
   } = item;
-
+  const cleanTitle = title.replace('*', '');
   return (
     <>
       <Stack component={Card} justifyContent="space-between" sx={{ background: "#fff" }} direction="row">
@@ -101,7 +101,7 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.news.special.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {title}
+                {cleanTitle}
               </TextMaxLine>
             </Link>
           </Stack>
@@ -131,7 +131,7 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.normal.details(id));
+            router.push(paths.dashboard.news.special.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />

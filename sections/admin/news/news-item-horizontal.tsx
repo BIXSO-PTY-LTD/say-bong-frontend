@@ -78,6 +78,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
     content,
     createdAt,
   } = item;
+  const cleanTitle = title.replace('#', '');
 
   return (
     <>
@@ -101,7 +102,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {title}
+                {cleanTitle}
               </TextMaxLine>
             </Link>
           </Stack>
