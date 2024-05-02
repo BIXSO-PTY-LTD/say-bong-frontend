@@ -125,11 +125,11 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
+        title="Xóa"
         content={"Bạn chắc chắn muốn xóa?"}
         action={
           <Button variant="contained" color="error" onClick={() => handleDeleteVideo(id)}>
-            Delete
+            Xóa
           </Button>
         }
       />
