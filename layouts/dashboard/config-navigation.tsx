@@ -38,8 +38,16 @@ export function useNavData() {
           },
           {
             title: 'Tin tức',
-            path: paths.dashboard.news.root,
+            path: paths.dashboard.news.special.root,
             icon: ICONS.blog,
+            children: [
+              { title: 'Tin tức đặc biệt', path: paths.dashboard.news.special.root },
+              {
+                title: 'Tin tức thường',
+                path: paths.dashboard.news.normal.root,
+              },
+
+            ],
           },
           {
             title: 'Video',

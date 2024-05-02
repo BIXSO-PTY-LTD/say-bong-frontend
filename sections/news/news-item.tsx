@@ -35,8 +35,11 @@ export default function NewsItem({ post, transparent
       setFirstImageUrl(match[1]);
     }
   }, [post.content]);
+
+  const cleanTitle = post.title.startsWith("#") ? post.title.replace('#', '') : post.title.startsWith("*") ? post.title.replace('*', '') : post.title
+
   return (
-    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] , boxShadow:"none"}}>
+    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800], boxShadow: "none" }}>
       <Stack
         spacing={2}
       >
@@ -56,7 +59,7 @@ export default function NewsItem({ post, transparent
         >
           <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
           <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant='h5'>{post.title}</TextMaxLine>
+            <TextMaxLine line={2} variant='h5'>{cleanTitle}</TextMaxLine>
           </Link>
 
 

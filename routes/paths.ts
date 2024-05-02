@@ -39,9 +39,16 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/user`,
     },
     news: {
-      root: `${ROOTS.DASHBOARD}/news`,
-      new: `${ROOTS.DASHBOARD}/news/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/news/${id}`,
+      special: {
+        root: `${ROOTS.DASHBOARD}/news/special`,
+        new: `${ROOTS.DASHBOARD}/news/special/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/news/special/${id}`,
+      },
+      normal: {
+        root: `${ROOTS.DASHBOARD}/news/normal`,
+        new: `${ROOTS.DASHBOARD}/news/normal/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/news/normal/${id}`,
+      },
     },
     video: {
       exciting: {

@@ -6,20 +6,20 @@ import Container from '@mui/material/Container';
 import { useSettingsContext } from '#/components/settings';
 
 import { Typography } from '@mui/material';
-import NewsNewEditForm from '../news-new-edit-form';
+import SpecialNewsNewEditForm from '../special-news-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function NewsCreateView() {
+export default function SpecialNewsCreateView() {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Typography variant="h3" sx={{
         mb: { xs: 3, md: 5 },
-      }}>Thêm tin tức thường</Typography>
+      }}>Thêm tin tức đặc biệt</Typography>
 
-      <NewsNewEditForm />
+      <SpecialNewsNewEditForm />
     </Container>
   );
 }

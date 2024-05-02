@@ -39,7 +39,7 @@ type Props = {
   endpoints?: string;
 };
 
-export default function PostItemHorizontal({ item, endpoints }: Props) {
+export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
@@ -78,8 +78,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
     content,
     createdAt,
   } = item;
-  const cleanTitle = title.replace('#', '');
-
+  const cleanTitle = title.replace('*', '');
   return (
     <>
       <Stack component={Card} justifyContent="space-between" sx={{ background: "#fff" }} direction="row">
@@ -100,7 +99,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.special.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
                 {cleanTitle}
               </TextMaxLine>
@@ -132,7 +131,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.normal.details(id));
+            router.push(paths.dashboard.news.special.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />

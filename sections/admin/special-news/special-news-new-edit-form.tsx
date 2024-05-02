@@ -37,8 +37,9 @@ type Props = {
   currentNew?: INewsItem;
 };
 
-export default function NewsNewEditForm({ currentNew }: Props) {
+export default function SpecialNewsNewEditForm({ currentNew }: Props) {
   const router = useRouter();
+
 
   const mdUp = useResponsive('up', 'md');
 
@@ -49,7 +50,6 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const NewPostSchema = Yup.object().shape({
     id: Yup.string(),
     title: Yup.string().required('Phải có tiêu đề'),
-
     content: Yup.string().required('Phải có nội dung'),
 
   });
@@ -57,7 +57,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   const defaultValues = useMemo(
     () => ({
       id: currentNew?.id || '',
-      title: currentNew?.title.startsWith("#") ? currentNew?.title.replace("#", "") : currentNew?.title || '',
+      title: currentNew?.title.startsWith("*") ? currentNew?.title.replace("*", "") : currentNew?.title || '',
       content: currentNew?.content || '',
     }),
     [currentNew]
@@ -81,16 +81,15 @@ export default function NewsNewEditForm({ currentNew }: Props) {
   }, [currentNew, defaultValues, reset]);
 
 
-
   const upload = useUpload();
   const createNews = useCreateNews();
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (data.title.startsWith("#")) {
+      if (data.title.startsWith("*")) {
         return data.title;
       } else {
-        data.title = `#${data.title}`
+        data.title = `*${data.title}`
       }
       if (data.content.includes('data:image')) {
         const base64Array = extractBase64Src(data.content);
@@ -107,6 +106,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
         });
 
         data.content = updatedContent;
+
       }
       if (currentNew) {
         await updateNew(data);
@@ -115,7 +115,7 @@ export default function NewsNewEditForm({ currentNew }: Props) {
       }
       mutate(endpoints.news);
       enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
-      router.push(paths.dashboard.news.normal.root);
+      router.push(paths.dashboard.news.special.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

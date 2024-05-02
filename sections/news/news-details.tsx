@@ -19,7 +19,7 @@ type Props = {
 }
 
 export default function NewsDetails({ currentPost, loading }: Props) {
-
+  const cleanTitle = currentPost?.title.startsWith("#") ? currentPost?.title.replace('#', '') : currentPost?.title.startsWith("*") ? currentPost?.title.replace('*', '') : currentPost?.title
   return (
     <>
       {loading && (
@@ -27,7 +27,7 @@ export default function NewsDetails({ currentPost, loading }: Props) {
       )}
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h3" sx={{ mb: 5 }}>
-          {currentPost?.title}
+          {cleanTitle}
         </Typography>
         <Typography variant="caption" sx={{ mb: 5 }}>
           {fDate(currentPost?.createdAt)}
