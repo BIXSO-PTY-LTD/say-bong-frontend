@@ -44,7 +44,6 @@ export default function LivestreamListView() {
       </Stack>
       <LiveStreamListHorizontal endpoints={endpoints} loading={livestreamsLoading} livestreams={livestreams}
       />
-
       <Pagination
         count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
         page={currentPage}

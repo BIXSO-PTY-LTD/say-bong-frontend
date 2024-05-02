@@ -1,7 +1,7 @@
 'use client';
 
 import { useBoolean } from '#/hooks/use-boolean';
-import { Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
+import { Alert, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
 import { m, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -14,9 +14,10 @@ import { varSlide } from '#/components/animate/variants';
 import { useSnackbar } from 'notistack';
 import { useAuthContext } from '#/auth/hooks';
 import { useRouter } from '#/routes/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { paths } from '#/routes/paths';
 import { useChangePassword } from '#/api/user';
+import zIndex from '@mui/material/styles/zIndex';
 
 // ----------------------------------------------------------------------
 type ChangePasswordDialogProps = {
@@ -34,6 +35,7 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
 
   const password = useBoolean();
 
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -43,13 +45,17 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
   }, [user, router, enqueueSnackbar])
 
   const ChangePassWordSchema = Yup.object().shape({
+
     password: Yup.string().required('Hãy điền mật khẩu mới'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu phải khớp'),
+    oldPassword: Yup.string().required('Hãy điền mật khẩu mới'),
+
   });
 
   const defaultValues = {
     password: '',
     confirmPassword: '',
+    oldPassword: '',
   };
 
   const methods = useForm({
@@ -66,13 +72,15 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
   const changePassword = useChangePassword();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await changePassword(user?.userName || user?.phone, data.password, data.confirmPassword as string);
+      await changePassword(user?.userName || user?.phone, data.password, data.confirmPassword, data.oldPassword as string);
       reset();
       onClose();
       enqueueSnackbar('Cập nhật thành công');
       console.info('DATA', data);
-    } catch (error) {
+
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
     }
   });
   const renderHead = (
@@ -84,6 +92,22 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2.5} alignItems="flex-end">
+        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
+        <RHFTextField
+          name="oldPassword"
+          type={password.value ? 'text' : 'password'}
+          label="Mật khẩu cũ"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={password.onToggle} edge="end">
+                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
         <RHFTextField
           name="password"
           type={password.value ? 'text' : 'password'}

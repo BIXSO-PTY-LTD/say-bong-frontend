@@ -25,21 +25,18 @@ export function useGetUsers(offset: number) {
 
 
 export function useChangePassword() {
-  const changePassword = async (phoneOrUserName: string, password: string, confirmPassword: string) => {
+  const changePassword = async (phoneOrUserName: string, password: string, confirmPassword: string | undefined, oldPassword: string) => {
     const URL = endpoints.auth.changePassword;
 
     const data = {
       phoneOrUserName,
       password,
-      confirmPassword
+      confirmPassword,
+      oldPassword
     };
 
-    try {
-      await axiosHost.post(URL, data);
-    } catch (error) {
-      console.error('Error changing password:', error);
-      throw new Error('Password change failed');
-    }
+    await axiosHost.post(URL, data);
+
   };
 
   return changePassword;
