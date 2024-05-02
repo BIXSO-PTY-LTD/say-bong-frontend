@@ -14,17 +14,21 @@ type Props = {
 
 export default function LivestreamVideo({ currentLivestream }: Props) {
   const playerRef = useRef(null);
+  const isHLS = currentLivestream?.content?.endsWith('.m3u8');
   return (
     <>
-      <ReactHlsPlayer
-        playerRef={playerRef}
-        src={currentLivestream?.content as string}
-        autoPlay={true}
-        controls={true}
-        width="100%"
-        height="auto"
-      />
-      {/* <Player controls autoPlay url={currentLivestream?.content} /> */}
+      {isHLS ? (
+        <ReactHlsPlayer
+          playerRef={playerRef}
+          src={currentLivestream?.content as string}
+          autoPlay={true}
+          controls={true}
+          width="100%"
+          height="auto"
+        />
+      ) : (
+        <Player controls autoPlay url={currentLivestream?.content} />
+      )}
       <Typography variant="body1" sx={{ py: 3 }}>{currentLivestream?.title}</Typography>
     </>
   );
