@@ -26,6 +26,9 @@ type Props = {
 
 export default function LivestreamItem({ livestream }: Props) {
   const { id, title, meta } = livestream;
+  const newMetaIndex = meta && meta.length > 0
+        ? meta.length - 1
+        : 0;
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Box
@@ -44,7 +47,7 @@ export default function LivestreamItem({ livestream }: Props) {
       </Box>
 
       <Box sx={{ position: "relative" }}>
-        <Image alt={title} src={meta?.[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
+        <Image alt={title} src={meta?.[newMetaIndex].content ? meta[newMetaIndex].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
         <Label sx={{
           width: "30px",
           height: "30px",

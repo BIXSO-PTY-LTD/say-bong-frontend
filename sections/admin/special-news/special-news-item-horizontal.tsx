@@ -151,11 +151,11 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
+        title="Xóa"
         content={"Bạn chắc chắn muốn xóa?"}
         action={
           <Button variant="contained" color="error" onClick={() => handleDeleteNew(id)}>
-            Delete
+            Xóa
           </Button>
         }
       />

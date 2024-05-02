@@ -32,6 +32,7 @@ import { useCreateLivestream, useUpdateLivestream } from '#/api/livestream';
 import { Upload } from '#/components/upload';
 import { useUpload } from '#/api/upload';
 import { HOST_API } from '#/config-global';
+import { metadata } from '#/app/layout';
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -93,20 +94,22 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   const updateLivestream = useUpdateLivestream();
   const onSubmit = handleSubmit(async (data) => {
     try {
-
-      if (data.metas && data.metas.length > 0) {
-        if (data.metas[0].content instanceof File) {
-
-          const fileData = await upload(data.metas[0].content)
-
-          data.metas[0].content = `${HOST_API}/api/v1/${fileData[0].filename}`
-        }
+      const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
+        ? currentLivestream.meta.length - 1
+        : 0;
+      if (data.metas && data.metas.length > 0 && data.metas[newMetaIndex].content instanceof File) {
+        const fileData = await upload(data.metas[newMetaIndex].content);
+        data.metas = [{
+          content: `${HOST_API}/api/v1/${fileData[0].filename}`,
+          key: "thumbnail"
+        }];
 
       } else {
-        console.log('No metas found or metas array is empty');
+        console.log('No metas found, metas array is empty, or the content of the first meta is not a File');
       }
 
       if (currentLivestream) {
+
         await updateLivestream(data);
       } else {
         await createLiveStream(data);
@@ -120,24 +123,34 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
     }
   });
 
+
+
+
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
+      const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
+        ? currentLivestream.meta.length - 1
+        : 0;
 
       if (file) {
-        setValue('metas.0.content', newFile, { shouldValidate: true });
+        const newFile = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+
+        // Update the form value with the new file
+        setValue(`metas.${newMetaIndex}.content`, newFile, { shouldValidate: true });
       }
     },
-    [setValue]
+    [currentLivestream?.meta, setValue]
   );
 
   const handleRemoveFile = useCallback(() => {
-    setValue('metas.0.content', null);
-  }, [setValue]);
+    const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
+      ? currentLivestream.meta.length - 1
+      : 0;
+    setValue(`metas.${newMetaIndex}.content`, null);
+  }, [currentLivestream?.meta, setValue]);
 
 
 
@@ -164,7 +177,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Hình hiển thị</Typography>
               <RHFUpload
-                name="metas.0.content"
+                name={`metas.${currentLivestream?.meta && currentLivestream?.meta.length > 0 ? currentLivestream.meta.length - 1 : 0}.content`}
                 onDrop={handleDrop}
                 onDelete={handleRemoveFile}
               />

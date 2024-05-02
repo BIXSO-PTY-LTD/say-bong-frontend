@@ -41,9 +41,9 @@ export function useNavData() {
             path: paths.dashboard.news.special.root,
             icon: ICONS.blog,
             children: [
-              { title: 'Tin tức đặc biệt', path: paths.dashboard.news.special.root },
+              { title: 'Tin tức bóng đá', path: paths.dashboard.news.special.root },
               {
-                title: 'Tin tức thường',
+                title: 'Tin tức nhận định',
                 path: paths.dashboard.news.normal.root,
               },
 
