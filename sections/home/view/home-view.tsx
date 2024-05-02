@@ -12,6 +12,7 @@ import { useGetHighlightVideos } from '#/api/highlight-video';
 import { useEffect, useState } from 'react';
 import matchesData from '#/public/data/matchesData.json';
 import { IMatchItem } from '#/types/match';
+import { useGetMatchs } from '#/api/match';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,8 @@ export default function HomeView() {
   const { news, newsLoading, newsEmpty } = useGetNews(1, 7)
   const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 7);
   const [matches, setMatches] = useState<IMatchItem[]>([]);
+  const matchesDataSoccer = useGetMatchs();
+  console.log(matchesDataSoccer);
 
   useEffect(() => {
     if (matchesData) {
