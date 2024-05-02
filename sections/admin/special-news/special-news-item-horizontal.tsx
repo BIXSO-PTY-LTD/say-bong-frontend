@@ -25,7 +25,7 @@ import { IBlogPostProps } from '#/types/blog';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
 import { useCallback, useEffect, useState } from 'react';
-import { useDeleteNew, useGetNews } from '#/api/news';
+import { useDeleteNew } from '#/api/news';
 import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
 import { ConfirmDialog } from '#/components/custom-dialog';

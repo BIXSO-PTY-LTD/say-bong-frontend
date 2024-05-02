@@ -25,10 +25,8 @@ export default function NewsListView() {
   const [currentPage, setCurrentPage] = useState(1);
 
 
-  const { news, newsLoading, endpoints } = useGetNews();
+  const { news, newsLoading, endpoints } = useGetNews(1, 100);
   const [normalNews, setNormalNews] = useState<INewsItem[]>([])
-  console.log(news);
-
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -55,7 +53,7 @@ export default function NewsListView() {
           Thêm tin tức
         </Button>
       </Stack>
-      <NewsListHorizontal endpoints={endpoints} loading={newsLoading} news={news}
+      <NewsListHorizontal endpoints={endpoints} loading={newsLoading} news={paginatedNormalNews}
       />
 
       <Pagination

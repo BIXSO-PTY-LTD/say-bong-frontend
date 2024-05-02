@@ -25,7 +25,7 @@ export default function SpecialNewsListView() {
   const [currentPage, setCurrentPage] = useState(1);
 
 
-  const { news, newsLoading, endpoints } = useGetNews();
+  const { news, newsLoading, endpoints } = useGetNews(1, 100);
   const [specialNews, setSpecialNews] = useState<INewsItem[]>([])
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
