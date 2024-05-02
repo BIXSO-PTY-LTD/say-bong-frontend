@@ -109,7 +109,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
           }}
         >
           <Iconify icon="solar:eye-bold" />
-          View
+          Xem
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -119,7 +119,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          Xóa
         </MenuItem>
       </CustomPopover>
       <ConfirmDialog

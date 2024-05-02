@@ -85,7 +85,7 @@ export default function UserListView() {
             )
           }
           action={
-            <Tooltip title="Delete">
+            <Tooltip title="Xóa">
               <IconButton color="primary" onClick={confirm.onTrue}>
                 <Iconify icon="solar:trash-bin-trash-bold" />
               </IconButton>
