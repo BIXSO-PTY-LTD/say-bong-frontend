@@ -22,7 +22,7 @@ import FormProvider, {
   RHFUploadFile,
 } from '#/components/hook-form';
 
-import { Button, CardHeader, FormHelperText } from '@mui/material';
+import { Alert, Button, CardHeader, FormHelperText } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
 import { mutate } from 'swr';
@@ -44,13 +44,15 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
+  const [errorMsg, setErrorMsg] = useState('');
+
 
   const { enqueueSnackbar } = useSnackbar();
 
   const LivestreamSchema = Yup.object().shape({
     id: Yup.string(),
     title: Yup.string().required('Phải có tiêu đề'),
-    content: Yup.string().required('Phải có link livestream'),
+    content: Yup.string().required('Phải có link livestream').url('Phải nhập một đường link hợp lệ.'),
     metas: Yup.array().of(
       Yup.object().shape({
         key: Yup.string(),
@@ -97,19 +99,19 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
       const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
         ? currentLivestream.meta.length - 1
         : 0;
-      if (data.metas && data.metas.length > 0 && data.metas[newMetaIndex].content instanceof File) {
-        const fileData = await upload(data.metas[newMetaIndex].content);
+      if (data.metas && data.metas.length > 0 && data.metas[newMetaIndex]?.content instanceof File) {
+        const fileData = await upload(data.metas[newMetaIndex]?.content);
         data.metas = [{
           content: `${HOST_API}/api/v1/${fileData[0].filename}`,
           key: "thumbnail"
         }];
 
       } else {
-        console.log('No metas found, metas array is empty, or the content of the first meta is not a File');
+        delete data.metas
+        data.metas = []
       }
 
       if (currentLivestream) {
-
         await updateLivestream(data);
       } else {
         await createLiveStream(data);
@@ -118,8 +120,10 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
       enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.livestream.root);
       console.info('DATA', data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
+
     }
   });
 
@@ -170,6 +174,8 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
             <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <RHFTextField inputColor='#fff' name="content" label="Link livestream" />

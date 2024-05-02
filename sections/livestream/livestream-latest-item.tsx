@@ -26,6 +26,9 @@ export default function LivestreamLatestItem({ livestream,
   //  order,
   largelivestream }: Props) {
   const { title, createdAt, id, content, meta } = livestream;
+  const newMetaIndex = meta && meta.length > 0
+    ? meta.length - 1
+    : 0;
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Stack
@@ -55,7 +58,7 @@ export default function LivestreamLatestItem({ livestream,
 
         <Box sx={{ position: "relative" }}>
           <Image
-            src={meta?.[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+            src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
             alt={title}
             ratio={(largelivestream && '3/4') ||
               // (order && '4/3') ||

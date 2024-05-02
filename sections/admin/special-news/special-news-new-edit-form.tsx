@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -20,7 +20,7 @@ import FormProvider, {
   RHFTextField,
 } from '#/components/hook-form';
 
-import { CardHeader, FormHelperText } from '@mui/material';
+import { Alert, CardHeader, FormHelperText } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
 import { mutate } from 'swr';
@@ -39,6 +39,8 @@ type Props = {
 
 export default function SpecialNewsNewEditForm({ currentNew }: Props) {
   const router = useRouter();
+
+  const [errorMsg, setErrorMsg] = useState('');
 
 
   const mdUp = useResponsive('up', 'md');
@@ -117,8 +119,10 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
       enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.news.special.root);
       console.info('DATA', data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
+
     }
   });
 
@@ -141,6 +145,8 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
             <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <Stack spacing={1.5}>
