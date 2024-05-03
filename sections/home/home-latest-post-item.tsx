@@ -51,6 +51,7 @@ export default function HomeLatestPostItem({ post, transparent,
         <Image
           src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={post.title}
+          height="170px"
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}

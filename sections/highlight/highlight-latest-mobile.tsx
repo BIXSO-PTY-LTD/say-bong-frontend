@@ -9,6 +9,8 @@ import TextMaxLine from '#/components/text-max-line';
 import { paths } from '#/routes/paths';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +20,17 @@ type Props = {
 };
 
 export default function HighlightLatestMobile({ video, onSiderbar }: Props) {
+  const { id, title, createdAt, content } = video;
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
+
   return (
     <Stack
       spacing={2}
@@ -26,8 +39,8 @@ export default function HighlightLatestMobile({ video, onSiderbar }: Props) {
       sx={{ width: 1 }}
     >
       <Image
-        alt={video.title}
-        src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        alt={title}
+        src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,
@@ -37,8 +50,8 @@ export default function HighlightLatestMobile({ video, onSiderbar }: Props) {
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit" href={paths.highlight.details(video.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{video.title}</TextMaxLine>
+        <Link color="inherit" href={paths.highlight.details(id)}>
+          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{title}</TextMaxLine>
         </Link>
 
       </Stack>

@@ -24,7 +24,7 @@ export default function LivestreamVideo({ currentLivestream }: Props) {
           autoPlay={true}
           controls={true}
           width="100%"
-          height="auto"
+          height="524px"
         />
       ) : (
         <Player controls autoPlay url={currentLivestream?.content} />

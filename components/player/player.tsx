@@ -9,7 +9,7 @@ import { Box } from '@mui/material';
 
 export default function Player({ ...other }: ReactPlayerProps) {
   return (
-    <Box height={{ sm: "524px" }}>
+    <Box height="524px">
       <StyledReactPlayer {...other} />
     </Box>
   )

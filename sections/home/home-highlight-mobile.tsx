@@ -10,6 +10,8 @@ import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
+import { useEffect, useState } from 'react';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +21,14 @@ type Props = {
 };
 
 export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (video?.content) {
+      captureThumbnailFromCloudinary(video.content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [video]);
   return (
     <Stack
       spacing={2}
@@ -28,7 +38,7 @@ export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
     >
       <Image
         alt={video.title}
-        src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,

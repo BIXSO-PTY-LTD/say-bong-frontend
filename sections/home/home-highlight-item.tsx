@@ -39,7 +39,8 @@ export default function HomeHighlightItem({ video,
   }, [video]);
   return (
     <Box sx={{
-      minHeight: '280px',
+      width: '100%',
+      minHeight: '210px',
       background: theme => theme.palette.grey[800],
     }}>
       <Stack
@@ -52,13 +53,48 @@ export default function HomeHighlightItem({ video,
       >
         <Box sx={{ position: "relative" }}>
           <Image
-            src={videoThumbnail}
+            src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
             alt={video?.title}
-            ratio={(largePost && '3/4') ||
-              // (order && '4/3') ||
-              '1/1'}
-            sx={{ filter: "brightness(0.7)" }}
+            ratio='1/1'
+            sx={{
+              filter: "brightness(0.7)",
+              height: "120px",
+              ...(largePost && {
+                height: "280px"
+              }),
+            }}
           />
+          {largePost && (
+            <>
+              <Stack
+                spacing={2}
+                sx={{
+                  ml: 1,
+                  mb: 1,
+                  left: 0,
+                  bottom: 0,
+                  zIndex: 9,
+                  position: 'absolute',
+                }}
+              >
+                <Label sx={{
+                  width: "30px",
+                  height: "30px",
+
+                  borderRadius: "100%"
+                }} variant='filled' color='default'>
+                  <Iconify icon="solar:play-bold" width="10px" height="10px" color="#01B243" />
+                </Label>
+                <Typography sx={{ px: 1 }} variant='caption'>{fDate(video?.createdAt)}</Typography>
+                <Link sx={{ px: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+                  <TextMaxLine line={2} variant="subtitle2">{video?.title}</TextMaxLine>
+                </Link>
+
+              </Stack>
+
+            </>
+          )}
+
           {!largePost && (
             <Label sx={{
               width: "30px",
@@ -71,50 +107,22 @@ export default function HomeHighlightItem({ video,
               position: 'absolute',
               borderRadius: "100%"
             }} variant='filled' color='default'>
-              <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+              <Iconify icon="solar:play-bold" width="10px" height="10px" color="#01B243" />
             </Label>
           )}
 
         </Box>
-        <Stack
-          spacing={largePost ? 2 : 1}
-          sx={{
-            ...(largePost && {
-              p: 5,
-              bottom: 0,
-              zIndex: 9,
-              position: 'absolute',
-              color: 'common.white',
-            }),
-          }}
-        >
-          {largePost ? (
-            <Stack direction="column">
-              <Label sx={{
-                width: "30px",
-                height: "30px",
-                mb: 4.5,
-                left: 0,
-                bottom: 0,
-                zIndex: 9,
-                borderRadius: "100%"
-              }} variant='filled' color='default'>
-                <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
-              </Label>
-              <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
-                <TextMaxLine line={3} variant="subtitle2">{video?.title}</TextMaxLine>
-              </Link>
-            </Stack>
-          ) : (
-            <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
-              <TextMaxLine line={3} variant="subtitle2">{video?.title}</TextMaxLine>
+        {!largePost && (
+          <Stack
+            spacing={largePost ? 2 : 1}
+          >
+            <Typography sx={{ px: 1 }} variant='caption'>{fDate(video?.createdAt)}</Typography>
+            <Link sx={{ px: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+              <TextMaxLine line={2} variant="subtitle2">{video?.title}</TextMaxLine>
             </Link>
-          )}
+          </Stack>
+        )}
 
-
-
-
-        </Stack>
       </Stack>
     </Box>
   );
