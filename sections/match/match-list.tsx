@@ -9,17 +9,18 @@ import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "./match-list-horizontal";
 import { usePathname } from "next/navigation";
 import { paths } from "#/routes/paths";
-import { fTimestamp, formatStringToDateTime } from "#/utils/format-time";
-import { filterLiveMatches, filterMatchesByLeagueTitle, filterTodayMatches, filterTomorrowMatches } from "#/utils/matchFilter";
+import { fDate, fTimestamp, formatStringToDateTime } from "#/utils/format-time";
+import { filterLiveMatches, filterMatchByDate, filterMatchesByLeagueTitle, filterTodayMatches, filterTomorrowMatches, filterYesterdayMatches } from "#/utils/matchFilter";
 import { useFilteredMatchesCount } from "#/hooks/use-filtered-matches-count";
 import { addDays, format, subDays } from "date-fns";
+import { generateOptions } from "#/utils/generate-shedule_options";
 
 // ----------------------------------------------------------------------
 
 
 const defaultFilters: IMatchFilters = {
   league_title: 'all',
-  matchStatus: 'all',
+  matchStatus: 'today',
 };
 
 type Props = {
@@ -32,31 +33,12 @@ export default function MatchList({ matches }: Props) {
 
   const matchesPerPage = 10;
 
-  const formatDate = (date: Date) => format(date, 'dd/MM');
-
   const STATUS_OPTIONS = pathname === "/" ? [...MATCH_STATUS_OPTIONS, { value: 'all', label: 'Tất cả' }] : [...MATCH_RESULT_OPTIONS, { value: 'all', label: 'Tất cả' }];
 
-  const SHEDULE_STATUS_OPTIONS = [...SCHEDULE_OPTIONS].map((option) => {
-    let label = option.label;
-    let date;
-    switch (option.value) {
-      case 'yesterday':
-        date = subDays(new Date(), 1);
-        break;
-      case 'today':
-        date = new Date();
-        break;
-      case 'tomorrow':
-        date = addDays(new Date(), 1);
-        break;
-      default:
-        date = new Date();
-    }
-    label += ' - ' + formatDate(date);
-    return { ...option, label };
-  })
+  const SHEDULE_STATUS_OPTIONS = generateOptions(SCHEDULE_OPTIONS)
 
   const COMPETITION_OPTIONS_SET = new Set(matches.map(match => match.league_title.trim().toLowerCase()));
+
   const COMPETITION_OPTIONS = Array.from(COMPETITION_OPTIONS_SET).sort();
 
   const allOption = 'all';
@@ -97,13 +79,20 @@ export default function MatchList({ matches }: Props) {
   return (
     <>
       {pathname === "/schedule" ? (
-        <Box sx={{ my: 5 }}>
+        <Stack spacing={3}
+          justifyContent="space-between"
+          alignItems={{ sm: 'center' }}
+          direction={{ sm: 'column', md: 'row' }}
+          sx={{
+            mb: { xs: 3, md: 5 },
+
+          }}>
           <Tabs
             value={filters.matchStatus}
             onChange={handleFilterStatus}
             sx={{
               background: (theme) => theme.palette.grey[800],
-              minWidth: { md: "600px", lg: "833px" },
+              maxWidth: { lg: "920px" },
               px: 2,
               py: 0.5,
               borderRadius: 1,
@@ -116,16 +105,17 @@ export default function MatchList({ matches }: Props) {
               },
             }}
           >
-            {SCHEDULE_OPTIONS.map((tab) => (
+            {SHEDULE_STATUS_OPTIONS.map((tab) => (
               <Tab
                 key={tab.value}
                 iconPosition="end"
                 value={tab.value}
-                label={tab.label}
+                label={<div style={{ whiteSpace: 'pre-line' }}>{tab.label}</div>}
                 sx={{
                   color:
                     (theme) =>
-                      theme.palette.primary.main
+                      theme.palette.primary.main,
+                  px: 1.5
                 }}
               />
             ))}
@@ -134,7 +124,7 @@ export default function MatchList({ matches }: Props) {
             onFilters={handleFilters}
             //
             competitionOptions={COMPETITION_OPTIONS} />
-        </Box>
+        </Stack>
       ) : (
         <Stack spacing={3}
           justifyContent="space-between"
@@ -285,7 +275,7 @@ const applyFilter = ({
   const { matchStatus, league_title } = filters;
   const startIndex = (page - 1) * matchesPerPage;
   const endIndex = startIndex + matchesPerPage;
-
+  const today = new Date()
   // Define filters
   const filtersToApply: ((matches: IMatchItem[]) => IMatchItem[])[] = [];
 
@@ -298,6 +288,9 @@ const applyFilter = ({
   // Filter based on matchStatus
   if (matchStatus !== 'all') {
     switch (matchStatus) {
+      case 'yesterday':
+        filtersToApply.push(filterYesterdayMatches);
+        break;
       case 'today':
         filtersToApply.push(filterTodayMatches);
         break;
@@ -307,18 +300,33 @@ const applyFilter = ({
       case 'live':
         filtersToApply.push(filterLiveMatches);
         break;
+      case fDate(addDays(today, 2)):
+        filtersToApply.push(filterMatchByDate(new Date(), 2));
+        break;
+      case fDate(addDays(today, 3)):
+        filtersToApply.push(filterMatchByDate(new Date(), 3));
+        break;
+      case fDate(addDays(today, 4)):
+        filtersToApply.push(filterMatchByDate(new Date(), 4));
+        break;
+      case fDate(addDays(today, 5)):
+        filtersToApply.push(filterMatchByDate(new Date(), 5));
+        break;
       default:
+
         break;
     }
   }
-
   // Apply filters sequentially
   let filteredData = inputData;
   for (const filter of filtersToApply) {
     filteredData = filter(filteredData);
+
   }
 
   // Sort and paginate filtered data
+
+
   return filteredData
     .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
     .slice(startIndex, endIndex);

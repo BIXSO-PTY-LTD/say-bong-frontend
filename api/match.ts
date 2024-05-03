@@ -46,7 +46,6 @@ export function useGetMatches() {
       });
 
       const response = await axiosSoccer.post(SOCCER_API as string, data);
-      console.log(response.data.data.list);
 
       return response.data.data.list;
     } catch (error) {

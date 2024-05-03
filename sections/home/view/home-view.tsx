@@ -16,32 +16,36 @@ import { useGetMatches } from '#/api/match';
 import { axiosSoccer } from '#/utils/axios';
 import { SOCCER_API } from '#/config-global';
 import QueryString from 'qs';
-
+import resposneData from '#/public/responseData.json'
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
   const { news, newsLoading, newsEmpty } = useGetNews(1, 7)
   const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 7);
   const [matches, setMatches] = useState<IMatchItem[]>([]);
-  const matchesDataSoccer = useGetMatches();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = QueryString.stringify({
-          'type': '1'
-        });
-        const response = await axiosSoccer.post(SOCCER_API as string, data);
-        // Handle success
-        setMatches(response.data.data.list);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+    }
+  }, [])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = QueryString.stringify({
+  //         'type': '1'
+  //       });
+  //       const response = await axiosSoccer.post(SOCCER_API as string, data);
+  //       // Handle success
+  //       setMatches(response.data.data.list);
+  //     } catch (error) {
+  //       // Handle error
+  //       console.error(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
   return (
     <MainLayout>
       <Container>
