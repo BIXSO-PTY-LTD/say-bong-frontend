@@ -18,7 +18,7 @@ export default function NewsView() {
   const [currentSpecialPage, setCurrentSpecialPage] = useState(1);
 
 
-  const { news, newsLoading, newsEmpty } = useGetNews();
+  const { news, newsLoading, newsEmpty } = useGetNews(1, 100);
   const [normalNews, setNormalNews] = useState<INewsItem[]>([])
   const [specialNews, setSpecialNews] = useState<INewsItem[]>([])
 

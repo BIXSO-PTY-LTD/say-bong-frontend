@@ -1,10 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { HOST_API, MATCH_API } from '#/config-global';
+import { HOST_API, SOCCER_API } from '#/config-global';
 
 const axiosHostInstance: AxiosInstance = axios.create({ baseURL: HOST_API });
 
 export const axiosSoccer: AxiosInstance = axios.create({
-  baseURL: MATCH_API, headers: {
+  baseURL: SOCCER_API, headers: {
     'content-type': 'application/x-www-form-urlencoded',
     'token': '75d167ad47be3a6e8d8ae84746424114'
   }

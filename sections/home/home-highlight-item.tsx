@@ -38,7 +38,7 @@ export default function HomeHighlightItem({ video,
     }
   }, [video]);
   return (
-    <Card sx={{
+    <Box sx={{
       minHeight: '280px',
       background: theme => theme.palette.grey[800],
     }}>
@@ -46,7 +46,6 @@ export default function HomeHighlightItem({ video,
         spacing={2}
         sx={{
           ...(largePost && {
-            borderRadius: 2,
             overflow: 'hidden',
           }),
         }}
@@ -117,6 +116,6 @@ export default function HomeHighlightItem({ video,
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

@@ -1,6 +1,6 @@
 import { Box, Stack, Table, TableBody, TableContainer, Typography } from "@mui/material";
 import { COMPETITION_SORT_OPTIONS } from "#/_mock";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IMatchFilterValue, IMatchFilters, IMatchItem, IRankFilters } from "#/types/match";
 import Scrollbar from "#/components/scrollbar";
 import { TableHeadCustom, getComparator, useTable } from "#/components/table";
@@ -22,7 +22,7 @@ const TABLE_HEAD = [
 ];
 
 const defaultFilters: IRankFilters = {
-  league_title: 'albanian cup',
+  league_title: '',
 };
 
 
@@ -31,14 +31,9 @@ type Props = {
 }
 export default function BXHList({ matches }: Props) {
 
-  const COMPETITION_OPTIONS_SET = new Set(matches.map(match => match.league_title.trim().toLowerCase()));
-  const COMPETITION_OPTIONS = Array.from(COMPETITION_OPTIONS_SET).sort();
-
-
-
   const table = useTable();
   const [filters, setFilters] = useState(defaultFilters);
-
+  const [COMPETITION_OPTIONS, setCompetitionOptions] = useState<string[]>([]);
 
   const dataFiltered = applyFilter({
     inputData: matches,
@@ -52,6 +47,27 @@ export default function BXHList({ matches }: Props) {
     }));
 
   }, []);
+  useEffect(() => {
+    if (COMPETITION_OPTIONS.length > 0) {
+      // Set filter to the first option in COMPETITION_OPTIONS when component mounts
+      setFilters(prevState => ({
+        ...prevState,
+        league_title: COMPETITION_OPTIONS[0]
+      }));
+    }
+  }, [COMPETITION_OPTIONS]);
+
+  useEffect(() => {
+
+    // Extract unique league titles and convert to lowercase
+    const options = Array.from(new Set(matches.map(match => match.league_title.trim().toLowerCase())));
+
+    // Convert Set to array and sort alphabetically
+    setCompetitionOptions(options.sort());
+
+  }, [matches]);
+
+
   return (
     <>
       <Stack spacing={3}

@@ -1,4 +1,4 @@
-import { MATCH_API } from '#/config-global';
+import { MATCH_API, SOCCER_API } from '#/config-global';
 import { IMatchResults } from '#/types/match';
 import { axiosSoccer } from '#/utils/axios';
 import axios, { AxiosRequestConfig } from 'axios';
@@ -38,18 +38,21 @@ export function useGetMatch(matchId: string | undefined) {
   return memoizedValue;
 }
 
-export const useGetMatchs = async () => {
-  try {
-    const data = QueryString.stringify({
-      'type': '1'
-    });
+export function useGetMatches() {
+  const getMatches = async () => {
+    try {
+      const data = QueryString.stringify({
+        'type': '1'
+      });
 
-    const response = await axiosSoccer.post(MATCH_API as string, data);
-    console.log(response);
+      const response = await axiosSoccer.post(SOCCER_API as string, data);
+      console.log(response.data.data.list);
 
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('Failed to fetch data');
+      return response.data.data.list;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to fetch data');
+    }
   }
-};
+  return getMatches;
+}

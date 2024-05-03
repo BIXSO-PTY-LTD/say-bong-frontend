@@ -35,6 +35,7 @@ export default function SpecialNewsListView() {
   useEffect(() => {
     setSpecialNews(news.filter(item => item.title.startsWith("*")))
   }, [news])
+  console.log(specialNews);
 
   // Paginate specialNews
   const startIndex = (currentPage - 1) * 8;
