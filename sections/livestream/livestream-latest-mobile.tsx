@@ -20,15 +20,10 @@ type Props = {
 };
 
 export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: Props) {
-  const [firstImageUrl, setFirstImageUrl] = useState('');
-
-  useEffect(() => {
-    const regex = /<img.*?src="(.*?)".*?>/;
-    const match = livestream.content.match(regex);
-    if (match && match[1]) {
-      setFirstImageUrl(match[1]);
-    }
-  }, [livestream.content]);
+  const { title, createdAt, id, content, meta } = livestream;
+  const newMetaIndex = meta && meta.length > 0
+    ? meta.length - 1
+    : 0;
   return (
     <Stack
       spacing={2}
@@ -38,7 +33,7 @@ export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: P
     >
       <Image
         alt={livestream.title}
-        src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
           height: 80,

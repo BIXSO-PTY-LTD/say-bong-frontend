@@ -50,7 +50,7 @@ export default function ExcitingLatestItem({ video,
         }}
       >
         <Image
-          src={videoThumbnail}
+          src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||

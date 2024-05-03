@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import EmptyContent from '#/components/empty-content/empty-content';
 import { LargerPostSkeleton } from '../skeletons/larger-post-skeleton';
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import { Grid } from '@mui/material';
 
 
 
@@ -33,38 +34,72 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
 
 
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
-  const renderList = <> <Box
-    sx={{
-      display: 'grid',
-      gap: { xs: 3, md: 4 },
-      gridTemplateColumns: {
-        xs: 'repeat(1, 1fr)',
-        sm: 'repeat(2, 1fr)',
-        md: 'repeat(12, 1fr)',
-      },
-    }}
-  >
-    {mdUp ? (
-      <>
-        <Box sx={{ gridColumn: 'span 5' }}>
-          <HomeHighlightItem video={latestVideo} largePost />
+  const renderList = (
+    <>
+      {mdUp ? (
+        <Box
+          sx={{
+            display: 'grid',
+            gap: { xs: 3, md: 4 },
+            gridTemplateColumns: {
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(12, 1fr)',
+            },
+          }}
+        >
+          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 5' } }}>
+            <HomeHighlightItem video={latestVideo} largePost />
+          </Box>
+          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 7' } }}>
+            <Grid container spacing={3}>
+              {highlightVideos.slice(1, 4).map((video) => (
+                <Grid key={video.id} item xs={12} md={4}>
+                  <HomeHighlightItem video={video} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 5' } }}>
+            <Grid container spacing={3}>
+              {highlightVideos.slice(5, 7).map((video) => (
+                <Grid key={video.id} item xs={12} md={6}>
+                  <HomeHighlightItem video={video} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 7' } }}>
+            <Grid container spacing={3}>
+              {highlightVideos.slice(8, 11).map((video) => (
+                <Grid key={video.id} item xs={12} md={4}>
+                  <HomeHighlightItem video={video} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </Box>
-        <Masonry columns={{ xs: 1, md: 3 }} spacing={3} sx={{ justifyContent: "space-between", gridColumn: 'span 7', alignItems: "center" }}>
-          {highlightVideos.slice(1, 7).map((video) => (
-            <HomeHighlightItem key={video.id} video={video} />
-          ))}
-        </Masonry>
-      </>
-    ) : (
-      <>
-        {highlightVideos.slice(0, 5).map((video) => (
-          <HomeHighlightMobile key={video.id} video={video} />
-        ))}
-      </>
-    )}
-  </Box>
-
-  </>
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: 'grid',
+              gap: { xs: 3, md: 4 },
+              gridTemplateColumns: {
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(12, 1fr)',
+              },
+            }}
+          >
+            {highlightVideos.slice(0, 5).map((video) => (
+              <HomeHighlightMobile key={video.id} video={video} />
+            ))}
+          </Box>
+        </>
+      )}
+    </>
+  );
 
   return (
     <Container
