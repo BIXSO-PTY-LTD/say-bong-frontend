@@ -39,7 +39,7 @@ export default function HighlightItem({ video }: Props) {
 
 
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: theme => theme.palette.grey[800] }}>
       <Box
         sx={{
           position: 'relative',
@@ -68,6 +68,6 @@ export default function HighlightItem({ video }: Props) {
           {title}
         </TextMaxLine>
       </Link>
-    </Card>
+    </Box>
   );
 }

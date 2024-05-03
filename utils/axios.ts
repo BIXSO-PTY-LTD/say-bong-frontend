@@ -1,15 +1,24 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { ASSETS_API, HOST_API } from '#/config-global';
-import { getStorage } from '#/hooks/use-local-storage';
+import { HOST_API, SOCCER_API } from '#/config-global';
 
 const axiosHostInstance: AxiosInstance = axios.create({ baseURL: HOST_API });
 
+export const axiosSoccer: AxiosInstance = axios.create({
+  baseURL: SOCCER_API, headers: {
+    'content-type': 'application/x-www-form-urlencoded',
+    'token': '75d167ad47be3a6e8d8ae84746424114'
+  }
+});
 
 const responseInterceptor = (error: any) => Promise.reject((error.response && error.response.data) || 'Something went wrong');
 
 axiosHostInstance.interceptors.response.use((res) => res, responseInterceptor);
 
+axiosSoccer.interceptors.response.use((res) => res, responseInterceptor);
+
 export const axiosHost: AxiosInstance = axiosHostInstance;
+
+
 
 export const hostFetcher = async (args: string | [string, AxiosRequestConfig]) => {
 
@@ -18,6 +27,15 @@ export const hostFetcher = async (args: string | [string, AxiosRequestConfig]) =
   const res = await axiosHostInstance.get(url, { ...config });
 
   return res.data.data;
+};
+
+export const soccerFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+
+  const [url, config] = Array.isArray(args) ? args : [args];
+
+  const res = await axiosSoccer.get(url, { ...config });
+
+  return res.data;
 };
 
 

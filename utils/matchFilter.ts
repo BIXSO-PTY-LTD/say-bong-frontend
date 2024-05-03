@@ -1,5 +1,37 @@
 import { IMatchItem } from "#/types/match";
-import { formatStringToDateTime } from "./format-time";
+import { endOfDay, startOfDay, subDays } from "date-fns";
+import { fDate, formatStringToDateTime } from "./format-time";
+
+export const filterMatchByDate = (baseDate: Date, daysToAdd: number) => (matches: IMatchItem[]) => {
+  const targetDate = new Date(baseDate);
+  targetDate.setDate(targetDate.getDate() + daysToAdd);
+
+  const formattedTargetDate = fDate(targetDate);
+
+  return matches.filter((match) => {
+    // Splitting match.startTimez into components
+    const [matchMonth, matchDay, matchYearTime] = match.startTimez.split("-");
+    const [matchYear, matchTime] = matchYearTime.split("T");
+    const matchTimeParts = matchTime.split(":");
+
+    // Constructing formatted date string
+    const formattedMatchDate = `${matchMonth}/${matchDay}/${matchYear}`;
+
+
+    return formattedMatchDate === formattedTargetDate;
+  });
+};
+
+export function filterYesterdayMatches(matches: IMatchItem[]) {
+  const yesterday = subDays(new Date(), 1); // Get yesterday's date
+  const startOfYesterday = startOfDay(yesterday);
+  const endOfYesterday = endOfDay(yesterday);
+
+  return matches.filter((match) => {
+    const matchStartTime = formatStringToDateTime(match.startTimez);
+    return matchStartTime >= startOfYesterday && matchStartTime <= endOfYesterday;
+  });
+}
 
 export function filterTodayMatches(matches: IMatchItem[]) {
   const today = new Date();

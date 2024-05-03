@@ -8,7 +8,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
 import { useEffect, useState } from 'react';
@@ -39,7 +39,7 @@ export default function NewsItem({ post, transparent
   const cleanTitle = post.title.startsWith("#") ? post.title.replace('#', '') : post.title.startsWith("*") ? post.title.replace('*', '') : post.title
 
   return (
-    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800], boxShadow: "none" }}>
+    <Box sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800], boxShadow: "none" }}>
       <Stack
         spacing={2}
       >
@@ -47,7 +47,6 @@ export default function NewsItem({ post, transparent
           src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
           alt={post.title}
           sx={{
-            borderRadius: "16px",
             height: "200px",
             objectFit: "cover"
           }}
@@ -65,6 +64,6 @@ export default function NewsItem({ post, transparent
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

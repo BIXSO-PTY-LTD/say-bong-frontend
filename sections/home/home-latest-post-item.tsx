@@ -8,7 +8,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { INewsItem } from '#/types/news';
 import { _mock } from '#/_mock';
 import { useEffect, useState } from 'react';
@@ -37,7 +37,7 @@ export default function HomeLatestPostItem({ post, transparent,
     }
   }, [post.content]);
   return (
-    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
+    <Box sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
       <Stack
         spacing={2}
         sx={{
@@ -77,6 +77,6 @@ export default function HomeLatestPostItem({ post, transparent,
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

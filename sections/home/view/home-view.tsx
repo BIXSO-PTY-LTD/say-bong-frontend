@@ -12,7 +12,11 @@ import { useGetHighlightVideos } from '#/api/highlight-video';
 import { useEffect, useState } from 'react';
 import matchesData from '#/public/data/matchesData.json';
 import { IMatchItem } from '#/types/match';
-
+import { useGetMatches } from '#/api/match';
+import { axiosSoccer } from '#/utils/axios';
+import { SOCCER_API } from '#/config-global';
+import QueryString from 'qs';
+import resposneData from '#/public/responseData.json'
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -21,11 +25,27 @@ export default function HomeView() {
   const [matches, setMatches] = useState<IMatchItem[]>([]);
 
   useEffect(() => {
-    if (matchesData) {
-      setMatches(matchesData.data.list)
+    if (resposneData) {
+      setMatches(resposneData.data.list)
     }
   }, [])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = QueryString.stringify({
+  //         'type': '1'
+  //       });
+  //       const response = await axiosSoccer.post(SOCCER_API as string, data);
+  //       // Handle success
+  //       setMatches(response.data.data.list);
+  //     } catch (error) {
+  //       // Handle error
+  //       console.error(error);
+  //     }
+  //   };
 
+  //   fetchData();
+  // }, []);
   return (
     <MainLayout>
       <Container>

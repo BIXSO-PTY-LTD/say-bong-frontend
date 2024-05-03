@@ -50,8 +50,8 @@ export default function CompetitionSort({ filters, onFilters, competitionOptions
             },
           }}
         >
-          {competitionOptions.map((option) => (
-            <MenuItem key={option} value={option}>
+          {competitionOptions.map((option, index) => (
+            <MenuItem key={index} value={option}>
               {option === "all" ? "TẤT CẢ TRẬN ĐẤU" : option.toUpperCase()}
             </MenuItem>
           ))}

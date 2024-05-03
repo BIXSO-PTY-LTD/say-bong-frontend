@@ -1,4 +1,9 @@
+import { MATCH_API, SOCCER_API } from '#/config-global';
 import { IMatchResults } from '#/types/match';
+import { axiosSoccer } from '#/utils/axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { NextApiRequest, NextApiResponse } from 'next';
+import QueryString from 'qs';
 import useSWR from 'swr';
 
 export interface ILivestreamItem {
@@ -6,7 +11,7 @@ export interface ILivestreamItem {
 }
 
 export function useGetMatch(matchId: string | undefined) {
-  const endpoints = `https://1647117064.global.cdnfastest.com/h2h`
+  const endpoints = `${MATCH_API}/h2h`
 
 
   const hostFetcher = async (url: string) => {
@@ -31,4 +36,22 @@ export function useGetMatch(matchId: string | undefined) {
   };
 
   return memoizedValue;
+}
+
+export function useGetMatches() {
+  const getMatches = async () => {
+    try {
+      const data = QueryString.stringify({
+        'type': '1'
+      });
+
+      const response = await axiosSoccer.post(SOCCER_API as string, data);
+
+      return response.data.data.list;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to fetch data');
+    }
+  }
+  return getMatches;
 }
