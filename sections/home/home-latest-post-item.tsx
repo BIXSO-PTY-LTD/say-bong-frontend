@@ -29,13 +29,25 @@ export default function HomeLatestPostItem({ post, transparent,
 
   const [firstImageUrl, setFirstImageUrl] = useState('');
 
+
+
+  const {
+    id,
+    title,
+    content,
+    createdAt,
+  } = post;
+
+  const cleanTitle = title.startsWith("*") ? title.replace("*", "") : title.startsWith("#") ? title.replace("#", "") : title
+
   useEffect(() => {
     const regex = /<img.*?src="(.*?)".*?>/;
-    const match = post.content.match(regex);
+    const match = content.match(regex);
     if (match && match[1]) {
       setFirstImageUrl(match[1]);
     }
-  }, [post.content]);
+  }, [content]);
+
   return (
     <Box sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
       <Stack
@@ -50,7 +62,7 @@ export default function HomeLatestPostItem({ post, transparent,
       >
         <Image
           src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
-          alt={post.title}
+          alt={cleanTitle}
           height="170px"
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
@@ -70,9 +82,9 @@ export default function HomeLatestPostItem({ post, transparent,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
+          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
+          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(id)} color="inherit">
+            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{cleanTitle}</TextMaxLine>
           </Link>
 
 

@@ -80,9 +80,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
               {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
@@ -93,17 +91,22 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
             </Link>
           </Stack>
         </Stack>
-
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
         {smUp && (
           <Box
             sx={{
               position: 'relative',
               p: 1,
-              width: "164px"
+              minWidth: "164px",
+              maxHeight: "107px"
             }}
           >
             <Image alt={title} src={meta && meta.length > 0 ? meta[meta.length - 1].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
-              borderRadius: 1.5, height: 1
+              borderRadius: 1.5, height: 1, width: 1
             }} />
           </Box>
         )}
