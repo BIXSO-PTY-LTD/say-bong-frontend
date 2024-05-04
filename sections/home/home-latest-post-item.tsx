@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Card } from '@mui/material';
 import { INewsItem } from '#/types/news';
-import { _mock } from '#/_mock';
+
 import { useEffect, useState } from 'react';
 
 
@@ -61,7 +61,7 @@ export default function HomeLatestPostItem({ post, transparent,
         }}
       >
         <Image
-          src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+          src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"}
           alt={cleanTitle}
           height="170px"
           ratio={(largePost && '3/4') ||

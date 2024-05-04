@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Card } from '@mui/material';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
 import { useEffect, useState } from 'react';
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 import Label from '#/components/label';
@@ -53,7 +53,7 @@ export default function HomeHighlightItem({ video,
       >
         <Box sx={{ position: "relative" }}>
           <Image
-            src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+            src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
             alt={video?.title}
             ratio='1/1'
             sx={{

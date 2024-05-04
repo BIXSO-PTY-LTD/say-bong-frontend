@@ -7,10 +7,8 @@ import { paths } from '#/routes/paths';
 
 import { useSettingsContext } from '#/components/settings';
 
-import { _userList } from '#/_mock/_user';
+
 import { Typography } from '@mui/material';
-import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
 import HighlightNewEditForm from '../highlight-new-edit-form';
 import { useGetHighlightVideo, useGetHighlightVideos } from '#/api/highlight-video';
 

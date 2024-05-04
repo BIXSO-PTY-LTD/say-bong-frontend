@@ -9,8 +9,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
-import { _marketingPosts } from '#/_mock/_blog';
-import { _mock } from '#/_mock';
+
 import { IVideoItem } from '#/types/video';
 import { useEffect, useState } from 'react';
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
@@ -51,7 +50,7 @@ export default function HighlightLatestItem({ video,
         }}
       >
         <Image
-          src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+          src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
           alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||

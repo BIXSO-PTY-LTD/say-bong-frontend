@@ -2,7 +2,7 @@
 
 // ----------------------------------------------------------------------
 
-import { _tours } from "#/_mock";
+
 import { useGetLivestream, useGetLivestreams } from "#/api/livestream";
 import LivestreamDetailView from "#/sections/livestream/view/livestream-detail-view";
 

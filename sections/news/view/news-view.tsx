@@ -1,7 +1,6 @@
 'use client';
 
 import NewsPosts from '../news-posts';
-import { _marketingPosts } from '#/_mock/_blog';
 import NewsSidebar from '../news-sidebar';
 import { useGetNews } from '#/api/news';
 import { Container, Typography } from '@mui/material';

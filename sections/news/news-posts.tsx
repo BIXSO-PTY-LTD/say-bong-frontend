@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
 
-import { _careerPosts } from '#/_mock/_blog';
+
 import { INewsItem } from '#/types/news';
 import { Dispatch, SetStateAction } from 'react';
 import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';

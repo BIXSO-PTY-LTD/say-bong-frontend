@@ -9,7 +9,7 @@ import TextMaxLine from '#/components/text-max-line';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
 import { useEffect, useState } from 'react';
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
@@ -38,7 +38,7 @@ export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
     >
       <Image
         alt={video.title}
-        src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
         sx={{
           width: 80,
           height: 80,

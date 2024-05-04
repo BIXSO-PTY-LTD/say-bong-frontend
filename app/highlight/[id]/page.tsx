@@ -2,7 +2,6 @@
 
 // ----------------------------------------------------------------------
 
-import { _tours } from "#/_mock";
 import HighlightDetailView from "#/sections/highlight/highlight-detail-view";
 
 export const metadata = {

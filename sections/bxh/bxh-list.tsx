@@ -1,11 +1,7 @@
 import { Box, Stack, Table, TableBody, TableContainer, Typography } from "@mui/material";
-import { COMPETITION_SORT_OPTIONS } from "#/_mock";
 import { useCallback, useEffect, useState } from "react";
-import { IMatchFilterValue, IMatchFilters, IMatchItem, IRankFilters } from "#/types/match";
-import Scrollbar from "#/components/scrollbar";
-import { TableHeadCustom, getComparator, useTable } from "#/components/table";
-import { _teamList } from "#/_mock/_team";
-import { ITeamItem, ITeamTableFilters } from "#/types/team";
+import { IMatchFilterValue, IMatchItem, IRankFilters } from "#/types/match";
+import { TableHeadCustom, useTable } from "#/components/table";
 import CompetitionSort from "../competition/competition-sort";
 import BXHTableRow from "./bxh-table-row";
 import { filterMatchesByLeagueTitle } from "#/utils/matchFilter";

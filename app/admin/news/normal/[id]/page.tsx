@@ -1,4 +1,4 @@
-import { _userList } from '#/_mock/_user';
+
 import { NewsEditView } from '#/sections/admin/news/view';
 
 

@@ -1,10 +1,8 @@
 'use client';
 
 import { Button, Container, Pagination, Stack, Typography, paginationClasses } from '@mui/material';
-import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
-import { _userList } from '#/_mock/_user';
+
 import Iconify from '#/components/iconify';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';

@@ -10,7 +10,7 @@ import { Box, Card } from '@mui/material';
 import { ILivestreamItem } from '#/types/livestream';
 import Label from '#/components/label';
 import { useEffect, useState } from 'react';
-import { _mock } from '#/_mock';
+
 import Iconify from '#/components/iconify';
 
 
@@ -58,7 +58,7 @@ export default function LivestreamLatestItem({ livestream,
 
         <Box sx={{ position: "relative" }}>
           <Image
-            src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+            src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"}
             alt={title}
             ratio={(largelivestream && '3/4') ||
               // (order && '4/3') ||

@@ -4,7 +4,7 @@ const captureThumbnailFromCloudinary = (videoUrl: string, callback: (thumbnailUr
   video.src = videoUrl;
   video.preload = 'metadata';
   video.onloadeddata = () => {
-    video.currentTime = 2; // Set the time to 2 seconds
+    video.currentTime = 10; // Set the time to 2 seconds
     video.onseeked = () => {
       const canvas = document.createElement('canvas');
       canvas.width = video.videoWidth;
@@ -13,7 +13,7 @@ const captureThumbnailFromCloudinary = (videoUrl: string, callback: (thumbnailUr
       const thumbnailUrl = canvas.toDataURL();
       callback(thumbnailUrl);
     };
-    video.currentTime = 2; // Seeking may not be immediate, so set it again
+    video.currentTime = 10; // Seeking may not be immediate, so set it again
   };
 };
 export default captureThumbnailFromCloudinary;

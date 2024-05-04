@@ -2,9 +2,7 @@
 
 import MainLayout from '#/layouts/main';
 import { Container, Typography } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
 import LivestreamList from '../livestream-list';
-import { _tours } from '#/_mock';
 import { useGetLivestreams } from '#/api/livestream';
 import { useState } from 'react';
 

@@ -11,7 +11,7 @@ import { IBlogPostProps } from '#/types/blog';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
 import { INewsItem } from '#/types/news';
-import { _mock } from '#/_mock';
+
 import { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 
@@ -51,7 +51,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
     >
       <Image
         alt={cleanTitle}
-        src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"}
         sx={{
           width: 80,
           height: onSiderbar ? 48 : 80,
