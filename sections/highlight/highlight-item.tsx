@@ -15,7 +15,7 @@ import TextMaxLine from '#/components/text-max-line';
 
 import Label from '#/components/label';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
@@ -43,6 +43,7 @@ export default function HighlightItem({ video }: Props) {
       <Box
         sx={{
           position: 'relative',
+          maxHeight: '260px',
         }}
       >
         <Label sx={{
@@ -59,12 +60,12 @@ export default function HighlightItem({ video }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={title} src={videoThumbnail} ratio="1/1" />
+        <Image alt={title} src={videoThumbnail} maxWidth={{ md: "270px" }} height="172px" ratio="1/1" />
 
       </Box>
 
       <Link component={RouterLink} href={paths.highlight.details(id)} color="inherit" >
-        <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
+        <TextMaxLine sx={{ m: 2 }} variant="subtitle2" persistent>
           {title}
         </TextMaxLine>
       </Link>

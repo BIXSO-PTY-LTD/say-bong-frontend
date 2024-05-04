@@ -21,7 +21,7 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { ITourProps } from '#/types/tour';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
 import { useDeleteExcitingVideo } from '#/api/exciting-video';
 import { useCallback, useEffect, useState } from 'react';
 import { mutate } from 'swr';
@@ -118,7 +118,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
 
             }}
           >
-            <Image alt={title} src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
+            <Image alt={title} src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"} sx={{
               borderRadius: 1.5, width: 1, height: 1
 
             }} />

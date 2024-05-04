@@ -23,7 +23,7 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { IBlogPostProps } from '#/types/blog';
 import { INewsItem } from '#/types/news';
-import { _mock } from '#/_mock';
+
 import { useCallback, useEffect, useState } from 'react';
 import { useDeleteNew } from '#/api/news';
 import { mutate } from 'swr';
@@ -119,7 +119,7 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
 
             }}
           >
-            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
+            <Image alt={title} src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"} sx={{
               borderRadius: 1.5, width: 1, height: 1
 
             }} />

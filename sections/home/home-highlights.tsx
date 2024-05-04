@@ -1,20 +1,13 @@
 import Box from '@mui/material/Box';
-import Masonry from '@mui/lab/Masonry';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useResponsive } from '#/hooks/use-responsive';
-import { paths } from '#/routes/paths';
-import { RouterLink } from '#/routes/components';
-import Iconify from '#/components/iconify';
 import HomeHighlightItem from './home-highlight-item';
 import HomeHighlightMobile from './home-highlight-mobile';
 import { IVideoItem } from '#/types/video';
-import { useEffect, useState } from 'react';
 import EmptyContent from '#/components/empty-content/empty-content';
 import { LargerPostSkeleton } from '../skeletons/larger-post-skeleton';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 import { Grid } from '@mui/material';
 
 

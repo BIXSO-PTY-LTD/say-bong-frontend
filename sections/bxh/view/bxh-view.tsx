@@ -1,8 +1,7 @@
 'use client';
 
 import { Container, Typography } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
+
 import BXHList from '../bxh-list';
 import matchesData from '#/public/data/matchesData.json';
 import { useEffect, useState } from 'react';

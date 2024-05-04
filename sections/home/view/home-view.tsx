@@ -3,7 +3,6 @@
 import MainLayout from '#/layouts/main';
 import { Container, Typography } from '@mui/material';
 
-import { _careerPosts } from '#/_mock/_blog';
 import HomeHighlight from '../home-highlights';
 import HomeLastestPosts from '../home-latest-posts';
 import MatchList from '../../match/match-list';

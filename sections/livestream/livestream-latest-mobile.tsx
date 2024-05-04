@@ -10,7 +10,7 @@ import { Link } from '@mui/material';
 import { RouterLink } from '#/routes/components';
 import { ILivestreamItem } from '#/types/livestream';
 import { useEffect, useState } from 'react';
-import { _mock } from '#/_mock';
+
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: P
     >
       <Image
         alt={livestream.title}
-        src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"}
         sx={{
           width: 80,
           height: 80,

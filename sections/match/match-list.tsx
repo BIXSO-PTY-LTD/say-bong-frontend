@@ -1,18 +1,18 @@
 'use client';
 
-import { COMPETITION_SORT_OPTIONS, MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS, SCHEDULE_OPTIONS } from "#/_mock/_match";
+import { MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS, SCHEDULE_OPTIONS } from "#/_mock/_match";
 import Label from "#/components/label";
 import { IMatchFilterValue, IMatchFilters, IMatchItem } from "#/types/match";
-import { Box, Button, Pagination, Stack, Tab, Tabs, Typography, alpha, paginationClasses, useTheme } from "@mui/material";
+import { Button, Pagination, Stack, Tab, Tabs, paginationClasses, useTheme } from "@mui/material";
 import { useCallback, useState } from "react";
 import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "./match-list-horizontal";
 import { usePathname } from "next/navigation";
 import { paths } from "#/routes/paths";
-import { fDate, fTimestamp, formatStringToDateTime } from "#/utils/format-time";
+import { fDate } from "#/utils/format-time";
 import { filterLiveMatches, filterMatchByDate, filterMatchesByLeagueTitle, filterTodayMatches, filterTomorrowMatches, filterYesterdayMatches } from "#/utils/matchFilter";
 import { useFilteredMatchesCount } from "#/hooks/use-filtered-matches-count";
-import { addDays, format, subDays } from "date-fns";
+import { addDays } from "date-fns";
 import { generateOptions } from "#/utils/generate-shedule_options";
 
 // ----------------------------------------------------------------------

@@ -1,8 +1,6 @@
 'use client';
 
 import { Container, Typography } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
 import MatchList from '../match/match-list';
 import { useEffect, useState } from 'react';
 import matchesData from '#/public/data/matchesData.json';

@@ -7,7 +7,6 @@ import Container from '@mui/material/Container';
 
 
 import NewsSidebar from '../news-sidebar';
-import { _travelPosts } from '#/_mock/_blog';
 import { useGetNew, useGetNews } from '#/api/news';
 import NewsDetails from '../news-details';
 import { Skeleton } from '@mui/material';

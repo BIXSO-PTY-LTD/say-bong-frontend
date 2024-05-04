@@ -17,7 +17,7 @@ import Iconify from '#/components/iconify';
 import TextMaxLine from '#/components/text-max-line';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 
-import { _mock } from '#/_mock';
+
 import { useCallback, useEffect, useState } from 'react';
 import { useDeleteNew } from '#/api/news';
 import { mutate } from 'swr';
@@ -105,7 +105,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
               maxHeight: "107px"
             }}
           >
-            <Image alt={title} src={meta && meta.length > 0 ? meta[meta.length - 1].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
+            <Image alt={title} src={meta && meta.length > 0 ? meta[meta.length - 1].content : "/assets/images/match/background-item.jpg"} sx={{
               borderRadius: 1.5, height: 1, width: 1
             }} />
           </Box>

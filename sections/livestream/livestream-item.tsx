@@ -16,7 +16,7 @@ import TextMaxLine from '#/components/text-max-line';
 import { ITourProps } from '#/types/tour';
 import Label from '#/components/label';
 import { ILivestreamItem } from '#/types/livestream';
-import { _mock } from '#/_mock';
+
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +27,8 @@ type Props = {
 export default function LivestreamItem({ livestream }: Props) {
   const { id, title, meta } = livestream;
   const newMetaIndex = meta && meta.length > 0
-        ? meta.length - 1
-        : 0;
+    ? meta.length - 1
+    : 0;
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Box
@@ -46,8 +46,12 @@ export default function LivestreamItem({ livestream }: Props) {
 
       </Box>
 
-      <Box sx={{ position: "relative" }}>
-        <Image alt={title} src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} ratio="1/1" />
+      <Box sx={{
+        position: "relative",
+        maxHeight: '260px',
+
+      }}>
+        <Image alt={title} width="270px" height="172px" src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"} ratio="1/1" />
         <Label sx={{
           width: "30px",
           height: "30px",
@@ -65,7 +69,7 @@ export default function LivestreamItem({ livestream }: Props) {
 
 
       <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit" >
-        <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
+        <TextMaxLine sx={{ m: 2 }} variant="subtitle2" persistent>
           {title}
         </TextMaxLine>
       </Link>

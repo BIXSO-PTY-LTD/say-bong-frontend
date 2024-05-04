@@ -1,4 +1,3 @@
-import { _userList } from '#/_mock/_user';
 import { LivestreamEditView } from '#/sections/admin/livestream/view';
 
 

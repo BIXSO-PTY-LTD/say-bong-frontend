@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 
 
 
-import { _travelPosts } from '#/_mock/_blog';
 import { Skeleton, Stack } from '@mui/material';
 import { fDate } from '#/utils/format-time';
 import { INewsItem } from '#/types/news';

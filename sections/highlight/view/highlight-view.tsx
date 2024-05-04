@@ -1,8 +1,7 @@
 'use client';
 
 import { Container, Typography } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
+
 import HighlightList from '../highlight-list';
 import ExcitingHighlightList from '../exciting/exciting-highlight-list';
 import { useGetHighlightVideos } from '#/api/highlight-video';
