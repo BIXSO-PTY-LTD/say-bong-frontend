@@ -25,13 +25,23 @@ type Props = {
 export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
   const [firstImageUrl, setFirstImageUrl] = useState('');
 
+
+  const {
+    id,
+    title,
+    content,
+    createdAt,
+  } = post;
+
+  const cleanTitle = title.startsWith("*") ? title.replace("*", "") : title.startsWith("#") ? title.replace("#", "") : title
+
   useEffect(() => {
     const regex = /<img.*?src="(.*?)".*?>/;
-    const match = post.content.match(regex);
+    const match = content.match(regex);
     if (match && match[1]) {
       setFirstImageUrl(match[1]);
     }
-  }, [post.content]);
+  }, [content]);
   return (
     <Stack
       spacing={2}
@@ -40,7 +50,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
       sx={{ width: 1 }}
     >
       <Image
-        alt={post.title}
+        alt={cleanTitle}
         src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
         sx={{
           width: 80,
@@ -50,10 +60,10 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit" component={RouterLink} href={paths.news.details(post.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{post.title}</TextMaxLine>
+        <Link color="inherit" component={RouterLink} href={paths.news.details(id)}>
+          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{cleanTitle}</TextMaxLine>
         </Link>
-        <Typography variant='caption'>{fDate(post.createdAt)}</Typography>
+        <Typography variant='caption'>{fDate(createdAt)}</Typography>
       </Stack>
     </Stack>
   );

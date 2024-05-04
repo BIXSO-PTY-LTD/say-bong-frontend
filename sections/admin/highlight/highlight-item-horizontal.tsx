@@ -26,10 +26,11 @@ import { IVideoItem } from '#/types/video';
 import { _mock } from '#/_mock';
 import { useBoolean } from '#/hooks/use-boolean';
 import { mutate } from 'swr';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDeleteHighlightVideo } from '#/api/highlight-video';
 import { ConfirmDialog } from '#/components/custom-dialog';
 import { Button } from '@mui/material';
+import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,8 @@ type Props = {
 
 export default function HighlightItemHorizontal({ highlight, endpoints }: Props) {
   const popover = usePopover();
+
+  const smUp = useResponsive('up', 'sm');
 
   const confirm = useBoolean();
 
@@ -63,7 +66,17 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
     id,
     title,
     content,
+    createdAt
   } = highlight;
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
     <>
@@ -76,23 +89,41 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
         >
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
             <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {title}
+              {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.video.highlight.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {content}
+                {title}
               </TextMaxLine>
             </Link>
           </Stack>
         </Stack>
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
+        {smUp && (
+          <Box
+            sx={{
+              position: 'relative',
+              p: 1,
+              minWidth: "164px",
+              maxHeight: "107px"
 
+            }}
+          >
+            <Image alt={title} src={videoThumbnail ? videoThumbnail : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
+              borderRadius: 1.5, width: 1, height: 1
+
+            }} />
+          </Box>
+        )}
       </Stack>
 
       <CustomPopover
@@ -104,7 +135,7 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.video.highlight.details(id));
+            router.push(paths.dashboard.news.normal.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />
@@ -135,3 +166,4 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
     </>
   );
 }
+

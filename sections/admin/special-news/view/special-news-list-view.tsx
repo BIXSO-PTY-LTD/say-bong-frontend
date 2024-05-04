@@ -42,7 +42,7 @@ export default function SpecialNewsListView() {
   const paginatedSpecialNews = specialNews.slice(startIndex, endIndex);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <Stack direction="row" justifyContent="space-between" sx={{
+      <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" sx={{
         mb: { xs: 3, md: 5 }
       }}>
         <Typography variant="h3">Danh sách tin tức đặc biệt</Typography>

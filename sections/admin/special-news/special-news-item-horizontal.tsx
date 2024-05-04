@@ -93,30 +93,35 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
               {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.special.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
                 {cleanTitle}
               </TextMaxLine>
             </Link>
           </Stack>
         </Stack>
-
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
         {smUp && (
           <Box
             sx={{
               position: 'relative',
               p: 1,
-              width: "164px"
+              minWidth: "164px",
+              maxHeight: "107px"
+
             }}
           >
             <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
-              borderRadius: 1.5, height: 1
+              borderRadius: 1.5, width: 1, height: 1
+
             }} />
           </Box>
         )}
@@ -131,7 +136,7 @@ export default function SpecialNewsItemHorizontal({ item, endpoints }: Props) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.special.details(id));
+            router.push(paths.dashboard.news.normal.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />

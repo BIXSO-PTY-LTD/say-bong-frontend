@@ -94,9 +94,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
               {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
@@ -107,17 +105,24 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
             </Link>
           </Stack>
         </Stack>
-
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
         {smUp && (
           <Box
             sx={{
               position: 'relative',
               p: 1,
-              width: "164px"
+              minWidth: "164px",
+              maxHeight: "107px"
+
             }}
           >
             <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
-              borderRadius: 1.5, height: 1
+              borderRadius: 1.5, width: 1, height: 1
+
             }} />
           </Box>
         )}
