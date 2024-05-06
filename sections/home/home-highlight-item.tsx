@@ -12,7 +12,7 @@ import { Box, Card } from '@mui/material';
 import { IVideoItem } from '#/types/video';
 
 import { useEffect, useState } from 'react';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 import Label from '#/components/label';
 import Iconify from '#/components/iconify';
 
@@ -32,7 +32,7 @@ export default function HomeHighlightItem({ video,
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (video?.content) {
-      captureThumbnailFromCloudinary(video.content, (thumbnailUrl: string) => {
+      captureThumbnail(video.content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }
@@ -115,10 +115,9 @@ export default function HomeHighlightItem({ video,
         {!largePost && (
           <Stack
             spacing={largePost ? 2 : 1}
-            sx={{ mt: 2 }}
           >
             <Typography variant='caption'>{fDate(video?.createdAt)}</Typography>
-            <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+            <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
               <TextMaxLine line={2} variant="subtitle1">{video?.title}</TextMaxLine>
             </Link>
           </Stack>

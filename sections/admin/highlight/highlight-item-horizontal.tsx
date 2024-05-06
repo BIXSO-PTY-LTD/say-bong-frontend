@@ -30,7 +30,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDeleteHighlightVideo } from '#/api/highlight-video';
 import { ConfirmDialog } from '#/components/custom-dialog';
 import { Button } from '@mui/material';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }

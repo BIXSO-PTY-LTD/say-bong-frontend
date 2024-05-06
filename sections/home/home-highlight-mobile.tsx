@@ -11,7 +11,7 @@ import { RouterLink } from '#/routes/components';
 import { IVideoItem } from '#/types/video';
 
 import { useEffect, useState } from 'react';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (video?.content) {
-      captureThumbnailFromCloudinary(video.content, (thumbnailUrl: string) => {
+      captureThumbnail(video.content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }

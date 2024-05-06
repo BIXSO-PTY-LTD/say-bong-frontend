@@ -12,7 +12,7 @@ import { paths } from '#/routes/paths';
 import { IVideoItem } from '#/types/video';
 
 import { useEffect, useState } from 'react';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ export default function ExcitingLatestMobile({ video, onSiderbar }: Props) {
 
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }

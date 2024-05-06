@@ -1,4 +1,4 @@
-const captureThumbnailFromCloudinary = (videoUrl: string, callback: (thumbnailUrl: string) => void) => {
+const captureThumbnail = (videoUrl: string, callback: (thumbnailUrl: string) => void) => {
   const video = document.createElement('video');
   video.crossOrigin = 'anonymous'; // Set crossOrigin to 'anonymous' to ensure access to the video
   video.src = videoUrl;
@@ -16,4 +16,4 @@ const captureThumbnailFromCloudinary = (videoUrl: string, callback: (thumbnailUr
     video.currentTime = 10; // Seeking may not be immediate, so set it again
   };
 };
-export default captureThumbnailFromCloudinary;
+export default captureThumbnail;

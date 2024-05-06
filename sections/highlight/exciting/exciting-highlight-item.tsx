@@ -16,7 +16,7 @@ import TextMaxLine from '#/components/text-max-line';
 import { IVideoItem } from '#/types/video';
 import Label from '#/components/label';
 
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 import { Stack, Typography } from '@mui/material';
 import { fDate } from '#/utils/format-time';
 
@@ -32,7 +32,7 @@ export default function ExcitingHighlightItem({ video }: Props) {
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }
