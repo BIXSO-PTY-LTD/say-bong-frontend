@@ -28,7 +28,7 @@ import { mutate } from 'swr';
 import { ConfirmDialog } from '#/components/custom-dialog';
 import { Button } from '@mui/material';
 import { useBoolean } from '#/hooks/use-boolean';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 import { fDate } from '#/utils/format-time';
 
 // ----------------------------------------------------------------------
@@ -72,7 +72,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }

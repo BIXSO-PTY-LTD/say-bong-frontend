@@ -10,7 +10,7 @@ import { paths } from '#/routes/paths';
 import { IVideoItem } from '#/types/video';
 
 import { useEffect, useState } from 'react';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ export default function HighlightLatestMobile({ video, onSiderbar }: Props) {
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }
