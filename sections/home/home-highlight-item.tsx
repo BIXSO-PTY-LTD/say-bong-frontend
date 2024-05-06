@@ -58,9 +58,9 @@ export default function HomeHighlightItem({ video,
             ratio='1/1'
             sx={{
               filter: "brightness(0.7)",
-              height: "120px",
+              height: "122px",
               ...(largePost && {
-                height: "280px"
+                height: "260px"
               }),
             }}
           />
