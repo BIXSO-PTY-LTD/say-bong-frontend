@@ -58,7 +58,8 @@ export default function HomeHighlightItem({ video,
             ratio='1/1'
             sx={{
               filter: "brightness(0.7)",
-              height: "122px",
+              objectFit: "cover",
+              height: "160px",
               ...(largePost && {
                 height: "260px"
               }),
@@ -79,8 +80,8 @@ export default function HomeHighlightItem({ video,
               >
                 <Label sx={{
                   width: "30px",
+                  ml: 1,
                   height: "30px",
-
                   borderRadius: "100%"
                 }} variant='filled' color='default'>
                   <Iconify icon="solar:play-bold" width="10px" height="10px" color="#01B243" />

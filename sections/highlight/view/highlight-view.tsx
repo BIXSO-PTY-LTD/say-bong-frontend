@@ -20,6 +20,14 @@ export default function HighlightView() {
 
   const { excitingVideos, excitingVideosLoading, excitingVideosEmpty, paginate: excitingPaginate } = useGetExcitingVideos(currentPageExciting, 8);
 
+  const sortedHighlightVideos = [...highlightVideos].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  const sortedExcitingVideos = [...excitingVideos].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   const handlePageChangeHighlight = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPageHighlight(page);
   };
@@ -31,7 +39,7 @@ export default function HighlightView() {
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList
-        videos={highlightVideos}
+        videos={sortedHighlightVideos}
         loading={highlightVideosLoading}
         empty={highlightVideosEmpty}
         paginate={highlightPaginate}
@@ -40,7 +48,7 @@ export default function HighlightView() {
       />
 
       <ExcitingHighlightList
-        videos={excitingVideos}
+        videos={sortedExcitingVideos}
         loading={excitingVideosLoading}
         empty={excitingVideosEmpty}
         paginate={excitingPaginate}
