@@ -55,10 +55,12 @@ export default function NewsItem({ post, transparent
 
         <Stack
           spacing={1}
+          sx={{ mt: 2 }}
+
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant='h5'>{cleanTitle}</TextMaxLine>
+          <Typography variant='caption'>{fDate(post.createdAt)}</Typography>
+          <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
+            <TextMaxLine line={2} variant='subtitle1'>{cleanTitle}</TextMaxLine>
           </Link>
 
 

@@ -38,7 +38,7 @@ export default function ExcitingLatestItem({ video,
     }
   }, [content]);
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Card sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
