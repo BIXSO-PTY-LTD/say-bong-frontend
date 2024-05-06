@@ -41,7 +41,7 @@ function Container({ children }: Props) {
       router.replace("/");
       enqueueSnackbar("Bạn chưa đăng nhập hoặc tài khoản phải có quyền admin", {
         variant: 'error',
-        autoHideDuration: 3000
+        autoHideDuration: 5000
       });
     } else {
       setChecked(true);
