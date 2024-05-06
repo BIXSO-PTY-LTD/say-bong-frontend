@@ -80,11 +80,12 @@ export default function HomeLatestPostItem({ post, transparent,
               position: 'absolute',
               color: 'common.white',
             }),
+            mt: 2
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{cleanTitle}</TextMaxLine>
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.news.details(id)} color="inherit">
+            <TextMaxLine line={2} variant='subtitle1'>{cleanTitle}</TextMaxLine>
           </Link>
 
 

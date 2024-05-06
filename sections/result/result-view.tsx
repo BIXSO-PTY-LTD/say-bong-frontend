@@ -13,28 +13,28 @@ import resposneData from '#/public/responseData.json'
 
 export default function ResultView() {
   const [matches, setMatches] = useState<IMatchItem[]>([]);
-  // useEffect(() => {
-  //   if (resposneData) {
-  //     setMatches(resposneData.data.list)
-  //   }
-  // }, [])
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = QueryString.stringify({
-          'type': '1'
-        });
-        const response = await axiosSoccer.post(SOCCER_API as string, data);
-        // Handle success
-        setMatches(response.data.data.list);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+    }
+  }, [])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = QueryString.stringify({
+  //         'type': '1'
+  //       });
+  //       const response = await axiosSoccer.post(SOCCER_API as string, data);
+  //       // Handle success
+  //       setMatches(response.data.data.list);
+  //     } catch (error) {
+  //       // Handle error
+  //       console.error(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
   return (
     <Container>
       <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">Kết quả</Typography>

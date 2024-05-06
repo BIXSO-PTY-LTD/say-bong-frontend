@@ -41,7 +41,7 @@ export default function HomeHighlightItem({ video,
     <Box sx={{
       width: '100%',
       minHeight: '210px',
-      background: theme => theme.palette.grey[800],
+      background: "transparent",
     }}>
       <Stack
         spacing={2}
@@ -115,10 +115,11 @@ export default function HomeHighlightItem({ video,
         {!largePost && (
           <Stack
             spacing={largePost ? 2 : 1}
+            sx={{ mt: 2 }}
           >
-            <Typography sx={{ px: 1 }} variant='caption'>{fDate(video?.createdAt)}</Typography>
-            <Link sx={{ px: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
-              <TextMaxLine line={2} variant="subtitle2">{video?.title}</TextMaxLine>
+            <Typography variant='caption'>{fDate(video?.createdAt)}</Typography>
+            <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+              <TextMaxLine line={2} variant="subtitle1">{video?.title}</TextMaxLine>
             </Link>
           </Stack>
         )}

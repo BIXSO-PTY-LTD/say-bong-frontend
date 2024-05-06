@@ -17,6 +17,8 @@ import { IVideoItem } from '#/types/video';
 import Label from '#/components/label';
 
 import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import { Stack, Typography } from '@mui/material';
+import { fDate } from '#/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +39,7 @@ export default function ExcitingHighlightItem({ video }: Props) {
   }, [content]);
 
   return (
-    <Box sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Box
         sx={{
           position: 'relative',
@@ -65,12 +67,14 @@ export default function ExcitingHighlightItem({ video }: Props) {
 
 
 
-
-      <Link component={RouterLink} href={paths.exciting.details(id)} color="inherit" >
-        <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
-          {title}
-        </TextMaxLine>
-      </Link>
+      <Stack sx={{ mt: 2 }}>
+        <Typography variant='caption'>{fDate(video?.createdAt)}</Typography>
+        <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.exciting.details(id)} color="inherit" >
+          <TextMaxLine line={2} variant="subtitle1" persistent>
+            {title}
+          </TextMaxLine>
+        </Link>
+      </Stack>
     </Box>
   );
 }

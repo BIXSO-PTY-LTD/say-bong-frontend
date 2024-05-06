@@ -44,7 +44,7 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
     {mdUp ? (
       <>
         {posts.slice(0, 4).map((post, index) => (
-          <HomeLatestPostItem key={post.id} post={post}
+          <HomeLatestPostItem transparent key={post.id} post={post}
           // order={index % 2}
           />
         ))}
