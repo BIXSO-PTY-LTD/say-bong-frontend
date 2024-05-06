@@ -2,19 +2,18 @@ import Image from '#/components/image';
 import TextMaxLine from '#/components/text-max-line';
 import { RouterLink } from '#/routes/components';
 import { paths } from '#/routes/paths';
-import { IBlogPostProps } from '#/types/blog';
 import { fDate } from '#/utils/format-time';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
-import { Box, Card } from '@mui/material';
+import { Box } from '@mui/material';
 import { IVideoItem } from '#/types/video';
 
 import { useEffect, useState } from 'react';
 import captureThumbnail from '#/utils/capturethumbnail';
 import Label from '#/components/label';
 import Iconify from '#/components/iconify';
+import { useRouter } from 'next/navigation';
 
 
 // ----------------------------------------------------------------------
@@ -29,6 +28,7 @@ type Props = {
 export default function HomeHighlightItem({ video,
   //  order,
   largePost }: Props) {
+  const router = useRouter()
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
   useEffect(() => {
     if (video?.content) {
