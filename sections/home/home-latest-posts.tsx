@@ -60,7 +60,7 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
   </Box>
   </>
   return (
-    <Container
+    <Box
       sx={{
         pt: { xs: 5, md: 10 },
         pb: 10,
@@ -90,6 +90,6 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
         renderList
       )}
 
-    </Container>
+    </Box>
   );
 }

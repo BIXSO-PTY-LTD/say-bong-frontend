@@ -22,10 +22,13 @@ export default function NewsView() {
   const [specialNews, setSpecialNews] = useState<INewsItem[]>([])
 
   useEffect(() => {
-    setSpecialNews(news.filter(item => item.title.startsWith("*")))
-    setNormalNews(news.filter(item => item.title.startsWith("#")))
-  }, [news])
-
+    // Sort news by createdAt
+    const sortedNews = [...news].sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+    setSpecialNews(sortedNews.filter(item => item.title.startsWith("*")));
+    setNormalNews(sortedNews.filter(item => item.title.startsWith("#")));
+  }, [news]);
   // Paginate normalNews
   const normalStartIndex = (currentNormalPage - 1) * 6;
   const normalEndIndex = normalStartIndex + 6;

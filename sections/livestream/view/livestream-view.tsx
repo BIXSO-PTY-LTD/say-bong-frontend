@@ -15,11 +15,14 @@ export default function LivestreamView() {
     setCurrentPage(page);
   };
   const { livestreams, livestreamsLoading, paginate, livestreamsEmpty } = useGetLivestreams(currentPage, 12)
+  const sortedLivestreams = [...livestreams].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
   return (
     <Container>
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">LIVESTREAM</Typography>
       <LivestreamList
-        livestreams={livestreams}
+        livestreams={sortedLivestreams}
         loading={livestreamsLoading}
         paginate={paginate}
         handlePageChange={handlePageChange}

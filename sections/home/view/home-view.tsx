@@ -22,7 +22,12 @@ export default function HomeView() {
   const { news, newsLoading, newsEmpty } = useGetNews(1, 100)
   const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 100);
   const [matches, setMatches] = useState<IMatchItem[]>([]);
-
+  const sortedHighlightVideos = [...highlightVideos].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+  const sortedNews = [...news].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
   useEffect(() => {
     if (resposneData) {
       setMatches(resposneData.data.list)
@@ -51,8 +56,8 @@ export default function HomeView() {
         <Typography sx={{ textTransform: "uppercase", mt: "40px" }} variant="h3">Trực tiếp bóng đá</Typography>
         <MatchList matches={matches} />
 
-        <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={highlightVideos} />
-        <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={news} />
+        <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={sortedHighlightVideos} />
+        <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={sortedNews} />
       </Container>
     </MainLayout>
   );
