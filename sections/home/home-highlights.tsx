@@ -77,7 +77,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
           <Box
             sx={{
               display: 'grid',
-              gap: { xs: 3, md: 4 },
+              gap: { xs: 1, md: 2 },
               gridTemplateColumns: {
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(2, 1fr)',
@@ -95,7 +95,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
   );
 
   return (
-    <Container
+    <Box
       sx={{
         pt: { xs: 5, md: 10 },
         pb: 10,
@@ -127,6 +127,6 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
 
 
 
-    </Container>
+    </Box>
   );
 }
