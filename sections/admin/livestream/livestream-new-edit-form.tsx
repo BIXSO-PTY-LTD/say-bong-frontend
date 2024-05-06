@@ -107,7 +107,6 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
         }];
 
       } else {
-        delete data.metas
         data.metas = []
       }
 
