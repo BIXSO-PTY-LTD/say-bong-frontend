@@ -96,7 +96,7 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.video.highlight.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
                 {title}
               </TextMaxLine>
@@ -135,7 +135,7 @@ export default function HighlightItemHorizontal({ highlight, endpoints }: Props)
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.normal.details(id));
+            router.push(paths.dashboard.video.highlight.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />

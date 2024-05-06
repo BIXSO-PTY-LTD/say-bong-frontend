@@ -70,8 +70,8 @@ export default function ExcitingLatestItem({ video,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.exciting.details(id)} color="inherit">
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.exciting.details(id)} color="inherit">
             <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{title}</TextMaxLine>
           </Link>
 

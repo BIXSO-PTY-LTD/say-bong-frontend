@@ -1,3 +1,5 @@
+import { HOST_API } from "#/config-global";
+
 export const extractBase64Src = (content: string) => {
   const imgSrcRegex = /data:image\/(?:png|jpeg|jpg|gif);base64,([^'"]+)/g;
   const base64SrcArray = [];
@@ -31,4 +33,12 @@ export function base64ToFiles(base64Array: string[]) {
   }
 
   return filesArray;
+}
+
+export function updateContentUrls(content: string, base64Array: string[], fileNames: string[]) {
+  let updatedContent = content;
+  base64Array.forEach((base64String, index) => {
+    updatedContent = updatedContent.replace(base64String, `${HOST_API}/api/v1/${fileNames[index]}`);
+  });
+  return updatedContent;
 }
