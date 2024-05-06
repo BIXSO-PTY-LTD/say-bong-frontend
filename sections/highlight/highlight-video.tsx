@@ -20,7 +20,7 @@ export default function HighlightVideo({ currentVideo, loading }: Props) {
       {loading ? (
         <Skeleton variant="rectangular" height="500px" />
       ) : (
-        <Player height="1080px" width="1920px" controls url={currentVideo?.content} />
+        <Player controls url={currentVideo?.content} />
 
       )}
 

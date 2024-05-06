@@ -30,7 +30,7 @@ export default function LivestreamLatestItem({ livestream,
     ? meta.length - 1
     : 0;
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
@@ -93,14 +93,14 @@ export default function LivestreamLatestItem({ livestream,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.livestream.details(id)} color="inherit">
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit">
             <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{title}</TextMaxLine>
           </Link>
 
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

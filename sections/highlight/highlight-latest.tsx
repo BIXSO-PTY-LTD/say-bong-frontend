@@ -60,6 +60,7 @@ export default function HighlightLatest({ highlightVideos }: Props) {
         sx={{
           display: 'grid',
           gap: { xs: 3, md: 4 },
+          mb: 2,
           gridTemplateColumns: {
             xs: 'repeat(1, 1fr)',
             sm: 'repeat(2, 1fr)',

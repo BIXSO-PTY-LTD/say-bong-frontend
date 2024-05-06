@@ -29,7 +29,7 @@ import { useCreateNews, useUpdateNew } from '#/api/news';
 import { INewsItem } from '#/types/news';
 import { useUpload } from '#/api/upload';
 import { HOST_API } from '#/config-global';
-import { base64ToFiles, extractBase64Src } from '#/utils/format-image';
+import { base64ToFiles, extractBase64Src, updateContentUrls } from '#/utils/format-image';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +38,8 @@ type Props = {
 };
 
 export default function SpecialNewsNewEditForm({ currentNew }: Props) {
+  console.log(currentNew);
+
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -88,33 +90,25 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
   const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (data.title.startsWith("*")) {
-        return data.title;
-      } else {
-        data.title = `*${data.title}`
+      if (!data.title.startsWith("*")) {
+        data.title = `*${data.title}`;
       }
+
       if (data.content.includes('data:image')) {
-        const base64Array = extractBase64Src(data.content);
+        const base64Array: string[] = extractBase64Src(data.content);
+        const filesArray: File[] = base64ToFiles(base64Array);
+        const FilesContent: any[] = await upload(filesArray);
+        const fileNames: string[] = FilesContent.map((file: any) => file.filename);
 
-        const filesArray = base64ToFiles(base64Array);
-
-        const FilesContent = await upload(filesArray)
-        const fileNames = FilesContent.map((file: any) => file.filename);
-
-        let updatedContent = data.content;
-
-        base64Array.forEach((base64String, index) => {
-          updatedContent = updatedContent.replace(base64String, `${HOST_API}/api/v1/${fileNames[index]}`);
-        });
-
-        data.content = updatedContent;
-
+        data.content = updateContentUrls(data.content, base64Array, fileNames);
       }
+
       if (currentNew) {
         await updateNew(data);
       } else {
         await createNews(data);
       }
+
       mutate(endpoints.news);
       enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.news.special.root);
@@ -122,7 +116,6 @@ export default function SpecialNewsNewEditForm({ currentNew }: Props) {
     } catch (error: any) {
       console.error(error);
       setErrorMsg(error.message);
-
     }
   });
 

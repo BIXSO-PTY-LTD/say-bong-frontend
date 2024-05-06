@@ -8,7 +8,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 
 import { IVideoItem } from '#/types/video';
 import { useEffect, useState } from 'react';
@@ -38,7 +38,7 @@ export default function HighlightLatestItem({ video,
   }, [content]);
 
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
@@ -70,14 +70,14 @@ export default function HighlightLatestItem({ video,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{title}</TextMaxLine>
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.highlight.details(id)} color="inherit">
+            <TextMaxLine line={2} variant="subtitle1">{title}</TextMaxLine>
           </Link>
 
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }
