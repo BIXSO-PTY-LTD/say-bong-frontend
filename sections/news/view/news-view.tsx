@@ -44,9 +44,10 @@ export default function NewsView() {
         mt: 10,
       }}
     >
-      <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Tin tức bóng đá</Typography>
       <Grid container columnSpacing={{ xs: 0, md: 8 }} >
         <Grid xs={12} md={8}>
+          <Typography sx={{ textTransform: "uppercase", mb: 8 }} variant="h3">Tin tức bóng đá</Typography>
+
           <NewsPosts paginateNews={specialNews} news={paginatedSpecialNews} currentPage={currentSpecialPage} setCurrentPage={setCurrentSpecialPage} loading={newsLoading} empty={newsEmpty} />
           <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Tin tức nhận định</Typography>
 

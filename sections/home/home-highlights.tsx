@@ -30,21 +30,22 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
   const renderList = (
     <>
       {mdUp ? (
-        <Box
-          sx={{
-            display: 'grid',
-            gap: { xs: 1, md: 2 },
-            gridTemplateColumns: {
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(12, 1fr)',
-            },
-          }}
-        >
-          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 5' } }}>
+        <>
+          <Stack direction="row" gap={2} justifyContent="center" width="100%">
+            <Box width="38%" sx={{ mb: 5 }}>
+              <HomeHighlightItem video={latestVideo} largePost />
+            </Box>
+            <Stack width="62%" gap={2} direction="row">
+              {highlightVideos.slice(1, 4).map((video) => (
+                <HomeHighlightItem key={video.id} video={video} />
+
+              ))}
+            </Stack>
+          </Stack>
+          {/* <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
             <HomeHighlightItem video={latestVideo} largePost />
           </Box>
-          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 7' } }}>
+          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 8' } }}>
             <Grid container spacing={2}>
               {highlightVideos.slice(1, 4).map((video) => (
                 <Grid key={video.id} item xs={12} md={4}>
@@ -52,26 +53,30 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
                 </Grid>
               ))}
             </Grid>
+          </Box> */}
+          <Box
+            sx={{
+              display: 'grid',
+              gap: { xs: 1, md: 2 },
+              gridTemplateColumns: {
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(12, 1fr)',
+              },
+            }}
+          >
+            <Box sx={{ gridColumn: { xs: 'span 12' } }}>
+              <Grid container spacing={2}>
+                {highlightVideos.slice(5, 9).map((video) => (
+                  <Grid key={video.id} item xs={12} md={3}>
+                    <HomeHighlightItem video={video} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+
           </Box>
-          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 5' } }}>
-            <Grid container spacing={2}>
-              {highlightVideos.slice(5, 7).map((video) => (
-                <Grid key={video.id} item xs={12} md={6}>
-                  <HomeHighlightItem video={video} />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-          <Box sx={{ gridColumn: { xs: 'span 12', md: 'span 7' } }}>
-            <Grid container spacing={2}>
-              {highlightVideos.slice(8, 11).map((video) => (
-                <Grid key={video.id} item xs={12} md={4}>
-                  <HomeHighlightItem video={video} />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </Box>
+        </>
       ) : (
         <>
           <Box
