@@ -59,6 +59,7 @@ export default function LivestreamLatestItem({ livestream,
         <Box sx={{ position: "relative" }}>
           <Image
             src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"}
+            maxHeight="170px"
             alt={title}
             ratio={(largelivestream && '3/4') ||
               // (order && '4/3') ||
