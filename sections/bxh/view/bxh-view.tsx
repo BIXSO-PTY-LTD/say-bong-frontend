@@ -39,7 +39,7 @@ export default function BXHView() {
   //   fetchData();
   // }, []);
   return (
-    <Container>
+    <Container maxWidth="xl">
 
       <BXHList matches={matches} />
 

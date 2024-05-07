@@ -77,7 +77,7 @@ export default function BXHList({ matches }: Props) {
           //
           competitionOptions={COMPETITION_OPTIONS} />
       </Stack>
-      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "lg" }}>
+      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "xl" }}>
 
 
         <Box sx={{ overflow: 'auto' }} >

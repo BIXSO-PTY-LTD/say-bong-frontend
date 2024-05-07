@@ -62,7 +62,7 @@ export default function HighlightItem({ video }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={title} src={videoThumbnail} maxWidth={{ md: "270px" }} height="172px" ratio="1/1" />
+        <Image alt={title} src={videoThumbnail} height="172px" ratio="1/1" />
 
       </Stack>
       <Stack sx={{ mt: 2 }}>

@@ -112,7 +112,7 @@ export default function Header() {
 
           }}
         >
-          <Container
+          <Container maxWidth="xl"
             sx={{
               height: 1,
               display: 'flex',

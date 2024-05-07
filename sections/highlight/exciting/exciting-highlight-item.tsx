@@ -61,7 +61,7 @@ export default function ExcitingHighlightItem({ video }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={title} src={videoThumbnail} ratio="1/1" width="270px" height="172px" />
+        <Image alt={title} src={videoThumbnail} ratio="1/1" height="172px" />
 
       </Box>
 

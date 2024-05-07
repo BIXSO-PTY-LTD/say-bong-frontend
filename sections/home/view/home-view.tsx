@@ -52,7 +52,7 @@ export default function HomeView() {
   // }, []);
   return (
     <MainLayout>
-      <Container>
+      <Container maxWidth="xl">
         <Typography sx={{ textTransform: "uppercase", mt: "40px" }} variant="h3">Trực tiếp bóng đá</Typography>
         <MatchList matches={matches} />
 
