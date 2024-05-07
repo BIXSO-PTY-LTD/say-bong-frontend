@@ -36,7 +36,7 @@ export default function ScheduleView() {
   //   fetchData();
   // }, []);
   return (
-    <Container style={{ maxWidth: "1330px" }}>
+    <Container style={{ maxWidth: "1330px", padding: "0" }}>
       <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">lịch thi đấu</Typography>
       <MatchList matches={matches} />
     </Container>

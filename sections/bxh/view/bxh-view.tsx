@@ -39,7 +39,7 @@ export default function BXHView() {
   //   fetchData();
   // }, []);
   return (
-    <Container style={{ maxWidth: "1330px" }}>
+    <Container style={{ maxWidth: "1330px", padding: "0" }}>
 
 
       <BXHList matches={matches} />
