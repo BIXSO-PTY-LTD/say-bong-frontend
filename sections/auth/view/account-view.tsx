@@ -17,7 +17,7 @@ export default function AccountView() {
 
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Tài khoản</Typography>
       <AccountEditForm currentUser={user} />
     </Container>

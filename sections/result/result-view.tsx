@@ -36,7 +36,7 @@ export default function ResultView() {
   //   fetchData();
   // }, []);
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">Kết quả</Typography>
       <MatchList matches={matches} />
 

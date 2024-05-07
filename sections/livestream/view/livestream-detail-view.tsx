@@ -21,7 +21,7 @@ export default function LivestreamDetailView({ id }: Props) {
   const filteredLivestreams = currentLivestream ? livestreams.filter(livestream => livestream.id !== currentLivestream.id) : livestreams;
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Stack direction="column">
         <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
         <Grid container spacing={{ xs: 1 }}>
@@ -38,7 +38,7 @@ export default function LivestreamDetailView({ id }: Props) {
             <>
               <Grid item xs={12} md={9}>
                 <LivestreamVideo currentLivestream={currentLivestream} />
-               
+
               </Grid>
               <Grid item xs={12} md={3}>
                 <LivestreamChatView currentLivestream={currentLivestream} />

@@ -36,7 +36,7 @@ export default function HighlightView() {
     setCurrentPageExciting(page);
   };
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList
         videos={sortedHighlightVideos}

@@ -16,7 +16,7 @@ export default function HighlightDetailView({ id }: Props) {
   const filteredHighlights = currentVideo ? highlightVideos.filter(video => video.id !== currentVideo.id) : highlightVideos;
 
   return (
-    <Container>
+    <Container maxWidth="xl">
 
       <Stack direction="column">
 

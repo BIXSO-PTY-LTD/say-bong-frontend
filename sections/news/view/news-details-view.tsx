@@ -23,7 +23,7 @@ export default function NewsDetailsView({ id }: Props) {
   const filteredNews = news.filter((item) => item.id !== id)
   return (
     <>
-      <Container sx={{ mt: 5 }}>
+      <Container maxWidth="xl" sx={{ mt: 5 }}>
         <Grid container columnSpacing={{ xs: 0, md: 8 }} >
           <Grid xs={12} md={8}>
             <NewsDetails currentPost={currentPost} loading={newLoading} />

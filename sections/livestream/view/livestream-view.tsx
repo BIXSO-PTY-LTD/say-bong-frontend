@@ -19,7 +19,7 @@ export default function LivestreamView() {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">LIVESTREAM</Typography>
       <LivestreamList
         livestreams={sortedLivestreams}
