@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 
 import AccountEditForm from '../account-edit-form';
 import { useAuthContext } from '#/auth/hooks';
