@@ -36,7 +36,7 @@ export default function HighlightView() {
     setCurrentPageExciting(page);
   };
   return (
-    <Container style={{ maxWidth: "1330px" }}>
+    <Container style={{ maxWidth: "1330px", padding: "0" }}>
 
       <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList

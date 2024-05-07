@@ -39,7 +39,7 @@ export default function NewsView() {
   const specialEndIndex = specialStartIndex + 6;
   const paginatedSpecialNews = specialNews.slice(specialStartIndex, specialEndIndex);
   return (
-    <Container style={{ maxWidth: "1330px" }}
+    <Container style={{ maxWidth: "1330px", padding: "0" }}
       sx={{
         mt: 10,
       }}

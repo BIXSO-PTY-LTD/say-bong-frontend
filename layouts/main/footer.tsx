@@ -27,7 +27,7 @@ export default function Footer() {
 
   const mainFooter = (
     <>
-     <Container style={{ maxWidth: "1330px" }}
+      <Container style={{ maxWidth: "1330px", padding: "0" }}
         sx={{
           overflow: 'hidden',
           py: { xs: 8, md: 10 },

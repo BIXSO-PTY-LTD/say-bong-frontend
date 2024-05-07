@@ -15,7 +15,7 @@ export default function CompactLayout({ children }: Props) {
     <>
       <Header />
 
-      <Container style={{ maxWidth: "1330px" }} component="main">
+      <Container style={{ maxWidth: "1330px", padding: "0" }} component="main">
         <Stack
           sx={{
             py: 12,
