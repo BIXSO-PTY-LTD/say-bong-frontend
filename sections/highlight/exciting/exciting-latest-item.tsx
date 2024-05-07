@@ -43,7 +43,6 @@ export default function ExcitingLatestItem({ video,
         spacing={2}
         sx={{
           ...(largePost && {
-            borderRadius: 2,
             overflow: 'hidden',
             position: 'relative',
           }),
@@ -51,6 +50,7 @@ export default function ExcitingLatestItem({ video,
       >
         <Image
           src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
+          maxHeight="170px"
           alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
