@@ -23,13 +23,14 @@ type Props = {
   // order?: number;
   largePost?: boolean;
   loading?: boolean;
+  small?: boolean
 };
 
-export default function HomeHighlightItem({ video,
-  //  order,
-  largePost }: Props) {
-  const router = useRouter()
+
+export default function HomeHighlightItem({ video, largePost, small }: Props) {
+  const router = useRouter();
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+
   useEffect(() => {
     if (video?.content) {
       captureThumbnail(video.content, (thumbnailUrl: string) => {
@@ -37,93 +38,45 @@ export default function HomeHighlightItem({ video,
       });
     }
   }, [video]);
+
   return (
-    <Box sx={{
-      width: '100%',
-      minHeight: '210px',
-      background: "transparent",
-    }}>
-      <Stack
-        spacing={2}
-        sx={{
-          ...(largePost && {
-            overflow: 'hidden',
-          }),
-        }}
-      >
+    <Box sx={{ width: '100%', minHeight: '210px', background: "transparent" }}>
+      <Stack spacing={2} sx={{ overflow: largePost ? 'hidden' : 'visible' }}>
         <Box sx={{ position: "relative" }}>
           <Image
-            src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
+            src={videoThumbnail || "/assets/images/match/background-item.jpg"}
             alt={video?.title}
             ratio='1/1'
             sx={{
               filter: "brightness(0.7)",
               objectFit: "cover",
-              height: "160px",
-              ...(largePost && {
-                height: "260px"
-              }),
+              height: largePost ? "280px" :small? "157px" :"192px",
             }}
           />
           {largePost && (
-            <>
-              <Stack
-                spacing={2}
-                sx={{
-                  ml: 1,
-                  mb: 1,
-                  left: 0,
-                  bottom: 0,
-                  zIndex: 9,
-                  position: 'absolute',
-                }}
-              >
-                <Label sx={{
-                  width: "30px",
-                  ml: 1,
-                  height: "30px",
-                  borderRadius: "100%"
-                }} variant='filled' color='default'>
-                  <Iconify icon="solar:play-bold" width="10px" height="10px" color="#01B243" />
-                </Label>
-                <Typography sx={{ px: 1 }} variant='caption'>{fDate(video?.createdAt)}</Typography>
-                <Link sx={{ px: 1 }} component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
-                  <TextMaxLine line={2} variant="subtitle2">{video?.title}</TextMaxLine>
-                </Link>
-
-              </Stack>
-
-            </>
+            <Stack spacing={1} sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 9, background: 'rgba(0,0,0,0.8)', width: "100%", padding: { xs: 0, xl: "20px" } }}>
+              <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
+                <TextMaxLine line={1} variant="h6">{video?.title}</TextMaxLine>
+              </Link>
+              <Typography variant='body2' color="text.secondary">Ngày đăng: {fDate(video?.createdAt)}</Typography>
+            </Stack>
           )}
 
           {!largePost && (
-            <Label sx={{
-              width: "30px",
-              height: "30px",
-              ml: 1,
-              mb: 1,
-              left: 0,
-              bottom: 0,
-              zIndex: 9,
-              position: 'absolute',
-              borderRadius: "100%"
-            }} variant='filled' color='default'>
+            <Label sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 9, borderRadius: "100%", ml: 1, mb: 1 }} variant='filled' color='default'>
               <Iconify icon="solar:play-bold" width="10px" height="10px" color="#01B243" />
             </Label>
           )}
-
         </Box>
+
         {!largePost && (
-          <Stack
-            spacing={largePost ? 2 : 1}
-          >
-            <Typography variant='caption'>{fDate(video?.createdAt)}</Typography>
+          <Stack spacing={1}>
             <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
               <TextMaxLine line={2} variant="subtitle1">{video?.title}</TextMaxLine>
             </Link>
+            <Typography variant='caption' color="text.secondary">{fDate(video?.createdAt)}</Typography>
           </Stack>
         )}
-
       </Stack>
     </Box>
   );

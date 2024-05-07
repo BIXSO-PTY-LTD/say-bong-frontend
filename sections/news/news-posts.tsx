@@ -28,12 +28,12 @@ export default function NewsPosts({ news, paginateNews, setCurrentPage, currentP
   const renderList = (
     <Box
       sx={{
-        columnGap: 4,
+        columnGap: 2.5,
         display: 'grid',
         rowGap: { xs: 4, md: 5 },
         gridTemplateColumns: {
           xs: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
+          sm: 'repeat(3, 1fr)',
         },
       }}
     >

@@ -42,12 +42,13 @@ export default function NewsItem({ post, transparent
     <Box sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800], boxShadow: "none" }}>
       <Stack
         spacing={2}
+        width="290px"
       >
         <Image
           src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"}
           alt={post.title}
           sx={{
-            height: "200px",
+            height: "180px",
             objectFit: "cover"
           }}
 

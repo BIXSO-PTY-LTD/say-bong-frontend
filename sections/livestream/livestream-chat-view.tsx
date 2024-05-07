@@ -9,9 +9,9 @@ import RegisterDialog from "../auth/register-dialog";
 import { ILivestreamItem } from "#/types/livestream";
 import { useGetLivestreamComments } from "#/api/chat";
 import { IAuthor, ICommentItem } from "#/types/chat";
-import { Socket } from "socket.io-client";
 import io from "socket.io-client";
 import { mutate } from "swr";
+import Image from "#/components/image";
 
 type Props = {
   currentLivestream?: ILivestreamItem;
@@ -65,13 +65,14 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
   }, [currentLivestream?.id, endpoint, user?.id]);
 
   const renderHead = (
-    <Stack direction="row" alignItems="center" flexShrink={0} sx={{ pr: 1, pl: 1, py: 1, minHeight: 0 }}>
+    <Stack direction="row" alignItems="center" flexShrink={0} sx={{ px: 2, py: 2, background: "#141622", border: "1px solid #1B1D29" }}>
+      <Image alt="chat-elipse" src="/assets/icons/chat/chat-elipse.svg" sx={{ mr: "13px", pb: 0.5 }} />
       Chat
-    </Stack>
+    </Stack >
   );
 
   const renderMessages = (
-    <Stack sx={{ width: 1, height: 1, overflow: "hidden" }}>
+    <Stack sx={{ width: 1, height: 1, overflow: "hidden", background: "rgba(145, 158, 171, 0.08)" }}>
       <ChatMessageList comments={comments} authors={authors} />
       {user ? (
         <ChatMessageInput currentLivestreamId={currentLivestream?.id} userId={user?.id} />
@@ -88,7 +89,7 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
 
   return (
     <>
-      <Stack sx={{ width: 1, height: "530px", overflow: "hidden" }}>
+      <Stack sx={{ width: "343px", height: "524px", overflow: "hidden", position: "relative" }}>
         {renderHead}
         <Stack direction="row" sx={{ width: 1, height: 1, overflow: "hidden", borderTop: (theme) => `solid 1px ${theme.palette.divider}` }}>
           {renderMessages}

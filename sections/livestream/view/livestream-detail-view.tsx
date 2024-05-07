@@ -24,7 +24,7 @@ export default function LivestreamDetailView({ id }: Props) {
     <Container style={{ maxWidth: "1330px", padding: "0" }}>
       <Stack direction="column">
         <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
-        <Grid container spacing={{ xs: 1 }}>
+        <Grid container spacing={4}>
           {livestreamLoading ? (
             <>
               <Grid item xs={12} md={9} >
