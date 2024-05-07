@@ -36,7 +36,7 @@ export default function HighlightView() {
     setCurrentPageExciting(page);
   };
   return (
-    <Box maxWidth="1330px" margin="0 auto">
+    <Container style={{ maxWidth: "1330px" }}>
 
       <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList
@@ -55,6 +55,6 @@ export default function HighlightView() {
         paginate={excitingPaginate}
         handlePageChange={handlePageChangeExciting}
         currentPage={currentPageExciting} />
-    </Box>
+    </Container>
   );
 }

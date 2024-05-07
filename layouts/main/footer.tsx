@@ -27,7 +27,7 @@ export default function Footer() {
 
   const mainFooter = (
     <>
-      <Box maxWidth="1330px" margin="0 auto"
+     <Container style={{ maxWidth: "1330px" }}
         sx={{
           overflow: 'hidden',
           py: { xs: 8, md: 10 },
@@ -72,7 +72,7 @@ export default function Footer() {
             )}
           </Grid>
         </Grid>
-      </Box>
+      </Container>
 
 
 

@@ -15,7 +15,7 @@ export default function CompactLayout({ children }: Props) {
     <>
       <Header />
 
-      <Box maxWidth="1330px" margin="0 auto" component="main">
+      <Container style={{ maxWidth: "1330px" }} component="main">
         <Stack
           sx={{
             py: 12,
@@ -28,7 +28,7 @@ export default function CompactLayout({ children }: Props) {
         >
           {children}
         </Stack>
-      </Box>
+      </Container>
     </>
   );
 }

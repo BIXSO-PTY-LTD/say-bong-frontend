@@ -52,13 +52,13 @@ export default function HomeView() {
   // }, []);
   return (
     <MainLayout>
-      <Box maxWidth="1330px" margin="0 auto">
+      <Container style={{ maxWidth: "1330px" }}>
         <Typography sx={{ textTransform: "uppercase", mt: "40px" }} variant="h3">Trực tiếp bóng đá</Typography>
         <MatchList matches={matches} />
 
         <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={sortedHighlightVideos} />
         <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={sortedNews} />
-      </Box>
+      </Container>
     </MainLayout>
   );
 }
