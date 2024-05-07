@@ -39,11 +39,11 @@ export default function BXHView() {
   //   fetchData();
   // }, []);
   return (
-    <Box maxWidth="1330px" margin="0 auto">
+    <Container style={{ maxWidth: "1330px" }}>
 
 
       <BXHList matches={matches} />
 
-    </Box>
+    </Container>
   );
 }

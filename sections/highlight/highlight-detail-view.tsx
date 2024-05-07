@@ -16,7 +16,7 @@ export default function HighlightDetailView({ id }: Props) {
   const filteredHighlights = currentVideo ? highlightVideos.filter(video => video.id !== currentVideo.id) : highlightVideos;
 
   return (
-    <Box maxWidth="1330px" margin="0 auto">
+    <Container style={{ maxWidth: "1330px" }}>
 
 
       <Stack direction="column">
@@ -26,6 +26,6 @@ export default function HighlightDetailView({ id }: Props) {
         <HighlightVideo loading={videoLoading} currentVideo={currentVideo} />
         <HighlightLatest highlightVideos={filteredHighlights === null ? filteredHighlights : highlightVideos} loading={highlightVideosLoading} />
       </Stack>
-    </Box>
+    </Container>
   )
 }
