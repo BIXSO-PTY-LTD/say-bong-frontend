@@ -3,7 +3,7 @@
 import NewsPosts from '../news-posts';
 import NewsSidebar from '../news-sidebar';
 import { useGetNews } from '#/api/news';
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useEffect, useState } from 'react';
 import { INewsItem } from '#/types/news';
@@ -39,7 +39,7 @@ export default function NewsView() {
   const specialEndIndex = specialStartIndex + 6;
   const paginatedSpecialNews = specialNews.slice(specialStartIndex, specialEndIndex);
   return (
-    <Container maxWidth="xl"
+    <Box maxWidth="1330px" margin="0 auto"
       sx={{
         mt: 10,
       }}
@@ -60,6 +60,6 @@ export default function NewsView() {
           />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 }

@@ -9,7 +9,7 @@ import Container from '@mui/material/Container';
 import NewsSidebar from '../news-sidebar';
 import { useGetNew, useGetNews } from '#/api/news';
 import NewsDetails from '../news-details';
-import { Skeleton } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ export default function NewsDetailsView({ id }: Props) {
   const filteredNews = news.filter((item) => item.id !== id)
   return (
     <>
-      <Container maxWidth="xl" sx={{ mt: 5 }}>
+      <Box maxWidth="1330px" margin="0 auto">
         <Grid container columnSpacing={{ xs: 0, md: 8 }} >
           <Grid xs={12} md={8}>
             <NewsDetails currentPost={currentPost} loading={newLoading} />
@@ -37,7 +37,7 @@ export default function NewsDetailsView({ id }: Props) {
             />
           </Grid>
         </Grid>
-      </Container>
+      </Box>
 
 
     </>

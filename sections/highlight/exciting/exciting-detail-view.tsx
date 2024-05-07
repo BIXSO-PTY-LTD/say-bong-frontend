@@ -16,7 +16,7 @@ export default function ExcitingDetailView({ id }: Props) {
   const { excitingVideos, excitingVideosLoading } = useGetExcitingVideos(1, 4)
   const filteredExcitings = currentVideo ? excitingVideos.filter(video => video.id !== currentVideo.id) : excitingVideos;
   return (
-    <Container maxWidth="xl">
+    <Box maxWidth="1330px" margin="0 auto">
       <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">Những pha bóng thú vị</Typography>
       {videoLoading ? <Skeleton variant="rectangular" height="500px" sx={{ mb: 10 }} /> : (
         <ExcitingVideo currentVideo={currentVideo} />
@@ -25,6 +25,6 @@ export default function ExcitingDetailView({ id }: Props) {
         <ExcitingLatest filteredExcitings={filteredExcitings === null ? filteredExcitings : excitingVideos} />
 
       )}
-    </Container>
+    </Box>
   )
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 
 import HighlightList from '../highlight-list';
 import ExcitingHighlightList from '../exciting/exciting-highlight-list';
@@ -36,7 +36,8 @@ export default function HighlightView() {
     setCurrentPageExciting(page);
   };
   return (
-    <Container maxWidth="xl">
+    <Box maxWidth="1330px" margin="0 auto">
+
       <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList
         videos={sortedHighlightVideos}
@@ -54,6 +55,6 @@ export default function HighlightView() {
         paginate={excitingPaginate}
         handlePageChange={handlePageChangeExciting}
         currentPage={currentPageExciting} />
-    </Container>
+    </Box>
   );
 }

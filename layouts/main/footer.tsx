@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { NavSubListProps } from './nav/types';
 import { RouterLink } from '#/routes/components';
 import { useBoolean } from '#/hooks/use-boolean';
+import { Box } from '@mui/material';
 
 
 
@@ -26,8 +27,7 @@ export default function Footer() {
 
   const mainFooter = (
     <>
-
-      <Container maxWidth="xl"
+      <Box maxWidth="1330px" margin="0 auto"
         sx={{
           overflow: 'hidden',
           py: { xs: 8, md: 10 },
@@ -72,7 +72,7 @@ export default function Footer() {
             )}
           </Grid>
         </Grid>
-      </Container>
+      </Box>
 
 
 
