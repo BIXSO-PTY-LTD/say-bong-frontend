@@ -1,7 +1,7 @@
 'use client';
 
 import MainLayout from '#/layouts/main';
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 
 import HomeHighlight from '../home-highlights';
 import HomeLastestPosts from '../home-latest-posts';
@@ -52,13 +52,13 @@ export default function HomeView() {
   // }, []);
   return (
     <MainLayout>
-      <Container maxWidth="xl">
+      <Box maxWidth="1330px" margin="0 auto">
         <Typography sx={{ textTransform: "uppercase", mt: "40px" }} variant="h3">Trực tiếp bóng đá</Typography>
         <MatchList matches={matches} />
 
         <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={sortedHighlightVideos} />
         <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={sortedNews} />
-      </Container>
+      </Box>
     </MainLayout>
   );
 }

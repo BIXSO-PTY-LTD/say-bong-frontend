@@ -2,6 +2,7 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
 import Header from '../common/header-simple';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +15,7 @@ export default function CompactLayout({ children }: Props) {
     <>
       <Header />
 
-      <Container maxWidth="xl" component="main">
+      <Box maxWidth="1330px" margin="0 auto" component="main">
         <Stack
           sx={{
             py: 12,
@@ -27,7 +28,7 @@ export default function CompactLayout({ children }: Props) {
         >
           {children}
         </Stack>
-      </Container>
+      </Box>
     </>
   );
 }

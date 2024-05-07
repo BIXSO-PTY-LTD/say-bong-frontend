@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import MatchList from '../match/match-list';
 import { useEffect, useState } from 'react';
 import { IMatchItem } from '#/types/match';
@@ -36,10 +36,10 @@ export default function ResultView() {
   //   fetchData();
   // }, []);
   return (
-    <Container maxWidth="xl">
+    <Box maxWidth="1330px" margin="0 auto">
       <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">Kết quả</Typography>
       <MatchList matches={matches} />
 
-    </Container>
+    </Box>
   );
 }

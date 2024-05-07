@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import MatchList from '../match/match-list';
 import { useEffect, useState } from 'react';
 import matchesData from '#/public/data/matchesData.json';
@@ -36,10 +36,9 @@ export default function ScheduleView() {
   //   fetchData();
   // }, []);
   return (
-    <Container maxWidth="xl">
+    <Box maxWidth="1330px" margin="0 auto">
       <Typography sx={{ textTransform: "uppercase", mt: "24px" }} variant="h3">lịch thi đấu</Typography>
       <MatchList matches={matches} />
-
-    </Container>
+    </Box>
   );
 }

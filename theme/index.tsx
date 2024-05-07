@@ -41,6 +41,13 @@ export default function ThemeProvider({ children }: Props) {
       shadows: shadows(),
       shape: { borderRadius: 8 },
       typography,
+      overrides: {
+        MuiContainer: {
+          root: {
+            maxWidth: '1330px',
+          },
+        },
+      }
     }),
     [settings.themeDirection, presets.palette, presets.customShadows]
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import MainLayout from '#/layouts/main';
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import LivestreamList from '../livestream-list';
 import { useGetLivestreams } from '#/api/livestream';
 import { useState } from 'react';
@@ -19,7 +19,7 @@ export default function LivestreamView() {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
   return (
-    <Container maxWidth="xl">
+    <Box maxWidth="1330px" margin="0 auto">
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">LIVESTREAM</Typography>
       <LivestreamList
         livestreams={sortedLivestreams}
@@ -29,6 +29,6 @@ export default function LivestreamView() {
         currentPage={currentPage}
         empty={livestreamsEmpty}
       />
-    </Container>
+    </Box>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 
 import BXHList from '../bxh-list';
 import matchesData from '#/public/data/matchesData.json';
@@ -39,10 +39,11 @@ export default function BXHView() {
   //   fetchData();
   // }, []);
   return (
-    <Container maxWidth="xl">
+    <Box maxWidth="1330px" margin="0 auto">
+
 
       <BXHList matches={matches} />
 
-    </Container>
+    </Box>
   );
 }
