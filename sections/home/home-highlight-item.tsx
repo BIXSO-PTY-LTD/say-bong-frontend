@@ -23,10 +23,11 @@ type Props = {
   // order?: number;
   largePost?: boolean;
   loading?: boolean;
+  small?: boolean
 };
 
 
-export default function HomeHighlightItem({ video, largePost }: Props) {
+export default function HomeHighlightItem({ video, largePost, small }: Props) {
   const router = useRouter();
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
 
@@ -49,7 +50,7 @@ export default function HomeHighlightItem({ video, largePost }: Props) {
             sx={{
               filter: "brightness(0.7)",
               objectFit: "cover",
-              height: largePost ? "280px" : "180px",
+              height: largePost ? "280px" :small? "157px" :"192px",
             }}
           />
           {largePost && (

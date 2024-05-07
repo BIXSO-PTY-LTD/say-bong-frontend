@@ -37,7 +37,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
             </Box>
             <Stack width="62%" gap={2} direction="row">
               {highlightVideos.slice(1, 4).map((video) => (
-                <HomeHighlightItem key={video.id} video={video} />
+                <HomeHighlightItem small key={video.id} video={video} />
 
               ))}
             </Stack>
@@ -66,7 +66,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
             }}
           >
             <Box sx={{ gridColumn: { xs: 'span 12' } }}>
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 {highlightVideos.slice(5, 9).map((video) => (
                   <Grid key={video.id} item xs={12} md={3}>
                     <HomeHighlightItem video={video} />
