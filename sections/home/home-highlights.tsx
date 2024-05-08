@@ -32,7 +32,7 @@ export default function HomeHighlight({ highlightVideos, loading, empty }: Props
       {mdUp ? (
         <>
           <Stack direction="row" gap={2} justifyContent="center" width="100%">
-            <Box width="38%" sx={{ mb: 5 }}>
+            <Box width="38%" sx={{ mb: 7 }}>
               <HomeHighlightItem video={latestVideo} largePost />
             </Box>
             <Stack width="62%" gap={2} direction="row">
