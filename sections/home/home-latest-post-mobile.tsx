@@ -61,7 +61,7 @@ export default function HomeLatestPostMobile({ post, onSiderbar }: Props) {
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
         <Link color="inherit" component={RouterLink} href={paths.news.details(id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{cleanTitle}</TextMaxLine>
+          <TextMaxLine variant='subtitle2'>{cleanTitle}</TextMaxLine>
         </Link>
         <Typography variant='caption'>{fDate(createdAt)}</Typography>
       </Stack>
