@@ -70,7 +70,7 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
         </Box>
 
         {!largePost && (
-          <Stack spacing={1}>
+          <Stack spacing={0.5}>
             <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
               <TextMaxLine line={2} variant="subtitle1">{video?.title}</TextMaxLine>
             </Link>
