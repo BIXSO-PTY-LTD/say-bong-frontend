@@ -40,7 +40,7 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
   }, [video]);
 
   return (
-    <Box sx={{ width: '100%', minHeight: '210px', background: "transparent" }}>
+    <Box sx={{ width: "100%", minHeight: '210px', background: "transparent" }}>
       <Stack spacing={2} sx={{ overflow: largePost ? 'hidden' : 'visible' }}>
         <Box sx={{ position: "relative" }}>
           <Image
@@ -50,15 +50,15 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
             sx={{
               filter: "brightness(0.7)",
               objectFit: "cover",
-              height: largePost ? "280px" :small? "157px" :"192px",
+              height: largePost ? "280px" : small ? "157px" : "192px",
             }}
           />
           {largePost && (
-            <Stack spacing={1} sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 9, background: 'rgba(0,0,0,0.8)', width: "100%", padding: { xs: 0, xl: "20px" } }}>
+            <Stack spacing={1} sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 9, background: 'rgba(0,0,0,0.8)', width: "100%", padding: { xs: 0, md: "20px" } }}>
               <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
                 <TextMaxLine line={1} variant="h6">{video?.title}</TextMaxLine>
               </Link>
-              <Typography variant='body2' color="text.secondary">Ngày đăng: {fDate(video?.createdAt)}</Typography>
+              <Typography variant='body2' color={(theme) => theme.palette.grey[500]}>Ngày đăng: {fDate(video?.createdAt)}</Typography>
             </Stack>
           )}
 
@@ -74,7 +74,7 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
             <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
               <TextMaxLine line={2} variant="subtitle1">{video?.title}</TextMaxLine>
             </Link>
-            <Typography variant='caption' color="text.secondary">{fDate(video?.createdAt)}</Typography>
+            <Typography variant='caption' color={(theme) => theme.palette.grey[500]}>Ngày đăng: {fDate(video?.createdAt)}</Typography>
           </Stack>
         )}
       </Stack>
