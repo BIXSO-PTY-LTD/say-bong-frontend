@@ -41,7 +41,7 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
 
   return (
     <Box sx={{ width: "100%", minHeight: '210px', background: "transparent" }}>
-      <Stack spacing={2} sx={{ overflow: largePost ? 'hidden' : 'visible' }}>
+      <Stack spacing={1} sx={{ overflow: largePost ? 'hidden' : 'visible' }}>
         <Box sx={{ position: "relative" }}>
           <Image
             src={videoThumbnail || "/assets/images/match/background-item.jpg"}
