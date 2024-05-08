@@ -49,7 +49,7 @@ export default function HomeHighlightMobile({ video, onSiderbar }: Props) {
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
         <Link color="inherit" component={RouterLink} href={paths.highlight.details(video.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{video.title}</TextMaxLine>
+          <TextMaxLine variant='subtitle2'>{video.title}</TextMaxLine>
         </Link>
 
       </Stack>

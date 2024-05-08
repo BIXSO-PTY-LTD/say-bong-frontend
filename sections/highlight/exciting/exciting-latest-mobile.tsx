@@ -56,7 +56,7 @@ export default function ExcitingLatestMobile({ video, onSiderbar }: Props) {
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
         <Link color="inherit" href={paths.exciting.details(id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{title}</TextMaxLine>
+          <TextMaxLine variant='subtitle2'>{title}</TextMaxLine>
         </Link>
 
       </Stack>
