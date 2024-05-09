@@ -9,7 +9,9 @@ import { Box } from '@mui/material';
 
 export default function Player({ ...other }: ReactPlayerProps) {
   return (
-    <Box height="524px">
+    <Box sx={{
+      aspectRatio: '16/9',
+    }}>
       <StyledReactPlayer {...other} />
     </Box>
   )

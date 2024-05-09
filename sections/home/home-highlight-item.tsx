@@ -41,7 +41,7 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
 
   return (
     <Box sx={{ width: "100%", minHeight: '210px', background: "transparent" }}>
-      <Stack spacing={1} sx={{ overflow: largePost ? 'hidden' : 'visible' }}>
+      <Stack spacing={2.5} sx={{ overflow: largePost ? 'hidden' : 'visible' }}>
         <Box sx={{ position: "relative" }}>
           <Image
             src={videoThumbnail || "/assets/images/match/background-item.jpg"}
@@ -56,7 +56,7 @@ export default function HomeHighlightItem({ video, largePost, small }: Props) {
           {largePost && (
             <Stack spacing={1} sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 9, background: 'rgba(0,0,0,0.8)', width: "100%", padding: { xs: 0, md: "20px" } }}>
               <Link component={RouterLink} href={paths.highlight.details(video?.id)} color="inherit">
-                <TextMaxLine line={1} variant="h6">{video?.title}</TextMaxLine>
+                <TextMaxLine line={1} variant="h3" sx={{ fontWeight: "inherit" }}>{video?.title}</TextMaxLine>
               </Link>
               <Typography variant='body2' color={(theme) => theme.palette.grey[500]}>Ngày đăng: {fDate(video?.createdAt)}</Typography>
             </Stack>

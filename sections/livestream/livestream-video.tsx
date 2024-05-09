@@ -24,7 +24,10 @@ export default function LivestreamVideo({ currentLivestream }: Props) {
           autoPlay={true}
           controls={true}
           width="100%"
-          height="524px"
+          height="100%"
+          style={{
+            aspectRatio: "16/9"
+          }}
         />
       ) : (
         <Player controls autoPlay url={currentLivestream?.content} />
