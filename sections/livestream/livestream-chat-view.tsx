@@ -89,7 +89,7 @@ export default function LivestreamChatView({ currentLivestream }: Props) {
 
   return (
     <>
-      <Stack sx={{ width: "343px", height: "524px", overflow: "hidden", position: "relative" }}>
+      <Stack sx={{ maxWidth: { lg: "343px" }, height: "524px", overflow: "hidden", position: "relative" }}>
         {renderHead}
         <Stack direction="row" sx={{ width: 1, height: 1, overflow: "hidden", borderTop: (theme) => `solid 1px ${theme.palette.divider}` }}>
           {renderMessages}
