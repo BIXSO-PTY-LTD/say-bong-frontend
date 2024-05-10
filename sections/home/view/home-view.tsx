@@ -9,7 +9,6 @@ import MatchList from '../../match/match-list';
 import { useGetNews } from '#/api/news';
 import { useGetHighlightVideos } from '#/api/highlight-video';
 import { useEffect, useMemo, useState } from 'react';
-import matchesData from '#/public/data/matchesData.json';
 import { IMatchItem } from '#/types/match';
 import resposneData from '#/public/responseData.json'
 // ----------------------------------------------------------------------
