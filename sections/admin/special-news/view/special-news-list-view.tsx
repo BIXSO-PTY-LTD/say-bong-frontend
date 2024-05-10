@@ -31,7 +31,10 @@ export default function SpecialNewsListView() {
   };
 
   useEffect(() => {
-    setSpecialNews(news.filter(item => item.title.startsWith("*")))
+    const sortedNews = [...news].sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+    setSpecialNews(sortedNews.filter(item => item.title.startsWith("*")))
   }, [news])
 
   // Paginate specialNews
