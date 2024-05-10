@@ -8,7 +8,8 @@ import HomeLastestPosts from '../home-latest-posts';
 import MatchList from '../../match/match-list';
 import { useGetNews } from '#/api/news';
 import { useGetHighlightVideos } from '#/api/highlight-video';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import matchesData from '#/public/data/matchesData.json';
 import { IMatchItem } from '#/types/match';
 import resposneData from '#/public/responseData.json'
 // ----------------------------------------------------------------------
@@ -16,13 +17,14 @@ import resposneData from '#/public/responseData.json'
 export default function HomeView() {
   const { news, newsLoading, newsEmpty } = useGetNews(1, 100)
   const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 100);
-  const [matches, setMatches] = useState<IMatchItem[]>([]);
-  const sortedHighlightVideos = [...highlightVideos].sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-  const sortedNews = [...news].sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  const [matches, setMatches] = useState<IMatchItem[]>(resposneData ? resposneData.data.list : []);
+  const sortedHighlightVideos = useMemo(() => {
+    return [...highlightVideos].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [highlightVideos]);
+
+  const sortedNews = useMemo(() => {
+    return [...news].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [news]);
   useEffect(() => {
     if (resposneData) {
       setMatches(resposneData.data.list)
