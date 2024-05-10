@@ -12,6 +12,8 @@ import Label from '#/components/label';
 import { useEffect, useState } from 'react';
 
 import Iconify from '#/components/iconify';
+import { IMatchItem } from '#/types/match';
+import resposneData from '#/public/responseData.json'
 
 
 // ----------------------------------------------------------------------
@@ -26,6 +28,18 @@ export default function LivestreamLatestItem({ livestream,
   //  order,
   largelivestream }: Props) {
   const { title, createdAt, id, content, meta } = livestream;
+
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+
+  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
+
+  useEffect(() => {
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+      setMatchingLivestream(matches.find(item => item.matchId === title))
+    }
+  }, [matches, title])
+
   const newMetaIndex = meta && meta.length > 0
     ? meta.length - 1
     : 0;
@@ -96,7 +110,10 @@ export default function LivestreamLatestItem({ livestream,
         >
           <Typography variant='caption'>{fDate(createdAt)}</Typography>
           <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit">
-            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{title}</TextMaxLine>
+            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{
+              matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
+                title
+              )}</TextMaxLine>
           </Link>
 
 

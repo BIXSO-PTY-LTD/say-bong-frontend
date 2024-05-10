@@ -6,9 +6,10 @@ import { useSettingsContext } from '#/components/settings';
 import Iconify from '#/components/iconify';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LiveStreamListHorizontal from '../livestream-list-horizontal';
 import { useGetLivestreams } from '#/api/livestream';
+import { IMatchItem } from '#/types/match';
 
 // ----------------------------------------------------------------------
 

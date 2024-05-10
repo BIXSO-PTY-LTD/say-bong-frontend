@@ -14,6 +14,7 @@ import LivestreamLatestPostMobile from './livestream-latest-mobile';
 import { ILivestreamItem } from '#/types/livestream';
 import EmptyContent from '#/components/empty-content';
 import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
+import { useEffect, useState } from 'react';
 
 
 
@@ -28,6 +29,8 @@ type Props = {
 export default function LivestreamLastest({ livestreams, loading, empty }: Props) {
 
   const mdUp = useResponsive('up', 'md');
+
+  const [filterLivestreams, setFilterLivestreams] = useState<ILivestreamItem[]>()
 
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
 
@@ -45,7 +48,7 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
     >
       {mdUp ? (
         <>
-          {livestreams.map((livestream) => (
+          {filterLivestreams?.slice(0, 4).map((livestream) => (
             <LivestreamLatestItem key={livestream.id} livestream={livestream}
             // order={index % 2}
             />
@@ -54,7 +57,7 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
         </>
       ) : (
         <>
-          {livestreams.slice(0, 4).map((livestream) => (
+          {filterLivestreams?.slice(0, 4).map((livestream) => (
             <LivestreamLatestPostMobile key={livestream.id} livestream={livestream} />
           ))}
         </>
@@ -73,41 +76,54 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
     </Button>
   );
 
+  useEffect(() => {
+    if (livestreams && livestreams.length > 0) {
+      // Sort the livestreams array from newest to oldest based on the createdAt property
+      const sortedArray = [...livestreams].sort((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+
+      // Set the state to the sorted array
+      setFilterLivestreams(sortedArray);
+    }
+  }, [livestreams]);
+
   return (
     <>
-  <Stack
-    direction="row"
-    alignItems="center"
-    justifyContent={{ xs: 'center', md: 'space-between' }}
-    sx={{
-      mb: { xs: 8, md: 10 },
-      textAlign: { xs: 'center', md: 'left' },
-    }}
-  >
-    <Typography variant="h3" sx={{ my: 3, textTransform: "uppercase" }}>
-      Các trận đấu đang diễn ra
-    </Typography>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent={{ xs: 'center', md: 'space-between' }}
+        sx={{
+          mb: { xs: 8, md: 10 },
+          mt: { xs: 14, md: 18 },
+          textAlign: { xs: 'center', md: 'left' },
+        }}
+      >
+        <Typography variant="h3" sx={{ my: 3, textTransform: "uppercase" }}>
+          Các trận đấu đang diễn ra
+        </Typography>
 
-    {mdUp && viewAllBtn}
-  </Stack>
+        {mdUp && viewAllBtn}
+      </Stack>
 
-{
-  loading ? (
-    <StackPostSkeleton count={4} />
-  ) : empty ? (
-    renderNotFound
-  ) : (
-    renderList
-  )
-}
+      {
+        loading ? (
+          <StackPostSkeleton count={4} />
+        ) : empty ? (
+          renderNotFound
+        ) : (
+          renderList
+        )
+      }
 
-{
-  !mdUp && (
-    <Stack alignItems="center" sx={{ mt: 8 }}>
-      {viewAllBtn}
-    </Stack>
-  )
-}
+      {
+        !mdUp && (
+          <Stack alignItems="center" sx={{ mt: 8 }}>
+            {viewAllBtn}
+          </Stack>
+        )
+      }
     </>
   );
 }
