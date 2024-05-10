@@ -44,7 +44,7 @@ export default function MatchItemHorizontal({ match }: Props) {
   const createLivestream = useCreateLivestream()
   const handleWatchClick = async () => {
     try {
-      if (m3u8 === '') {
+      if (m3u8 === '' || !m3u8.endsWith('.m3u8')) {
         enqueueSnackbar('Trận này không có livestream', { variant: 'error' });
         return;
       }

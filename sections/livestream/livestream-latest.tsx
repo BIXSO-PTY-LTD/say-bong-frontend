@@ -30,18 +30,9 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
 
   const mdUp = useResponsive('up', 'md');
 
+  const [filterLivestreams, setFilterLivestreams] = useState<ILivestreamItem[]>()
+
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
-
-  const [filterLivestreams, setFilterLivestreams] = useState<ILivestreamItem[]>();
-
-  useEffect(() => {
-    const filtered = livestreams.filter(livestream => (
-      livestream.title &&                      // Make sure there's a title
-      livestream.title.length !== 15 &&        // Title has exactly 15 characters
-      livestream.title.includes(" ")          // Title has no spaces
-    ));
-    setFilterLivestreams(filtered);
-  }, [livestreams]);
 
   const renderList = (
     <Box
@@ -85,6 +76,18 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
     </Button>
   );
 
+  useEffect(() => {
+    if (livestreams && livestreams.length > 0) {
+      // Sort the livestreams array from newest to oldest based on the createdAt property
+      const sortedArray = [...livestreams].sort((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+
+      // Set the state to the sorted array
+      setFilterLivestreams(sortedArray);
+    }
+  }, [livestreams]);
+
   return (
     <>
       <Stack
@@ -92,7 +95,8 @@ export default function LivestreamLastest({ livestreams, loading, empty }: Props
         alignItems="center"
         justifyContent={{ xs: 'center', md: 'space-between' }}
         sx={{
-          my: { xs: 8, md: 10 },
+          mb: { xs: 8, md: 10 },
+          mt: { xs: 14, md: 18 },
           textAlign: { xs: 'center', md: 'left' },
         }}
       >

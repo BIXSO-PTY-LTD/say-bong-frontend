@@ -19,13 +19,14 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 
 import { useCallback, useEffect, useState } from 'react';
-import { useDeleteNew } from '#/api/news';
 import { mutate } from 'swr';
 import { ConfirmDialog } from '#/components/custom-dialog';
 import { Button, MenuItem } from '@mui/material';
 import { useBoolean } from '#/hooks/use-boolean';
 import { ILivestreamItem } from '#/types/livestream';
 import { useDeleteLivestream } from '#/api/livestream';
+import resposneData from '#/public/responseData.json'
+import { IMatchItem } from '#/types/match';
 
 // ----------------------------------------------------------------------
 
@@ -37,9 +38,28 @@ type Props = {
 export default function LivestreamlivestreamHorizontal({ livestream, endpoints }: Props) {
   const popover = usePopover();
 
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
+
+
   const router = useRouter();
 
   const confirm = useBoolean();
+
+  const {
+    id,
+    title,
+    content,
+    meta,
+    createdAt,
+  } = livestream;
+
+  useEffect(() => {
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+      setMatchingLivestream(matches.find(item => item.matchId === title))
+    }
+  }, [matches, title])
 
 
   const smUp = useResponsive('up', 'sm');
@@ -58,13 +78,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
     [deleteLivestream, endpoints, confirm]
   );
 
-  const {
-    id,
-    title,
-    content,
-    meta,
-    createdAt,
-  } = livestream;
+
 
   return (
     <>
@@ -85,8 +99,11 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
 
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.livestream.details(id)}>
-              <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {title}
+              <TextMaxLine color="black" variant="subtitle2" line={2}>{
+                matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
+                  title
+                )}
+
               </TextMaxLine>
             </Link>
           </Stack>
@@ -118,15 +135,22 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
         arrow="bottom-center"
         sx={{ width: 140 }}
       >
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            router.push(paths.dashboard.livestream.details(id));
-          }}
-        >
-          <Iconify icon="solar:eye-bold" />
-          View
-        </MenuItem>
+        {matchingLivestream ? (
+          <></>
+        ) : (
+          <>
+            <MenuItem
+              onClick={() => {
+                popover.onClose();
+                router.push(paths.dashboard.livestream.details(id));
+              }}
+            >
+              <Iconify icon="solar:eye-bold" />
+              View
+            </MenuItem>
+          </>
+        )}
+
         <MenuItem
           onClick={() => {
             confirm.onTrue();

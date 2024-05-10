@@ -35,10 +35,10 @@ export default function LivestreamVideo({ currentLivestream, currentMatch }: Pro
         <Player controls autoPlay url={currentLivestream?.content} />
       )}
       {currentMatch ? (
-        <Typography variant="body1" sx={{ mt: 4 }}>{currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}</Typography >
+        <Typography variant="h3" sx={{ mt: 4 }}>{currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}</Typography >
       ) :
         (
-          <Typography variant="body1" sx={{ mt: 4 }}>{currentLivestream?.title}</Typography >
+          <Typography variant="h3" sx={{ mt: 4 }}>{currentLivestream?.title}</Typography >
         )
       }
 

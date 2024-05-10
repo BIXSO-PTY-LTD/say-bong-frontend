@@ -1,14 +1,10 @@
 'use client';
 
-import { Box, Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 
 import BXHList from '../bxh-list';
-import matchesData from '#/public/data/matchesData.json';
 import { useEffect, useState } from 'react';
 import { IMatchItem } from '#/types/match';
-import QueryString from 'qs';
-import { axiosSoccer } from '#/utils/axios';
-import { SOCCER_API } from '#/config-global';
 
 import resposneData from '#/public/responseData.json'
 

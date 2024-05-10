@@ -1,7 +1,7 @@
 'use client';
 
 import MainLayout from '#/layouts/main';
-import { Box, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
 import HomeHighlight from '../home-highlights';
 import HomeLastestPosts from '../home-latest-posts';
@@ -9,12 +9,7 @@ import MatchList from '../../match/match-list';
 import { useGetNews } from '#/api/news';
 import { useGetHighlightVideos } from '#/api/highlight-video';
 import { useEffect, useState } from 'react';
-import matchesData from '#/public/data/matchesData.json';
 import { IMatchItem } from '#/types/match';
-import { useGetMatches } from '#/api/match';
-import { axiosSoccer } from '#/utils/axios';
-import { SOCCER_API } from '#/config-global';
-import QueryString from 'qs';
 import resposneData from '#/public/responseData.json'
 // ----------------------------------------------------------------------
 
