@@ -5,14 +5,16 @@ import { Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { ILivestreamItem } from '#/types/livestream';
 import ReactHlsPlayer from 'react-hls-player';
+import { IMatchItem } from '#/types/match';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   currentLivestream?: ILivestreamItem;
+  currentMatch?: IMatchItem;
 };
 
-export default function LivestreamVideo({ currentLivestream }: Props) {
+export default function LivestreamVideo({ currentLivestream, currentMatch }: Props) {
   const playerRef = useRef(null);
   const isHLS = currentLivestream?.content?.endsWith('.m3u8');
   return (
@@ -32,7 +34,14 @@ export default function LivestreamVideo({ currentLivestream }: Props) {
       ) : (
         <Player controls autoPlay url={currentLivestream?.content} />
       )}
-      <Typography variant="body1" sx={{ py: 3 }}>{currentLivestream?.title}</Typography>
+      {currentMatch ? (
+        <Typography variant="body1" sx={{ mt: 4 }}>{currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}</Typography >
+      ) :
+        (
+          <Typography variant="body1" sx={{ mt: 4 }}>{currentLivestream?.title}</Typography >
+        )
+      }
+
     </>
   );
 }

@@ -3,7 +3,7 @@
 import { MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS, SCHEDULE_OPTIONS } from "#/_mock/_match";
 import Label from "#/components/label";
 import { IMatchFilterValue, IMatchFilters, IMatchItem } from "#/types/match";
-import { Button, Pagination, Stack, Tab, Tabs, paginationClasses, useTheme } from "@mui/material";
+import { Button, Pagination, Stack, Tab, Tabs, Typography, paginationClasses, useTheme } from "@mui/material";
 import { useCallback, useState } from "react";
 import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "./match-list-horizontal";
@@ -223,11 +223,14 @@ export default function MatchList({ matches }: Props) {
         </Stack>
       )}
 
+      {dataFiltered.length === 0 ? (
+        <Typography>Không có trận đấu nào</Typography>
+      ) :
+        (
+          <MatchListHorizontal matchs={dataFiltered} />
 
+        )}
 
-      <MatchListHorizontal matchs={dataFiltered}
-      //  loading={matchsLoading} 
-      />
       {pathname === '/' ?
         (
           <Button

@@ -8,6 +8,9 @@ import { ILivestreamItem } from "#/types/livestream"
 import { useGetLivestream, useGetLivestreams } from "#/api/livestream"
 import { StackPostSkeleton } from "#/sections/skeletons/stack-post-skeleton"
 import EmptyContent from "#/components/empty-content/empty-content"
+import { useEffect, useState } from "react"
+import resposneData from '#/public/responseData.json'
+import { IMatchItem } from "#/types/match"
 
 type Props = {
   id: string;
@@ -16,10 +19,22 @@ export default function LivestreamDetailView({ id }: Props) {
 
 
   const { livestream: currentLivestream, livestreamLoading } = useGetLivestream(id);
-  const { livestreams, livestreamsLoading, livestreamsEmpty } = useGetLivestreams(1, 4);
+  const { livestreams, livestreamsLoading, livestreamsEmpty } = useGetLivestreams(1, 100);
+
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+
 
   const filteredLivestreams = currentLivestream ? livestreams.filter(livestream => livestream.id !== currentLivestream.id) : livestreams;
 
+
+
+  useEffect(() => {
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+    }
+  }, [])
+
+  const currentMatch = matches.find(match => match.matchId === currentLivestream?.title);
   return (
     <Container style={{ maxWidth: "1330px", padding: "0" }}>
       <Stack direction="column">
@@ -37,21 +52,16 @@ export default function LivestreamDetailView({ id }: Props) {
           ) : (
             <>
               <Grid item xs={12} md={9}>
-                <LivestreamVideo currentLivestream={currentLivestream} />
-
+                <LivestreamVideo currentMatch={currentMatch} currentLivestream={currentLivestream} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <LivestreamChatView currentLivestream={currentLivestream} />
               </Grid>
-
             </>
           )}
-
         </Grid>
-
-
-        <LivestreamLastest loading={livestreamsLoading} empty={livestreamsEmpty} livestreams={livestreams.length === 1 ? livestreams : filteredLivestreams} />
       </Stack>
+      <LivestreamLastest loading={livestreamsLoading} empty={livestreamsEmpty} livestreams={livestreams.length === 1 ? livestreams : filteredLivestreams} />
     </Container>
   )
 }
