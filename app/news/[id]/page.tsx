@@ -5,7 +5,7 @@ import NewsDetailsView from "#/sections/news/view/news-details-view";
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: Post Details',
+  title: 'Say Bóng: Tin tức',
 };
 
 type Props = {

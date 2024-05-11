@@ -7,7 +7,7 @@ import { useGetLivestream, useGetLivestreams } from "#/api/livestream";
 import LivestreamDetailView from "#/sections/livestream/view/livestream-detail-view";
 
 export const metadata = {
-  title: 'Dashboard: Post Details',
+  title: 'Say Bóng: Trực tiếp',
 };
 
 type Props = {
