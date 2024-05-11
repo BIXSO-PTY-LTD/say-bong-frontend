@@ -32,6 +32,11 @@ export default function MatchList({ matches }: Props) {
   const pathname = usePathname();
 
   const matchesPerPage = 10;
+  const [itemsToShow, setItemsToShow] = useState(10);
+
+  const loadMoreItems = () => {
+    setItemsToShow(prevItems => prevItems + 10);
+  };
 
   const STATUS_OPTIONS = pathname === "/" ? [...MATCH_STATUS_OPTIONS, { value: 'all', label: 'Tất cả' }] : [...MATCH_RESULT_OPTIONS, { value: 'all', label: 'Tất cả' }];
 
@@ -70,10 +75,13 @@ export default function MatchList({ matches }: Props) {
     inputData: matches,
     filters,
     page,
-    matchesPerPage
+    matchesPerPage,
+    pathname,
+    itemsToShow
   });
 
   const filteredMatchesCount = useFilteredMatchesCount(matches, filters, matchesPerPage);
+
 
 
   return (
@@ -231,33 +239,48 @@ export default function MatchList({ matches }: Props) {
 
         )}
 
-      {pathname === '/' ?
-        (
-          <Button
-            fullWidth
-            href={paths.livestream.root}
-            sx={{
-              my: 5,
-              color: "#01B243",
-              background: theme => theme.palette.grey[800]
-            }}>
-            Xem thêm lịch trực tiếp
-          </Button>
-        ) :
-        (
-          <Pagination
-            count={filteredMatchesCount}
-            color="primary"
-            page={page}
-            onChange={handlePageChange}
-            sx={{
-              my: 10,
-              [`& .${paginationClasses.ul}`]: {
-                justifyContent: 'center',
-              },
-            }}
-          />
-        )}
+      {pathname === '/' && (
+        <Button
+          fullWidth
+          href={paths.livestream.root}
+          sx={{
+            my: 5,
+            color: "#01B243",
+            background: theme => theme.palette.grey[800]
+          }}
+        >
+          Xem thêm lịch trực tiếp
+        </Button>
+      )}
+
+      {pathname === '/livestream' && dataFiltered.length >= itemsToShow && (
+        <Button
+          fullWidth
+          onClick={loadMoreItems}
+          sx={{
+            my: 5,
+            color: "#01B243",
+            background: theme => theme.palette.grey[800]
+          }}
+        >
+          Xem thêm
+        </Button>
+      )}
+
+      {pathname !== '/' && pathname !== '/livestream' && (
+        <Pagination
+          count={filteredMatchesCount}
+          color="primary"
+          page={page}
+          onChange={handlePageChange}
+          sx={{
+            my: 10,
+            [`& .${paginationClasses.ul}`]: {
+              justifyContent: 'center',
+            },
+          }}
+        />
+      )}
 
     </>
   )
@@ -268,12 +291,16 @@ const applyFilter = ({
   inputData,
   filters,
   page,
-  matchesPerPage
+  matchesPerPage,
+  pathname,
+  itemsToShow
 }: {
+  itemsToShow: number,
   matchesPerPage: number,
   page: number,
   inputData: IMatchItem[];
   filters: IMatchFilters;
+  pathname: string
 }) => {
   const { matchStatus, league_title } = filters;
   const startIndex = (page - 1) * matchesPerPage;
@@ -327,10 +354,15 @@ const applyFilter = ({
 
   }
 
-  // Sort and paginate filtered data
 
+  if (pathname === "/livestream") {
+    return filteredData
+      .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
+      .slice(0, itemsToShow);
+  } else {
+    return filteredData
+      .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
+      .slice(startIndex, endIndex);
+  }
 
-  return filteredData
-    .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
-    .slice(startIndex, endIndex);
 };

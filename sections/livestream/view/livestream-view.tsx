@@ -13,16 +13,16 @@ import { IMatchItem } from '#/types/match';
 // ----------------------------------------------------------------------
 
 export default function LivestreamView() {
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [matches, setMatches] = useState<IMatchItem[]>([]);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
-  };
-  const { livestreams, livestreamsLoading, paginate, livestreamsEmpty } = useGetLivestreams(currentPage, 12)
-  const sortedLivestreams = [...livestreams].sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  // const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  //   setCurrentPage(page);
+  // };
+  // const { livestreams, livestreamsLoading, paginate, livestreamsEmpty } = useGetLivestreams(currentPage, 12)
+  // const sortedLivestreams = [...livestreams].sort((a, b) => {
+  //   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  // });
   useEffect(() => {
     if (resposneData) {
       setMatches(resposneData.data.list)
@@ -33,7 +33,7 @@ export default function LivestreamView() {
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">LIVESTREAM</Typography>
 
       <MatchList matches={matches} />
-      <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">LIVESTREAM KHÁC</Typography>
+      {/* <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">LIVESTREAM KHÁC</Typography>
       <LivestreamList
         livestreams={sortedLivestreams}
         loading={livestreamsLoading}
@@ -41,7 +41,7 @@ export default function LivestreamView() {
         handlePageChange={handlePageChange}
         currentPage={currentPage}
         empty={livestreamsEmpty}
-      />
+      /> */}
     </Container>
   );
 }

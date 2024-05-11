@@ -32,14 +32,6 @@ export default function LivestreamListView() {
         mb: { xs: 3, md: 5 }
       }}>
         <Typography variant="h3">Danh sách livestream</Typography>
-        <Button
-          component={RouterLink}
-          href={paths.dashboard.livestream.new}
-          variant="contained"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          Thêm livestream
-        </Button>
       </Stack>
       <LiveStreamListHorizontal endpoints={endpoints} loading={livestreamsLoading} livestreams={livestreams}
       />

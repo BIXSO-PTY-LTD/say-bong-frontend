@@ -29,7 +29,7 @@ export default function MatchListHorizontal({ matchs,
 
   const renderList = (
     <>
-      {matchs.slice(0, 8).map((match, index) => (
+      {matchs.map((match, index) => (
         <MatchItemHorizontal key={index} match={match} />
       ))}
     </>

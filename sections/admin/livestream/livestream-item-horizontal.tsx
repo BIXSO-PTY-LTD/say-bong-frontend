@@ -122,7 +122,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
               maxHeight: "107px"
             }}
           >
-            <Image alt={title} src={meta && meta.length > 0 ? meta[meta.length - 1].content : "/assets/images/match/background-item.jpg"} sx={{
+            <Image alt={title} src="/assets/images/match/background-item.jpg" sx={{
               borderRadius: 1.5, height: 1, width: 1
             }} />
           </Box>
