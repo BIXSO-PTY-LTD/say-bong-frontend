@@ -232,7 +232,7 @@ export default function MatchList({ matches }: Props) {
       )}
 
       {dataFiltered.length === 0 ? (
-        <Typography xs={{ mb: 2 }}>Không có trận đấu nào</Typography>
+        <Typography sx={{ mb: 2 }}>Không có trận đấu nào</Typography>
       ) :
         (
           <MatchListHorizontal matchs={dataFiltered} />
