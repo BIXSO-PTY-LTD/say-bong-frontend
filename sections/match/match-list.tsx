@@ -10,7 +10,7 @@ import MatchListHorizontal from "./match-list-horizontal";
 import { usePathname } from "next/navigation";
 import { paths } from "#/routes/paths";
 import { fDate } from "#/utils/format-time";
-import { filterLiveMatches, filterMatchByDate, filterMatchesByLeagueTitle, filterTodayMatches, filterTomorrowMatches, filterYesterdayMatches } from "#/utils/matchFilter";
+import { filterAllTimeMatches, filterLiveMatches, filterMatchByDate, filterMatchesByLeagueTitle, filterTodayAndLiveMatches, filterTodayMatches, filterTomorrowMatches, filterYesterdayMatches } from "#/utils/matchFilter";
 import { useFilteredMatchesCount } from "#/hooks/use-filtered-matches-count";
 import { addDays } from "date-fns";
 import { generateOptions } from "#/utils/generate-shedule_options";
@@ -31,7 +31,6 @@ type Props = {
 export default function MatchList({ matches }: Props) {
   const pathname = usePathname();
 
-  const matchesPerPage = 10;
   const [itemsToShow, setItemsToShow] = useState(10);
 
   const loadMoreItems = () => {
@@ -74,17 +73,15 @@ export default function MatchList({ matches }: Props) {
   const dataFiltered = applyFilter({
     inputData: matches,
     filters,
-    page,
-    matchesPerPage,
     pathname,
     itemsToShow
   });
 
-  const filteredMatchesCount = useFilteredMatchesCount(matches, filters, matchesPerPage);
 
   useEffect(() => {
-    setItemsToShow(10);
-  }, [filters.matchStatus, filters.league_title]);
+    setPage(1)
+    setItemsToShow(10)
+  }, [filters.matchStatus, filters.league_title])
 
   return (
     <>
@@ -200,10 +197,19 @@ export default function MatchList({ matches }: Props) {
                       filterTodayMatches(
                         filterMatchesByLeagueTitle(matches, filters.league_title)
                       ).length}
-                    {tab.value === "all" &&
-                      filterMatchesByLeagueTitle(
-                        matches,
-                        filters.league_title
+                    {tab.value === "all" && pathname === "/" &&
+                      filterLiveMatches(
+                        filterMatchesByLeagueTitle(matches, filters.league_title)
+                      ).length + filterTodayMatches(
+                        filterMatchesByLeagueTitle(matches, filters.league_title)
+                      ).length + filterTomorrowMatches(
+                        filterMatchesByLeagueTitle(matches, filters.league_title)
+                      ).length}
+                    {tab.value === "all" && (pathname === "/livestream" || pathname === "/result") &&
+                      filterLiveMatches(
+                        filterMatchesByLeagueTitle(matches, filters.league_title)
+                      ).length + filterTodayMatches(
+                        filterMatchesByLeagueTitle(matches, filters.league_title)
                       ).length}
                   </Label>
                 }
@@ -255,7 +261,7 @@ export default function MatchList({ matches }: Props) {
         </Button>
       )}
 
-      {pathname === '/livestream' && dataFiltered.length >= itemsToShow && (
+      {pathname !== '/' && dataFiltered.length >= itemsToShow && (
         <Button
           fullWidth
           onClick={loadMoreItems}
@@ -269,20 +275,6 @@ export default function MatchList({ matches }: Props) {
         </Button>
       )}
 
-      {pathname !== '/' && pathname !== '/livestream' && (
-        <Pagination
-          count={filteredMatchesCount}
-          color="primary"
-          page={page}
-          onChange={handlePageChange}
-          sx={{
-            my: 10,
-            [`& .${paginationClasses.ul}`]: {
-              justifyContent: 'center',
-            },
-          }}
-        />
-      )}
 
     </>
   )
@@ -292,21 +284,15 @@ export default function MatchList({ matches }: Props) {
 const applyFilter = ({
   inputData,
   filters,
-  page,
-  matchesPerPage,
   pathname,
   itemsToShow
 }: {
   itemsToShow: number,
-  matchesPerPage: number,
-  page: number,
   inputData: IMatchItem[];
   filters: IMatchFilters;
   pathname: string
 }) => {
   const { matchStatus, league_title } = filters;
-  const startIndex = (page - 1) * matchesPerPage;
-  const endIndex = startIndex + matchesPerPage;
   const today = new Date()
   // Define filters
   const filtersToApply: ((matches: IMatchItem[]) => IMatchItem[])[] = [];
@@ -318,36 +304,41 @@ const applyFilter = ({
   }
 
   // Filter based on matchStatus
-  if (matchStatus !== 'all') {
-    switch (matchStatus) {
-      case 'yesterday':
-        filtersToApply.push(filterYesterdayMatches);
-        break;
-      case 'today':
-        filtersToApply.push(filterTodayMatches);
-        break;
-      case 'tomorrow':
-        filtersToApply.push(filterTomorrowMatches);
-        break;
-      case 'live':
-        filtersToApply.push(filterLiveMatches);
-        break;
-      case fDate(addDays(today, 2)):
-        filtersToApply.push(filterMatchByDate(new Date(), 2));
-        break;
-      case fDate(addDays(today, 3)):
-        filtersToApply.push(filterMatchByDate(new Date(), 3));
-        break;
-      case fDate(addDays(today, 4)):
-        filtersToApply.push(filterMatchByDate(new Date(), 4));
-        break;
-      case fDate(addDays(today, 5)):
-        filtersToApply.push(filterMatchByDate(new Date(), 5));
-        break;
-      default:
+  switch (matchStatus) {
+    case 'yesterday':
+      filtersToApply.push(filterYesterdayMatches);
+      break;
+    case 'today':
+      filtersToApply.push(filterTodayMatches);
+      break;
+    case 'tomorrow':
+      filtersToApply.push(filterTomorrowMatches);
+      break;
+    case 'live':
+      filtersToApply.push(filterLiveMatches);
+      break;
+    case fDate(addDays(today, 2)):
+      filtersToApply.push(filterMatchByDate(new Date(), 2));
+      break;
+    case fDate(addDays(today, 3)):
+      filtersToApply.push(filterMatchByDate(new Date(), 3));
+      break;
+    case fDate(addDays(today, 4)):
+      filtersToApply.push(filterMatchByDate(new Date(), 4));
+      break;
+    case fDate(addDays(today, 5)):
+      filtersToApply.push(filterMatchByDate(new Date(), 5));
+      break;
+    case 'all':
+      if (pathname === "/") {
+        filtersToApply.push(filterAllTimeMatches);
+      } else {
+        filtersToApply.push(filterTodayAndLiveMatches);
+      }
+      break;
+    default:
 
-        break;
-    }
+      break;
   }
   // Apply filters sequentially
   let filteredData = inputData;
@@ -357,14 +348,8 @@ const applyFilter = ({
   }
 
 
-  if (pathname === "/livestream") {
-    return filteredData
-      .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
-      .slice(0, itemsToShow);
-  } else {
-    return filteredData
-      .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
-      .slice(startIndex, endIndex);
-  }
+  return filteredData
+    .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
+    .slice(0, itemsToShow);
 
 };

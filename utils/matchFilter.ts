@@ -90,3 +90,43 @@ export function isMatchOngoing(match: IMatchItem, currentTime: Date, endTimeThre
   const matchEndTime = new Date(matchStartTime.getTime() + 105 * 60000); // 105 minutes in milliseconds
   return matchStartTime <= currentTime && currentTime <= matchEndTime;
 }
+
+export function filterAllTimeMatches(matches: IMatchItem[]) {
+  const currentTime = new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = subDays(today, 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  const startOfYesterday = startOfDay(yesterday);
+  const endOfYesterday = endOfDay(yesterday);
+  const endOfToday = endOfDay(currentTime);
+  const endOfTomorrow = endOfDay(tomorrow);
+  const endTimeThreshold = new Date(currentTime.getTime() + 105 * 60000);
+
+  return matches.filter((match) => {
+    const matchStartTime = formatStringToDateTime(match.startTimez);
+    return (
+      isMatchOngoing(match, currentTime, endTimeThreshold) ||
+      (matchStartTime >= startOfYesterday && matchStartTime <= endOfYesterday) ||
+      (matchStartTime >= today && matchStartTime <= endOfToday) ||
+      (matchStartTime >= tomorrow && matchStartTime <= endOfTomorrow)
+    );
+  });
+}
+export function filterTodayAndLiveMatches(matches: IMatchItem[]) {
+  const currentTime = new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endOfToday = endOfDay(currentTime);
+  const endTimeThreshold = new Date(currentTime.getTime() + 105 * 60000); // 105 minutes in milliseconds
+
+  return matches.filter((match) => {
+    const matchStartTime = formatStringToDateTime(match.startTimez);
+    return (
+      isMatchOngoing(match, currentTime, endTimeThreshold) ||
+      (matchStartTime >= today && matchStartTime <= endOfToday)
+    );
+  });
+}
