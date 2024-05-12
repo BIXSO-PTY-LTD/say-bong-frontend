@@ -38,7 +38,6 @@ type Props = {
 };
 
 export default function SpecialNewsNewEditForm({ currentNew }: Props) {
-  console.log(currentNew);
 
   const router = useRouter();
 

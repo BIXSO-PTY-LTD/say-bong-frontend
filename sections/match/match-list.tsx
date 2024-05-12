@@ -10,7 +10,7 @@ import MatchListHorizontal from "./match-list-horizontal";
 import { usePathname } from "next/navigation";
 import { paths } from "#/routes/paths";
 import { fDate } from "#/utils/format-time";
-import { filterAllTimeMatches, filterLiveMatches, filterMatchByDate, filterMatchesByLeagueTitle, filterTodayAndLiveMatches, filterTodayMatches, filterTomorrowMatches, filterYesterdayMatches } from "#/utils/matchFilter";
+import { filterAllTimeMatches, filterFourDaysLaterMatches, filterLiveMatches, filterMatchByDate, filterMatchesByLeagueTitle, filterTodayAndLiveMatches, filterTodayMatches, filterTomorrowMatches, filterYesterdayMatches } from "#/utils/matchFilter";
 import { useFilteredMatchesCount } from "#/hooks/use-filtered-matches-count";
 import { addDays } from "date-fns";
 import { generateOptions } from "#/utils/generate-shedule_options";
@@ -41,7 +41,8 @@ export default function MatchList({ matches }: Props) {
 
   const SHEDULE_STATUS_OPTIONS = generateOptions(SCHEDULE_OPTIONS)
 
-  const COMPETITION_OPTIONS_SET = new Set(matches.map(match => match.league_title.trim().toLowerCase()));
+  const COMPETITION_OPTIONS_SET = pathname === "/" ? new Set(filterAllTimeMatches(matches).map(match => match.league_title.trim().toLowerCase())) : pathname === '/schedule' ? new Set(filterAllTimeMatches(matches).concat(filterFourDaysLaterMatches(matches))
+    .map(match => match.league_title.trim().toLowerCase())) : new Set(filterTodayAndLiveMatches(matches).map(match => match.league_title.trim().toLowerCase()));
 
   const COMPETITION_OPTIONS = Array.from(COMPETITION_OPTIONS_SET).sort();
 

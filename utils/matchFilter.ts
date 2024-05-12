@@ -1,5 +1,5 @@
 import { IMatchItem } from "#/types/match";
-import { endOfDay, startOfDay, subDays } from "date-fns";
+import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 import { fDate, formatStringToDateTime } from "./format-time";
 
 export const filterMatchByDate = (baseDate: Date, daysToAdd: number) => (matches: IMatchItem[]) => {
@@ -128,5 +128,14 @@ export function filterTodayAndLiveMatches(matches: IMatchItem[]) {
       isMatchOngoing(match, currentTime, endTimeThreshold) ||
       (matchStartTime >= today && matchStartTime <= endOfToday)
     );
+  });
+}
+export function filterFourDaysLaterMatches(matches: IMatchItem[]) {
+  const today = new Date();
+  const fourDaysLater = addDays(today, 4);
+
+  return matches.filter((match) => {
+    const matchDate = new Date(match.startTimez);
+    return matchDate >= today && matchDate <= fourDaysLater;
   });
 }
