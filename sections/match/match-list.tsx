@@ -4,7 +4,7 @@ import { MATCH_RESULT_OPTIONS, MATCH_STATUS_OPTIONS, SCHEDULE_OPTIONS } from "#/
 import Label from "#/components/label";
 import { IMatchFilterValue, IMatchFilters, IMatchItem } from "#/types/match";
 import { Button, Pagination, Stack, Tab, Tabs, Typography, paginationClasses, useTheme } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CompetitionSort from "../competition/competition-sort";
 import MatchListHorizontal from "./match-list-horizontal";
 import { usePathname } from "next/navigation";
@@ -82,7 +82,9 @@ export default function MatchList({ matches }: Props) {
 
   const filteredMatchesCount = useFilteredMatchesCount(matches, filters, matchesPerPage);
 
-
+  useEffect(() => {
+    setItemsToShow(10);
+  }, [filters.matchStatus, filters.league_title]);
 
   return (
     <>
