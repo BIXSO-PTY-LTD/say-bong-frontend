@@ -10,6 +10,8 @@ import { Link } from '@mui/material';
 import { RouterLink } from '#/routes/components';
 import { ILivestreamItem } from '#/types/livestream';
 import { useEffect, useState } from 'react';
+import { IMatchItem } from '#/types/match';
+import resposneData from '#/public/responseData.json'
 
 
 // ----------------------------------------------------------------------
@@ -21,6 +23,17 @@ type Props = {
 
 export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: Props) {
   const { title, createdAt, id, content, meta } = livestream;
+
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
+
+  useEffect(() => {
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+      setMatchingLivestream(matches.find(item => item.matchId === title))
+    }
+
+  }, [matches, title])
   const newMetaIndex = meta && meta.length > 0
     ? meta.length - 1
     : 0;
@@ -44,7 +57,10 @@ export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: P
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
         <Link component={RouterLink} color="inherit" href={paths.livestream.details(livestream.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{livestream.title}</TextMaxLine>
+          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{
+            matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
+              title
+            )}</TextMaxLine>
         </Link>
 
       </Stack>
