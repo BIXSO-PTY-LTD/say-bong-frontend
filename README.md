@@ -6,51 +6,74 @@ To download or pull the code for this project, follow these steps:
 
 Clone the Repository:
 
-bash
-Copy code
-git clone <repository_url>
+git clone https://github.com/BIXSO-PTY-LTD/say-bong-frontend.git
+
+
 Switch to the 'features' Branch:
 
-Copy code
 git checkout features
 Install Dependencies:
 
-Copy code
 npm install
+
 or
 
-Copy code
 yarn install
+
 Run the Project:
 
-arduino
-Copy code
 npm run dev
+
 or
 
-Copy code
 yarn dev
+
 Project Structure:
-pages/: Contains the Next.js pages.
-components/: Reusable React components.
-styles/: Stylesheets for the project.
-public/: Static assets like images or fonts.
-utils/: Utility functions or modules.
-...: Other project-specific directories and files.
+api/: Contains files related to API integration, including endpoints, API services, or utilities for making API calls.
+
+app/: This directory holds files specific to the application logic, such as state management, business logic, or main application components.
+
+assets/: Stores asset files such as images, fonts, icons, or any other static files used in the application.
+
+auth/: Houses files related to authentication, including authentication logic, authentication providers, or authentication-related components.
+
+components/: Contains reusable React components that can be used across different parts of the application.
+
+hooks/: Holds custom React hooks, which encapsulate logic that can be reused across multiple components.
+
+layouts/: Stores layout components, which define the overall structure and design of different pages or sections of the application.
+
+public/: Contains static assets that are publicly accessible, such as images, fonts, or any other files that need to be served directly to the client.
+
+routes/: Includes routing configuration files, defining the navigation paths and routes within the application.
+
+sections/: Contains specific sections of the application, each section may consist of multiple components, pages, or features.
+
+theme/: Holds theme configuration files, defining the visual style and design system of the application.
+
+types/: Stores TypeScript type definitions, providing type safety and improving code readability and maintainability.
+
+utils/: Houses utility functions or modules, containing commonly used functions or helper methods throughout the application.
+
+.env: Configuration file containing environment variables, such as API keys, database URLs, or any sensitive information required by the application.
+
 Development Workflow:
+
 Branches:
 
 features: Development branch where new features are implemented.
 main: Production-ready branch, stable and deployable.
+
 Pull Requests:
 
 Create a new branch from features.
 Implement your feature or fix.
 Push your changes to the repository.
 Open a pull request targeting the features branch.
-Additional Information:
-Dependencies:
 
+Additional Information:
+
+Dependencies:
 React
 Next.js
 Other project-specific dependencies listed in package.json.
@@ -66,5 +89,5 @@ Contributing:
 Feel free to open issues for bugs or feature requests.
 Pull requests are welcome. Please follow the outlined workflow.
 Contact:
-For any inquiries or support, please contact project_owner@example.com.
+For any inquiries or support, please contact truongcongtrung2709@gmail.com.
 
