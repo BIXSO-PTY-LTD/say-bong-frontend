@@ -11,6 +11,10 @@ import { useGetHighlightVideos } from '#/api/highlight-video';
 import { useEffect, useMemo, useState } from 'react';
 import { IMatchItem } from '#/types/match';
 import resposneData from '#/public/responseData.json'
+import { axiosSoccer } from '#/utils/axios';
+import { SOCCER_API } from '#/config-global';
+import QueryString from 'qs';
+
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -24,28 +28,28 @@ export default function HomeView() {
   const sortedNews = useMemo(() => {
     return [...news].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [news]);
-  useEffect(() => {
-    if (resposneData) {
-      setMatches(resposneData.data.list)
-    }
-  }, [])
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = QueryString.stringify({
-  //         'type': '1'
-  //       });
-  //       const response = await axiosSoccer.post(SOCCER_API as string, data);
-  //       // Handle success
-  //       setMatches(response.data.data.list);
-  //     } catch (error) {
-  //       // Handle error
-  //       console.error(error);
-  //     }
-  //   };
+  //   if (resposneData) {
+  //     setMatches(resposneData.data.list)
+  //   }
+  // }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = QueryString.stringify({
+          'type': '1'
+        });
+        const response = await axiosSoccer.post(SOCCER_API as string, data);
+        // Handle success
+        setMatches(response.data.data.list);
+      } catch (error) {
+        // Handle error
+        console.error(error);
+      }
+    };
 
-  //   fetchData();
-  // }, []);
+    fetchData();
+  }, []);
   return (
     <MainLayout>
       <Container style={{ maxWidth: "1330px", padding: "0" }}>
