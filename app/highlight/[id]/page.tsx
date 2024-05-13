@@ -2,11 +2,10 @@
 
 // ----------------------------------------------------------------------
 
-import { _tours } from "#/_mock";
 import HighlightDetailView from "#/sections/highlight/highlight-detail-view";
 
 export const metadata = {
-  title: 'Dashboard: Highlight',
+  title: 'Say Bóng: Highlights',
 };
 
 type Props = {

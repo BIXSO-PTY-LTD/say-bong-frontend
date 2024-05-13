@@ -1,13 +1,11 @@
 'use client';
 
 import { Container, IconButton, Pagination, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
 import { IUserItem, IUserTableFilters } from '#/types/user';
 import { TableHeadCustom, TableSelectedAction, getComparator, useTable } from '#/components/table';
 import { useEffect, useState } from 'react';
-import { _userList } from '#/_mock/_user';
+
 import Iconify from '#/components/iconify';
 import Scrollbar from '#/components/scrollbar';
 import UserTableRow from '../user-table-row';
@@ -85,7 +83,7 @@ export default function UserListView() {
             )
           }
           action={
-            <Tooltip title="Delete">
+            <Tooltip title="Xóa">
               <IconButton color="primary" onClick={confirm.onTrue}>
                 <Iconify icon="solar:trash-bin-trash-bold" />
               </IconButton>

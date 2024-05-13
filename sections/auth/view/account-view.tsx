@@ -1,8 +1,7 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
+import { Box, Container, Typography } from '@mui/material';
+
 import AccountEditForm from '../account-edit-form';
 import { useAuthContext } from '#/auth/hooks';
 import { useEffect, useState } from 'react';
@@ -18,9 +17,9 @@ export default function AccountView() {
 
 
   return (
-    <Container>
+    <Container style={{ maxWidth: "1330px", padding: "0" }}>
       <Typography sx={{ textTransform: "uppercase", my: 8 }} variant="h3">Tài khoản</Typography>
       <AccountEditForm currentUser={user} />
-    </Container>
+    </Container >
   );
 }

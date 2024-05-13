@@ -1,4 +1,4 @@
-import { _userList } from '#/_mock/_user';
+
 import { ExcitingEditView } from '#/sections/admin/exciting/view';
 
 

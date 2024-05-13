@@ -111,9 +111,11 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const updateExcitingVideo = useUpdateExcitingVideo()
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const updatedContent = await upload(data.content)
+      if (data.content instanceof File) {
+        const updatedContent = await upload(data.content)
 
-      data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
+        data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
+      }
       if (currentVideo) {
         await updateExcitingVideo(data)
       } else {

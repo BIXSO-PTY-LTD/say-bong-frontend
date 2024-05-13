@@ -1,20 +1,11 @@
-import { sub } from 'date-fns';
-import { useRef, useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
-import Stack from '@mui/material/Stack';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
-
-import { paths } from '#/routes/paths';
-import { useRouter } from '#/routes/hooks';
-
-import { useMockedUser } from '#/hooks/use-mocked-user';
-
-
+import EmojiPicker from 'emoji-picker-react';
 import Iconify from '#/components/iconify';
-import { IAuthor } from '#/types/chat';
-import { useAuthContext } from '#/auth/hooks';
 import { useSendMessage } from '#/api/chat';
+import Image from '#/components/image';
 
 
 // ----------------------------------------------------------------------
@@ -29,14 +20,17 @@ export default function ChatMessageInput({
   userId
 }: Props) {
 
-
-
-
   const [message, setMessage] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   }, []);
+
+  const handleEmojiClick = (emojiData: any, event: any) => {
+    setMessage((prevMessage) => prevMessage + emojiData.emoji)
+
+  }
 
   const messageData = useMemo(
     () => ({
@@ -69,23 +63,33 @@ export default function ChatMessageInput({
   );
 
   return (
-    <InputBase
-      value={message}
-      onKeyUp={handleKeyPress}
-      onChange={handleChangeMessage}
-      placeholder="Chat..."
-      endAdornment={
-        <IconButton onClick={handleSendMessage}>
-          <Iconify icon="solar:map-arrow-right-bold-duotone" />
-        </IconButton>
-      }
-      sx={{
-        px: 1,
-        height: 56,
-        flexShrink: 0,
-        borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
-      }}
-    />
-
+    <>
+      <InputBase
+        value={message}
+        onKeyUp={handleKeyPress}
+        onChange={handleChangeMessage}
+        placeholder="Chat..."
+        startAdornment={
+          <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+            <Image alt="smile-face" src='/assets/icons/chat/smile-face.svg' sx={{ pb: 0.5 }} />
+          </IconButton>
+        }
+        endAdornment={
+          <IconButton onClick={handleSendMessage}>
+            <Image alt="smile-face" src='/assets/icons/chat/arrow.svg' sx={{ pb: 0.5 }} />
+          </IconButton>
+        }
+        sx={{
+          px: 1,
+          height: "80px",
+          flexShrink: 0,
+          background: "#141622",
+        }}
+      />
+      {showEmojiPicker &&
+        (
+          <EmojiPicker onEmojiClick={handleEmojiClick} width="300px" height="400px" style={{ position: "absolute", bottom: 60 }}/>
+        )}
+    </>
   );
 }

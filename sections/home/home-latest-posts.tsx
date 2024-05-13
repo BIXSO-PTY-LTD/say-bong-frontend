@@ -44,7 +44,7 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
     {mdUp ? (
       <>
         {posts.slice(0, 4).map((post, index) => (
-          <HomeLatestPostItem key={post.id} post={post}
+          <HomeLatestPostItem transparent key={post.id} post={post}
           // order={index % 2}
           />
         ))}
@@ -60,7 +60,7 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
   </Box>
   </>
   return (
-    <Container
+    <Box
       sx={{
         pt: { xs: 5, md: 10 },
         pb: 10,
@@ -90,6 +90,6 @@ export default function HomeLastestPosts({ posts, loading, empty }: Props) {
         renderList
       )}
 
-    </Container>
+    </Box>
   );
 }

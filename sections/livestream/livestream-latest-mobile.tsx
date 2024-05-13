@@ -10,7 +10,9 @@ import { Link } from '@mui/material';
 import { RouterLink } from '#/routes/components';
 import { ILivestreamItem } from '#/types/livestream';
 import { useEffect, useState } from 'react';
-import { _mock } from '#/_mock';
+import { IMatchItem } from '#/types/match';
+import resposneData from '#/public/responseData.json'
+
 
 // ----------------------------------------------------------------------
 
@@ -20,15 +22,21 @@ type Props = {
 };
 
 export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: Props) {
-  const [firstImageUrl, setFirstImageUrl] = useState('');
+  const { title, createdAt, id, content, meta } = livestream;
+
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
 
   useEffect(() => {
-    const regex = /<img.*?src="(.*?)".*?>/;
-    const match = livestream.content.match(regex);
-    if (match && match[1]) {
-      setFirstImageUrl(match[1]);
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+      setMatchingLivestream(matches.find(item => item.matchId === title))
     }
-  }, [livestream.content]);
+
+  }, [matches, title])
+  const newMetaIndex = meta && meta.length > 0
+    ? meta.length - 1
+    : 0;
   return (
     <Stack
       spacing={2}
@@ -38,7 +46,7 @@ export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: P
     >
       <Image
         alt={livestream.title}
-        src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"}
         sx={{
           width: 80,
           height: 80,
@@ -49,7 +57,10 @@ export default function LivestreamLatestPostMobile({ livestream, onSiderbar }: P
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
         <Link component={RouterLink} color="inherit" href={paths.livestream.details(livestream.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{livestream.title}</TextMaxLine>
+          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{
+            matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
+              title
+            )}</TextMaxLine>
         </Link>
 
       </Stack>

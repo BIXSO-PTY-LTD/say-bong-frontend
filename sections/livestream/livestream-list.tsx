@@ -5,6 +5,8 @@ import { ILivestreamItem } from '#/types/livestream';
 import { Typography } from '@mui/material';
 import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
 import EmptyContent from '#/components/empty-content';
+import { useEffect, useState } from 'react';
+import { IMatchItem } from '#/types/match';
 
 
 
@@ -23,6 +25,17 @@ export default function LivestreamList({ livestreams,
   loading, paginate, currentPage, handlePageChange, empty
 }: Props) {
   const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+  const [filterLivestreams, setFilterLivestreams] = useState<ILivestreamItem[]>();
+
+  useEffect(() => {
+    const filtered = livestreams.filter(livestream => (
+      livestream.title &&                      // Make sure there's a title
+      livestream.title.length !== 15 &&        // Title has exactly 15 characters
+      livestream.title.includes(" ")          // Title has no spaces
+    ));
+    setFilterLivestreams(filtered);
+  }, [livestreams]);
+
 
   const renderList = (
     <Box
@@ -37,7 +50,7 @@ export default function LivestreamList({ livestreams,
         },
       }}
     >
-      {livestreams.map((livestream) =>
+      {filterLivestreams?.map((livestream) =>
       (
         <LivestreamItem key={livestream.id} livestream={livestream} />
       )

@@ -2,11 +2,10 @@
 
 // ----------------------------------------------------------------------
 
-import { _tours } from "#/_mock";
 import ExcitingDetailView from "#/sections/highlight/exciting/exciting-detail-view";
 
 export const metadata = {
-  title: 'Dashboard: Những pha bóng thú vị',
+  title: 'Say bóng: Những pha bóng thú vị',
 };
 
 type Props = {

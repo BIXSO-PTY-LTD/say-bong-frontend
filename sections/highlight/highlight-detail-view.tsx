@@ -2,9 +2,7 @@
 
 import { ITourProps } from "#/types/tour"
 import { Box, Container, Grid, Stack, Typography } from "@mui/material"
-import { _tours } from "#/_mock"
 import HighlightVideo from "./highlight-video"
-import { _careerPosts } from "#/_mock/_blog"
 import ExcitingLatest from "./exciting/exciting-latest"
 import HighlightLatest from "./highlight-latest"
 import { useGetHighlightVideo, useGetHighlightVideos } from "#/api/highlight-video"
@@ -18,7 +16,8 @@ export default function HighlightDetailView({ id }: Props) {
   const filteredHighlights = currentVideo ? highlightVideos.filter(video => video.id !== currentVideo.id) : highlightVideos;
 
   return (
-    <Container>
+    <Container style={{ maxWidth: "1330px", padding: "0" }}>
+
 
       <Stack direction="column">
 

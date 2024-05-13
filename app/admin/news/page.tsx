@@ -1,12 +1,20 @@
-import NewsListView from "#/sections/admin/news/view/news-list-view";
+"use client"
+
+import { paths } from "#/routes/paths";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
 
-export const metadata = {
-  title: 'Dashboard: News',
-};
-
 export default function NewsPage() {
-  return <NewsListView />;
+  const router = useRouter()
+  useEffect(() => {
+    (
+      router.push(paths.dashboard.news.special.root)
+    )
+  })
+  return (
+    <></>
+  )
 }

@@ -10,7 +10,9 @@ import { fDate } from '#/utils/format-time';
 import { IBlogPostProps } from '#/types/blog';
 import { paths } from '#/routes/paths';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
+import { useEffect, useState } from 'react';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +22,20 @@ type Props = {
 };
 
 export default function ExcitingLatestMobile({ video, onSiderbar }: Props) {
+
+  const { id, title, content, createdAt } = video;
+
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+
+  useEffect(() => {
+    if (content) {
+      captureThumbnail(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
+
   return (
     <Stack
       spacing={2}
@@ -28,8 +44,8 @@ export default function ExcitingLatestMobile({ video, onSiderbar }: Props) {
       sx={{ width: 1 }}
     >
       <Image
-        alt={video.title}
-        src={_mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+        alt={title}
+        src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
         sx={{
           width: 80,
           height: 80,
@@ -39,8 +55,8 @@ export default function ExcitingLatestMobile({ video, onSiderbar }: Props) {
       />
 
       <Stack spacing={onSiderbar ? 0.5 : 1}>
-        <Link color="inherit" href={paths.exciting.details(video.id)}>
-          <TextMaxLine variant={onSiderbar ? 'subtitle2' : 'h6'}>{video.title}</TextMaxLine>
+        <Link color="inherit" href={paths.exciting.details(id)}>
+          <TextMaxLine variant='subtitle2'>{title}</TextMaxLine>
         </Link>
 
       </Stack>

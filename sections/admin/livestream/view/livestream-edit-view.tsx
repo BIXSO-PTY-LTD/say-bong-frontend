@@ -6,9 +6,8 @@ import Container from '@mui/material/Container';
 
 import { useSettingsContext } from '#/components/settings';
 
-import { _userList } from '#/_mock/_user';
+
 import { Typography } from '@mui/material';
-import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
 import LivestreamNewEditForm from '../livestream-new-edit-form';
 import { useGetLivestream } from '#/api/livestream';
 

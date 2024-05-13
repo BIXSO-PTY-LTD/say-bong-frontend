@@ -22,7 +22,7 @@ import FormProvider, {
   RHFUploadFile,
 } from '#/components/hook-form';
 
-import { Button, CardHeader, FormHelperText } from '@mui/material';
+import { Alert, Button, CardHeader, FormHelperText } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
 import { mutate } from 'swr';
@@ -32,6 +32,7 @@ import { useCreateLivestream, useUpdateLivestream } from '#/api/livestream';
 import { Upload } from '#/components/upload';
 import { useUpload } from '#/api/upload';
 import { HOST_API } from '#/config-global';
+import { metadata } from '#/app/layout';
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -43,17 +44,19 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
 
   const mdUp = useResponsive('up', 'md');
 
+  const [errorMsg, setErrorMsg] = useState('');
+
 
   const { enqueueSnackbar } = useSnackbar();
 
   const LivestreamSchema = Yup.object().shape({
     id: Yup.string(),
     title: Yup.string().required('Phải có tiêu đề'),
-    content: Yup.string().required('Phải có link livestream'),
+    content: Yup.string().required('Phải có link livestream').url('Phải nhập một đường link hợp lệ.'),
     metas: Yup.array().of(
       Yup.object().shape({
-        key: Yup.string().required(),
-        content: Yup.mixed<any>().nullable().required('Phải có hình ảnh hiển thị')
+        key: Yup.string(),
+        content: Yup.mixed<any>().nullable()
       })
     )
   });
@@ -93,14 +96,20 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
   const updateLivestream = useUpdateLivestream();
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
+        ? currentLivestream.meta.length - 1
+        : 0;
+      if (data.metas && data.metas.length > 0 && data.metas[newMetaIndex]?.content instanceof File) {
+        const fileData = await upload(data.metas[newMetaIndex]?.content);
+        data.metas = [{
+          content: `${HOST_API}/api/v1/${fileData[0].filename}`,
+          key: "thumbnail"
+        }];
 
-      if (data.metas && data.metas.length > 0) {
-        const fileData = await upload(data.metas[0].content)
-
-        data.metas[0].content = `${HOST_API}/api/v1/${fileData[0].filename}`
       } else {
-        console.log('No metas found or metas array is empty');
+        data.metas = []
       }
+
       if (currentLivestream) {
         await updateLivestream(data);
       } else {
@@ -110,29 +119,41 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
       enqueueSnackbar(currentLivestream ? 'Cập nhật thành công!' : 'Tạo thành công');
       router.push(paths.dashboard.livestream.root);
       console.info('DATA', data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
+
     }
   });
+
+
+
 
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
+      const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
+        ? currentLivestream.meta.length - 1
+        : 0;
 
       if (file) {
-        setValue('metas.0.content', newFile, { shouldValidate: true });
+        const newFile = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+
+        // Update the form value with the new file
+        setValue(`metas.${newMetaIndex}.content`, newFile, { shouldValidate: true });
       }
     },
-    [setValue]
+    [currentLivestream?.meta, setValue]
   );
 
   const handleRemoveFile = useCallback(() => {
-    setValue('metas.0.content', null);
-  }, [setValue]);
+    const newMetaIndex = currentLivestream?.meta && currentLivestream?.meta.length > 0
+      ? currentLivestream.meta.length - 1
+      : 0;
+    setValue(`metas.${newMetaIndex}.content`, null);
+  }, [currentLivestream?.meta, setValue]);
 
 
 
@@ -152,6 +173,8 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
             <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <RHFTextField inputColor='#fff' name="content" label="Link livestream" />
@@ -159,7 +182,7 @@ export default function LivestreamNewEditForm({ currentLivestream }: Props) {
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Hình hiển thị</Typography>
               <RHFUpload
-                name="metas.0.content"
+                name={`metas.${currentLivestream?.meta && currentLivestream?.meta.length > 0 ? currentLivestream.meta.length - 1 : 0}.content`}
                 onDrop={handleDrop}
                 onDelete={handleRemoveFile}
               />

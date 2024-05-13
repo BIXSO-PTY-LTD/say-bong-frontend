@@ -10,9 +10,9 @@ import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Card } from '@mui/material';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
 import { useEffect, useState } from 'react';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 
 // ----------------------------------------------------------------------
@@ -32,25 +32,25 @@ export default function ExcitingLatestItem({ video,
 
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }
   }, [content]);
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Card sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
           ...(largePost && {
-            borderRadius: 2,
             overflow: 'hidden',
             position: 'relative',
           }),
         }}
       >
         <Image
-          src={videoThumbnail}
+          src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
+          maxHeight="170px"
           alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
@@ -70,8 +70,8 @@ export default function ExcitingLatestItem({ video,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.exciting.details(id)} color="inherit">
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.exciting.details(id)} color="inherit">
             <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{title}</TextMaxLine>
           </Link>
 

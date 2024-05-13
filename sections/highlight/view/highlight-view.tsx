@@ -1,8 +1,7 @@
 'use client';
 
-import { Container, Typography } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
+import { Box, Container, Typography } from '@mui/material';
+
 import HighlightList from '../highlight-list';
 import ExcitingHighlightList from '../exciting/exciting-highlight-list';
 import { useGetHighlightVideos } from '#/api/highlight-video';
@@ -21,6 +20,14 @@ export default function HighlightView() {
 
   const { excitingVideos, excitingVideosLoading, excitingVideosEmpty, paginate: excitingPaginate } = useGetExcitingVideos(currentPageExciting, 8);
 
+  const sortedHighlightVideos = [...highlightVideos].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  const sortedExcitingVideos = [...excitingVideos].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   const handlePageChangeHighlight = (event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPageHighlight(page);
   };
@@ -29,10 +36,11 @@ export default function HighlightView() {
     setCurrentPageExciting(page);
   };
   return (
-    <Container>
+    <Container style={{ maxWidth: "1330px", padding: "0" }}>
+
       <Typography sx={{ textTransform: "uppercase", my: 5 }} variant="h3">Highlight</Typography>
       <HighlightList
-        videos={highlightVideos}
+        videos={sortedHighlightVideos}
         loading={highlightVideosLoading}
         empty={highlightVideosEmpty}
         paginate={highlightPaginate}
@@ -41,7 +49,7 @@ export default function HighlightView() {
       />
 
       <ExcitingHighlightList
-        videos={excitingVideos}
+        videos={sortedExcitingVideos}
         loading={excitingVideosLoading}
         empty={excitingVideosEmpty}
         paginate={excitingPaginate}

@@ -1,5 +1,5 @@
 export type ILivestreamMetas = {
-  key: string;
+  key?: string;
   content?: string;
 };
 export type ILivestreamItem = {
@@ -8,6 +8,6 @@ export type ILivestreamItem = {
   content: string;
   createdAt: Date;
   video: string;
-  metas: ILivestreamMetas[];
-  meta: ILivestreamMetas[];
+  metas?: ILivestreamMetas[];
+  meta?: ILivestreamMetas[];
 };

@@ -66,6 +66,8 @@ export default function ExcitingLatest({ filteredExcitings }: Props) {
             sm: 'repeat(2, 1fr)',
             md: 'repeat(4, 1fr)',
           },
+          mb: 2
+
         }}
       >
         {mdUp ? (

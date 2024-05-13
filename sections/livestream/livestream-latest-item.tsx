@@ -10,8 +10,10 @@ import { Box, Card } from '@mui/material';
 import { ILivestreamItem } from '#/types/livestream';
 import Label from '#/components/label';
 import { useEffect, useState } from 'react';
-import { _mock } from '#/_mock';
+
 import Iconify from '#/components/iconify';
+import { IMatchItem } from '#/types/match';
+import resposneData from '#/public/responseData.json'
 
 
 // ----------------------------------------------------------------------
@@ -26,8 +28,23 @@ export default function LivestreamLatestItem({ livestream,
   //  order,
   largelivestream }: Props) {
   const { title, createdAt, id, content, meta } = livestream;
+
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+
+  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
+
+  useEffect(() => {
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+      setMatchingLivestream(matches.find(item => item.matchId === title))
+    }
+  }, [matches, title])
+
+  const newMetaIndex = meta && meta.length > 0
+    ? meta.length - 1
+    : 0;
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
@@ -55,7 +72,8 @@ export default function LivestreamLatestItem({ livestream,
 
         <Box sx={{ position: "relative" }}>
           <Image
-            src={meta[0].content ? meta[0].content : _mock.image.cover(Math.floor(Math.random() * 23) + 1)}
+            src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"}
+            maxHeight="170px"
             alt={title}
             ratio={(largelivestream && '3/4') ||
               // (order && '4/3') ||
@@ -90,14 +108,17 @@ export default function LivestreamLatestItem({ livestream,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.livestream.details(id)} color="inherit">
-            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{title}</TextMaxLine>
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit">
+            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{
+              matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
+                title
+              )}</TextMaxLine>
           </Link>
 
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

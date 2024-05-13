@@ -1,16 +1,13 @@
 import { Box, Stack, Table, TableBody, TableContainer, Typography } from "@mui/material";
-import { COMPETITION_SORT_OPTIONS } from "#/_mock";
-import { useCallback, useState } from "react";
-import { IMatchFilterValue } from "#/types/match";
-import Scrollbar from "#/components/scrollbar";
-import { TableHeadCustom, getComparator, useTable } from "#/components/table";
-import { _teamList } from "#/_mock/_team";
-import { ITeamItem, ITeamTableFilters } from "#/types/team";
+import { useCallback, useEffect, useState } from "react";
+import { IMatchFilterValue, IMatchItem, IRankFilters } from "#/types/match";
+import { TableHeadCustom, useTable } from "#/components/table";
 import CompetitionSort from "../competition/competition-sort";
 import BXHTableRow from "./bxh-table-row";
+import { filterMatchesByLeagueTitle } from "#/utils/matchFilter";
 
 const TABLE_HEAD = [
-  { id: 'team', label: 'TEAM', width: 1000, },
+  { id: 'team', label: 'TEAM', width: { md: 300, lg: 740 } },
   { id: 'matchs', label: 'ST', },
   { id: 'win', label: 'T', color: "#007AFF" },
   { id: 'draw', label: 'H', color: "#01B243" },
@@ -20,23 +17,22 @@ const TABLE_HEAD = [
   { id: '5_matchs', label: '5 trận gần nhất', },
 ];
 
-const defaultFilters: ITeamTableFilters = {
-  competition: 'all',
+const defaultFilters: IRankFilters = {
+  league_title: '',
 };
 
-const COMPETITION_OPTIONS = [...COMPETITION_SORT_OPTIONS];
-const allOption = { value: 'all', label: 'Tất cả' };
-COMPETITION_OPTIONS.unshift(allOption);
 
-export default function BXHList() {
+type Props = {
+  matches: IMatchItem[]
+}
+export default function BXHList({ matches }: Props) {
+
   const table = useTable();
   const [filters, setFilters] = useState(defaultFilters);
-
-  const [tableData, setTableData] = useState(_teamList);
+  const [COMPETITION_OPTIONS, setCompetitionOptions] = useState<string[]>([]);
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(table.order, table.orderBy),
+    inputData: matches,
     filters,
   });
 
@@ -47,6 +43,27 @@ export default function BXHList() {
     }));
 
   }, []);
+  useEffect(() => {
+    if (COMPETITION_OPTIONS.length > 0) {
+      // Set filter to the first option in COMPETITION_OPTIONS when component mounts
+      setFilters(prevState => ({
+        ...prevState,
+        league_title: COMPETITION_OPTIONS[0]
+      }));
+    }
+  }, [COMPETITION_OPTIONS]);
+
+  useEffect(() => {
+
+    // Extract unique league titles and convert to lowercase
+    const options = Array.from(new Set(matches.map(match => match.league_title.trim().toLowerCase())));
+
+    // Convert Set to array and sort alphabetically
+    setCompetitionOptions(options.sort());
+
+  }, [matches]);
+
+
   return (
     <>
       <Stack spacing={3}
@@ -60,7 +77,7 @@ export default function BXHList() {
           //
           competitionOptions={COMPETITION_OPTIONS} />
       </Stack>
-      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "lg" }}>
+      <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: { xs: 3, md: 0 }, maxWidth: "xl" }}>
 
 
         <Box sx={{ overflow: 'auto' }} >
@@ -69,15 +86,15 @@ export default function BXHList() {
               order={table.order}
               orderBy={table.orderBy}
               headLabel={TABLE_HEAD}
-              rowCount={tableData.length}
+              rowCount={matches.length}
               numSelected={table.selected.length}
 
             />
 
             <TableBody>
-              {dataFiltered.map((row) => (
+              {dataFiltered.map((row, index) => (
                 <BXHTableRow
-                  key={row.id}
+                  key={index}
                   row={row}
                 />
               ))}
@@ -93,31 +110,14 @@ export default function BXHList() {
 
 function applyFilter({
   inputData,
-  comparator,
   filters,
 }: {
-  inputData: ITeamItem[];
-  comparator: (a: any, b: any) => number;
-  filters: ITeamTableFilters;
+  inputData: IMatchItem[];
+  filters: IRankFilters;
 }) {
-  const { competition } = filters;
+  const { league_title } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
+  inputData = filterMatchesByLeagueTitle(inputData, league_title)
 
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-
-
-  if (competition !== 'all') {
-    inputData = inputData.filter((team) => team.competition === competition);
-  }
-
-
-  return inputData;
+  return inputData.sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime());
 }

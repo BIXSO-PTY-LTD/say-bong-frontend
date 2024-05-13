@@ -21,13 +21,15 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { ITourProps } from '#/types/tour';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
+
 import { useDeleteExcitingVideo } from '#/api/exciting-video';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { mutate } from 'swr';
 import { ConfirmDialog } from '#/components/custom-dialog';
 import { Button } from '@mui/material';
 import { useBoolean } from '#/hooks/use-boolean';
+import captureThumbnail from '#/utils/capturethumbnail';
+import { fDate } from '#/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +45,7 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
 
   const confirm = useBoolean();
 
+  const smUp = useResponsive('up', 'sm');
 
 
   const deleteExcitingVideo = useDeleteExcitingVideo();
@@ -62,8 +65,18 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
   const {
     id,
     title,
-    content
+    content,
+    createdAt
   } = video;
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnail(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
     <>
@@ -76,24 +89,41 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
         >
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
             <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {title}
+              {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.video.exciting.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {content}
+                {title}
               </TextMaxLine>
             </Link>
           </Stack>
         </Stack>
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
+        {smUp && (
+          <Box
+            sx={{
+              position: 'relative',
+              p: 1,
+              minWidth: "164px",
+              maxHeight: "107px"
 
+            }}
+          >
+            <Image alt={title} src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"} sx={{
+              borderRadius: 1.5, width: 1, height: 1
 
+            }} />
+          </Box>
+        )}
       </Stack>
 
       <CustomPopover
@@ -119,17 +149,17 @@ export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          Xóa
         </MenuItem>
       </CustomPopover>
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
+        title="Xóa"
         content={"Bạn chắc chắn muốn xóa?"}
         action={
           <Button variant="contained" color="error" onClick={() => handleDeleteVideo(id)}>
-            Delete
+            Xóa
           </Button>
         }
       />

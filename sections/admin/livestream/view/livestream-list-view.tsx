@@ -1,16 +1,15 @@
 'use client';
 
 import { Button, Container, Pagination, Stack, Typography, paginationClasses } from '@mui/material';
-import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
-import { _userList } from '#/_mock/_user';
+
 import Iconify from '#/components/iconify';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LiveStreamListHorizontal from '../livestream-list-horizontal';
 import { useGetLivestreams } from '#/api/livestream';
+import { IMatchItem } from '#/types/match';
 
 // ----------------------------------------------------------------------
 
@@ -33,18 +32,9 @@ export default function LivestreamListView() {
         mb: { xs: 3, md: 5 }
       }}>
         <Typography variant="h3">Danh sách livestream</Typography>
-        <Button
-          component={RouterLink}
-          href={paths.dashboard.livestream.new}
-          variant="contained"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          Thêm livestream
-        </Button>
       </Stack>
       <LiveStreamListHorizontal endpoints={endpoints} loading={livestreamsLoading} livestreams={livestreams}
       />
-
       <Pagination
         count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
         page={currentPage}

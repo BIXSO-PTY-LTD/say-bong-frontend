@@ -7,9 +7,9 @@ import Container from '@mui/material/Container';
 
 
 import NewsSidebar from '../news-sidebar';
-import { _travelPosts } from '#/_mock/_blog';
 import { useGetNew, useGetNews } from '#/api/news';
 import NewsDetails from '../news-details';
+import { Box, Skeleton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -18,23 +18,21 @@ type Props = {
 }
 
 export default function NewsDetailsView({ id }: Props) {
-  const { new: currentPost } = useGetNew(id);
-  const { news, newsLoading, newsEmpty } = useGetNews(1, 4);
+  const { new: currentPost, newLoading } = useGetNew(id);
+  const { news, newsLoading, newsEmpty } = useGetNews(1, 100);
+  const filteredNews = news.filter((item) => item.id !== id)
   return (
     <>
-
-      <Container sx={{ mt: 5 }}>
+      <Container style={{ maxWidth: "1330px", padding: "0" }}>
         <Grid container columnSpacing={{ xs: 0, md: 8 }} >
           <Grid xs={12} md={8}>
-            <NewsDetails currentPost={currentPost} />
-
-
+            <NewsDetails currentPost={currentPost} loading={newLoading} />
 
           </Grid>
 
           <Grid xs={12} md={4}>
             <NewsSidebar
-              recentPosts={news}
+              recentPosts={filteredNews.slice(1.6)}
               loading={newsLoading} empty={newsEmpty}
             />
           </Grid>

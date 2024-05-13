@@ -15,8 +15,10 @@ import TextMaxLine from '#/components/text-max-line';
 
 import Label from '#/components/label';
 import { IVideoItem } from '#/types/video';
-import { _mock } from '#/_mock';
-import captureThumbnailFromCloudinary from '#/utils/capturethumbnail';
+
+import captureThumbnail from '#/utils/capturethumbnail';
+import { Stack, Typography } from '@mui/material';
+import { fDate } from '#/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +33,7 @@ export default function HighlightItem({ video }: Props) {
 
   useEffect(() => {
     if (content) {
-      captureThumbnailFromCloudinary(content, (thumbnailUrl: string) => {
+      captureThumbnail(content, (thumbnailUrl: string) => {
         setVideoThumbnail(thumbnailUrl);
       });
     }
@@ -39,10 +41,11 @@ export default function HighlightItem({ video }: Props) {
 
 
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
-      <Box
+    <Box sx={{ background: 'transparent' }}>
+      <Stack
         sx={{
           position: 'relative',
+          maxHeight: '260px',
         }}
       >
         <Label sx={{
@@ -59,15 +62,17 @@ export default function HighlightItem({ video }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={title} src={videoThumbnail} ratio="1/1" />
+        <Image alt={title} src={videoThumbnail} height="172px" ratio="1/1" />
 
-      </Box>
-
-      <Link component={RouterLink} href={paths.highlight.details(id)} color="inherit" >
-        <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
-          {title}
-        </TextMaxLine>
-      </Link>
-    </Card>
+      </Stack>
+      <Stack sx={{ mt: 2 }}>
+        <Typography variant='caption'>{fDate(video?.createdAt)}</Typography>
+        <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.highlight.details(id)} color="inherit" >
+          <TextMaxLine variant="subtitle1" persistent>
+            {title}
+          </TextMaxLine>
+        </Link>
+      </Stack >
+    </Box>
   );
 }

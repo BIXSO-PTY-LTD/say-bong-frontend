@@ -23,9 +23,9 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { IBlogPostProps } from '#/types/blog';
 import { INewsItem } from '#/types/news';
-import { _mock } from '#/_mock';
+
 import { useCallback, useEffect, useState } from 'react';
-import { useDeleteNew, useGetNews } from '#/api/news';
+import { useDeleteNew } from '#/api/news';
 import { mutate } from 'swr';
 import { endpoints } from '#/utils/axios';
 import { ConfirmDialog } from '#/components/custom-dialog';
@@ -78,6 +78,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
     content,
     createdAt,
   } = item;
+  const cleanTitle = title.replace('#', '');
 
   return (
     <>
@@ -93,30 +94,35 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
               {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {title}
+                {cleanTitle}
               </TextMaxLine>
             </Link>
           </Stack>
         </Stack>
-
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
         {smUp && (
           <Box
             sx={{
               position: 'relative',
               p: 1,
-              width: "164px"
+              minWidth: "164px",
+              maxHeight: "107px"
+
             }}
           >
-            <Image alt={title} src={firstImageUrl ? firstImageUrl : _mock.image.cover(Math.floor(Math.random() * 23) + 1)} sx={{
-              borderRadius: 1.5, height: 1
+            <Image alt={title} src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"} sx={{
+              borderRadius: 1.5, width: 1, height: 1
+
             }} />
           </Box>
         )}
@@ -131,7 +137,7 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.details(id));
+            router.push(paths.dashboard.news.normal.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />
@@ -151,11 +157,11 @@ export default function PostItemHorizontal({ item, endpoints }: Props) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
+        title="Xóa"
         content={"Bạn chắc chắn muốn xóa?"}
         action={
           <Button variant="contained" color="error" onClick={() => handleDeleteNew(id)}>
-            Delete
+            Xóa
           </Button>
         }
       />

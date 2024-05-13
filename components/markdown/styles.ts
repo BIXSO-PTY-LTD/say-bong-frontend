@@ -87,8 +87,8 @@ const StyledMarkdown = styled('div', {
   '& img': {
     borderRadius: theme.spacing(1),
     width: '100%',
-    height: "500px",
-    objectFit: "cover"
+    height: '100%',
+    objectFit: 'cover'
   },
 
   // Table
