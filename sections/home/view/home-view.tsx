@@ -20,7 +20,7 @@ import QueryString from 'qs';
 export default function HomeView() {
   const { news, newsLoading, newsEmpty } = useGetNews(1, 100)
   const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 100);
-  const [matches, setMatches] = useState<IMatchItem[]>(resposneData ? resposneData.data.list : []);
+  const [matches, setMatches] = useState<IMatchItem[]>();
   const sortedHighlightVideos = useMemo(() => {
     return [...highlightVideos].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [highlightVideos]);
