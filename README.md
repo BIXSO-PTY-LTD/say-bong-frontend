@@ -70,15 +70,6 @@ Công Cụ Được Khuyến Nghị:
 Node.js
 npm hoặc Yarn
 
-Triển Khai:
-
-Dự án được thiết lập để triển khai lên các nền tảng như Vercel hoặc Netlify.
-
-Đóng Góp:
-
-Hãy mở các vấn đề cho lỗi hoặc yêu cầu tính năng.
-Yêu cầu pull được hoan nghênh. Vui lòng tuân theo luồng làm việc được mô tả.
-
 Liên Hệ:
 Đối với bất kỳ thắc mắc hoặc hỗ trợ nào, vui lòng liên hệ truongcongtrung2709@gmail.com.
 
