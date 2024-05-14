@@ -2,31 +2,29 @@
 
 import Player from "#/components/player";
 import { ITourProps } from "#/types/tour";
-import { Typography } from "@mui/material";
+import { IVideoItem } from "#/types/video";
+import { Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 type Props = {
-  currentTour?: ITourProps
+  currentVideo?: IVideoItem
+  loading: boolean
 }
 
-export default function HighlightVideo({ currentTour }: Props) {
-  const [currentTourVideo, setCurrentTourVideo] = useState<string | undefined>()
+export default function HighlightVideo({ currentVideo, loading }: Props) {
 
-  useEffect(() => {
-    setCurrentTourVideo(currentTour?.video)
-  }, [currentTour?.video])
+
 
   return (
     <>
-      {currentTourVideo ? (
-        <Player controls url={currentTour?.video} />
+      {loading ? (
+        <Skeleton variant="rectangular" height="500px" />
+      ) : (
+        <Player controls url={currentVideo?.content} />
 
-      ) :
-        (
-          <Typography>Loading...</Typography>
-        )
-      }
-      <Typography sx={{ my: 3 }} variant="h4">{currentTour?.slug}</Typography>
+      )}
+
+      <Typography sx={{ my: 3 }} variant="h4">{currentVideo?.title}</Typography>
     </>
   )
 }

@@ -4,7 +4,7 @@
 export type ITeamTableFilterValue = string | string[];
 
 export type ITeamTableFilters = {
-  competition: string;
+  league_title: string;
 };
 
 // ----------------------------------------------------------------------

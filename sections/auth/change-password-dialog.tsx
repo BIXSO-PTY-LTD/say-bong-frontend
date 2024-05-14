@@ -1,9 +1,7 @@
 'use client';
 
 import { useBoolean } from '#/hooks/use-boolean';
-import { RouterLink } from '#/routes/components';
-import { paths } from '#/routes/paths';
-import { Box, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
+import { Alert, Dialog, IconButton, InputAdornment, Link, Paper, PaperProps, Stack, Typography, useTheme } from '@mui/material';
 import { m, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -13,8 +11,13 @@ import { RHFTextField } from '#/components/hook-form';
 import Iconify from '#/components/iconify';
 import { LoadingButton } from '@mui/lab';
 import { varSlide } from '#/components/animate/variants';
-import { useCallback } from 'react';
 import { useSnackbar } from 'notistack';
+import { useAuthContext } from '#/auth/hooks';
+import { useRouter } from '#/routes/hooks';
+import { useEffect, useState } from 'react';
+import { paths } from '#/routes/paths';
+import { useChangePassword } from '#/api/user';
+import zIndex from '@mui/material/styles/zIndex';
 
 // ----------------------------------------------------------------------
 type ChangePasswordDialogProps = {
@@ -24,27 +27,35 @@ type ChangePasswordDialogProps = {
 
 export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDialogProps) {
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
 
   const theme = useTheme();
 
+  const router = useRouter();
+
   const password = useBoolean();
 
+  const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    if (!user) {
+      router.push(paths.home)
+      enqueueSnackbar('Phải đăng nhập', { variant: 'error' });
+    }
+  }, [user, router, enqueueSnackbar])
+
   const ChangePassWordSchema = Yup.object().shape({
-    oldPassword: Yup.string().required('Hãy điền mật khẩu cũ'),
-    newPassword: Yup.string()
-      .required('Hãy điền mật khẩu mới')
-      .test(
-        'no-match',
-        'Mật khẩu mới phải khác mật khẩu cũ',
-        (value, { parent }) => value !== parent.oldPassword
-      ),
-    confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword')], 'Mật khẩu phải trùng khớp'),
+
+    password: Yup.string().required('Hãy điền mật khẩu mới'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu phải khớp'),
+    oldPassword: Yup.string().required('Hãy điền mật khẩu mới'),
+
   });
 
   const defaultValues = {
+    password: '',
+    confirmPassword: '',
     oldPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
   };
 
   const methods = useForm({
@@ -58,14 +69,18 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
     formState: { isSubmitting },
   } = methods;
 
+  const changePassword = useChangePassword();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await changePassword(user?.userName || user?.phone, data.password, data.confirmPassword, data.oldPassword as string);
       reset();
-      enqueueSnackbar('Update success!');
+      onClose();
+      enqueueSnackbar('Cập nhật thành công');
       console.info('DATA', data);
-    } catch (error) {
+
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
     }
   });
   const renderHead = (
@@ -77,6 +92,8 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2.5} alignItems="flex-end">
+        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
         <RHFTextField
           name="oldPassword"
           type={password.value ? 'text' : 'password'}
@@ -91,11 +108,10 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
             ),
           }}
         />
-
         <RHFTextField
-          name="newPassword"
-          label="Mật khẩu mới"
+          name="password"
           type={password.value ? 'text' : 'password'}
+          label="Mật khẩu mới"
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -105,13 +121,12 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
               </InputAdornment>
             ),
           }}
-
         />
 
         <RHFTextField
-          name="confirmNewPassword"
+          name="confirmPassword"
+          label="Nhập lại mật khẩu"
           type={password.value ? 'text' : 'password'}
-          label="Xác nhận mật khẩu"
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -121,6 +136,7 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
               </InputAdornment>
             ),
           }}
+
         />
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting} sx={{ ml: 'auto', background: "#272463", color: "#fff" }}>

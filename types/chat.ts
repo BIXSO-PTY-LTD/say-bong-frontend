@@ -1,45 +1,24 @@
 // ----------------------------------------------------------------------
 
-export type IChatAttachment = {
-  name: string;
-  size: number;
-  type: string;
-  path: string;
-  preview: string;
+export type IAuthor = {
+  id: string;
+  userName: string;
+  fullName: string;
+  profileImage: string
+};
+
+export type ICommentItem = {
+  id: string;
+  title: number;
+  content: string;
+  postId: string;
+  author: IAuthor;
   createdAt: Date;
-  modifiedAt: Date;
+  updatedAt: Date;
 };
 
-export type IChatMessage = {
-  id: string;
-  body: string;
-  createdAt: Date;
-  senderId: string;
-  contentType: string;
-  attachments: IChatAttachment[];
-};
-
-export type IChatParticipant = {
-  id: string;
-  name: string;
-  role: string;
-  email: string;
-  address: string;
-  avatarUrl: string;
-  phoneNumber: string;
-  lastActivity: Date;
-  status: 'online' | 'offline' | 'alway' | 'busy';
-};
-
-export type IChatConversation = {
-  id: string;
-  type: string;
-  unreadCount: number;
-  messages: IChatMessage[];
-  participants: IChatParticipant[];
-};
-
-export type IChatConversations = {
-  byId: Record<string, IChatConversation>;
-  allIds: string[];
+export type ICommentUser = {
+  content: string;
+  postId: string;
+  userId: string
 };

@@ -27,3 +27,11 @@ export function fToNow(date: InputValue) {
     })
     : '';
 }
+export function formatStringToDateTime(dateTimeString: string) {
+  const [datePart, timePart] = dateTimeString.split("T");
+  const [day, month, year] = datePart.split("-");
+  const [hours, minutes] = timePart.split(":");
+  const formattedDateString = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+  return new Date(formattedDateString);
+}

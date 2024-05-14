@@ -6,30 +6,49 @@ import { fDate } from '#/utils/format-time';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Card } from '@mui/material';
-import { ITourProps } from '#/types/tour';
+import { ILivestreamItem } from '#/types/livestream';
 import Label from '#/components/label';
+import { useEffect, useState } from 'react';
+
+import Iconify from '#/components/iconify';
+import { IMatchItem } from '#/types/match';
+import resposneData from '#/public/responseData.json'
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tour: ITourProps;
+  livestream: ILivestreamItem;
   // order?: number;
-  largeTour?: boolean;
+  largelivestream?: boolean;
 };
 
-export default function LivestreamLatestItem({ tour,
+export default function LivestreamLatestItem({ livestream,
   //  order,
-  largeTour }: Props) {
+  largelivestream }: Props) {
+  const { title, createdAt, id, content, meta } = livestream;
 
+  const [matches, setMatches] = useState<IMatchItem[]>([]);
+
+  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
+
+  useEffect(() => {
+    if (resposneData) {
+      setMatches(resposneData.data.list)
+      setMatchingLivestream(matches.find(item => item.matchId === title))
+    }
+  }, [matches, title])
+
+  const newMetaIndex = meta && meta.length > 0
+    ? meta.length - 1
+    : 0;
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
-          ...(largeTour && {
+          ...(largelivestream && {
             borderRadius: 2,
             overflow: 'hidden',
             position: 'relative',
@@ -50,19 +69,37 @@ export default function LivestreamLatestItem({ tour,
           <Label variant='filled' color='error'>Trực tiếp</Label>
 
         </Box>
-        <Image
-          src={tour.coverUrl}
-          alt={tour.slug}
-          ratio={(largeTour && '3/4') ||
-            // (order && '4/3') ||
-            '1/1'}
 
-        />
+        <Box sx={{ position: "relative" }}>
+          <Image
+            src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"}
+            maxHeight="170px"
+            alt={title}
+            ratio={(largelivestream && '3/4') ||
+              // (order && '4/3') ||
+              '1/1'}
+
+          />
+          <Label sx={{
+            width: "30px",
+            height: "30px",
+            ml: 1,
+            mb: 1,
+            left: 0,
+            bottom: 0,
+            zIndex: 9,
+            position: 'absolute',
+            borderRadius: "100%"
+          }} variant='filled' color='default'>
+            <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+          </Label>
+        </Box>
+
 
         <Stack
-          spacing={largeTour ? 2 : 1}
+          spacing={largelivestream ? 2 : 1}
           sx={{
-            ...(largeTour && {
+            ...(largelivestream && {
               p: 5,
               bottom: 0,
               zIndex: 9,
@@ -71,14 +108,17 @@ export default function LivestreamLatestItem({ tour,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(tour.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.livestream.details(tour.id)} color="inherit">
-            <TextMaxLine line={2} variant={largeTour ? 'h5' : 'body1'}>{tour.slug}</TextMaxLine>
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit">
+            <TextMaxLine line={2} variant={largelivestream ? 'h5' : 'body1'}>{
+              matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
+                title
+              )}</TextMaxLine>
           </Link>
 
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

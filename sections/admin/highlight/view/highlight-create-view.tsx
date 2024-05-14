@@ -17,7 +17,7 @@ export default function HightlightCreateView() {
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Typography variant="h3" sx={{
         mb: { xs: 3, md: 5 },
-      }}>Thêm Pha bóng thú vị</Typography>
+      }}>Thêm Highlight</Typography>
 
       <HighlightNewEditForm />
     </Container>

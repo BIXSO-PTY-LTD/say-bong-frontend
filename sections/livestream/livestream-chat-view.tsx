@@ -1,93 +1,102 @@
-import { Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import ChatMessageList from "./chat-message-list";
 import ChatMessageInput from "./chat-message-input";
-import { useGetConversation, useGetConversations } from "#/api/chat";
-import { useRouter } from '#/routes/hooks';
-import { useMockedUser } from "#/hooks/use-mocked-user";
-import { useCallback, useEffect, useState } from "react";
-import { IChatParticipant } from "#/types/chat";
-import { paths } from "#/routes/paths";
+import { useEffect } from "react";
+import { useAuthContext } from "#/auth/hooks";
+import { useDialogControls } from "#/hooks/use-dialog-controls";
+import LoginDialog from "../auth/login-dialog";
+import RegisterDialog from "../auth/register-dialog";
+import { ILivestreamItem } from "#/types/livestream";
+import { useGetLivestreamComments } from "#/api/chat";
+import { IAuthor, ICommentItem } from "#/types/chat";
+import io from "socket.io-client";
+import { mutate } from "swr";
+import Image from "#/components/image";
 
-export default function LivestreamChatView() {
-  const router = useRouter();
-  const { user } = useMockedUser();
+type Props = {
+  currentLivestream?: ILivestreamItem;
+};
 
-  const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
+const EVENTS = {
+  CLIENT: {
+    NEW_USER_JOIN_ROOM: "1",
+  },
+  SERVER: {
+    RECEIVE_NEW_LIVE_STREAM_COMMENT: "2",
+  },
+};
 
-
-  const selectedConversationId = 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2' || '';
-
-  const { conversation, conversationError } = useGetConversation(`${selectedConversationId}`);
-
-  const participants: IChatParticipant[] = conversation
-    ? conversation.participants.filter(
-      (participant: IChatParticipant) => participant.id !== `${user?.id}`
-    )
-    : [];
-
+export default function LivestreamChatView({ currentLivestream }: Props) {
+  const { user } = useAuthContext();
+  const { dialogLoginOpen, dialogRegisterOpen } = useDialogControls();
+  const { comments, endpoint } = useGetLivestreamComments(currentLivestream?.id);
+  const authors: IAuthor[] = comments.flatMap((comment) => comment.author).filter((author) => author.id !== user?.id);
   useEffect(() => {
-    if (conversationError || !selectedConversationId) {
-      router.push(paths.livestream.root);
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.log("Access token not found in localStorage");
+      return;
     }
-  }, [conversationError, router, selectedConversationId]);
 
-  const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
-    setRecipients(selected);
-  }, []);
+    const newSocket = io("ws://157.119.248.121:8001", {
+      extraHeaders: { Authorization: accessToken },
+    });
+
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.IO server");
+      newSocket.emit(EVENTS.CLIENT.NEW_USER_JOIN_ROOM, {
+        userId: user?.id,
+        postId: currentLivestream?.id,
+      });
+    });
+
+    newSocket.on(EVENTS.SERVER.RECEIVE_NEW_LIVE_STREAM_COMMENT, (comment: { data: ICommentItem }) => {
+      if (comment && comment.data && currentLivestream?.id === comment.data.postId) {
+        mutate(endpoint);
+      }
+    });
+
+    return () => {
+      if (newSocket.connected) {
+        console.log("Disconnecting from Socket.IO server");
+        newSocket.disconnect();
+      }
+    };
+  }, [currentLivestream?.id, endpoint, user?.id]);
 
   const renderHead = (
-    <Stack
-      direction="row"
-      alignItems="center"
-      flexShrink={0}
-      sx={{ pr: 1, pl: 1, py: 1, minHeight: 0 }}
-    >
+    <Stack direction="row" alignItems="center" flexShrink={0} sx={{ px: 2, py: 2, background: "#141622", border: "1px solid #1B1D29" }}>
+      <Image alt="chat-elipse" src="/assets/icons/chat/chat-elipse.svg" sx={{ mr: "13px", pb: 0.5 }} />
       Chat
-    </Stack>
+    </Stack >
   );
-  const renderMessages = (
-    <Stack
-      sx={{
-        width: 1,
-        height: 1,
-        overflow: 'hidden',
-      }}
-    >
-      <ChatMessageList messages={conversation?.messages} participants={participants} />
 
-      <ChatMessageInput
-        recipients={recipients}
-        onAddRecipients={handleAddRecipients}
-        //
-        selectedConversationId={selectedConversationId}
-        disabled={!recipients.length && !selectedConversationId}
-      />
+  const renderMessages = (
+    <Stack sx={{ width: 1, height: 1, overflow: "hidden", background: "rgba(145, 158, 171, 0.08)" }}>
+      <ChatMessageList comments={comments} authors={authors} />
+      {user ? (
+        <ChatMessageInput currentLivestreamId={currentLivestream?.id} userId={user?.id} />
+      ) : (
+        <Box textAlign="center" sx={{ p: 1 }}>
+          <Typography component="span" onClick={dialogLoginOpen.onTrue} sx={{ cursor: "pointer" }} color="primary">
+            Đăng nhập
+          </Typography>
+          <Typography component="span"> để chat</Typography>
+        </Box>
+      )}
     </Stack>
   );
 
   return (
-    <Stack
-      sx={{
-        width: 1,
-        height: "530px",
-        overflow: 'hidden',
-      }}
-    >
-      {renderHead}
-
-      <Stack
-        direction="row"
-        sx={{
-          width: 1,
-          height: 1,
-          overflow: 'hidden',
-          borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
-        }}
-      >
-        {renderMessages}
-
-
+    <>
+      <Stack sx={{ maxWidth: { lg: "343px" }, height: "524px", overflow: "hidden", position: "relative" }}>
+        {renderHead}
+        <Stack direction="row" sx={{ width: 1, height: 1, overflow: "hidden", borderTop: (theme) => `solid 1px ${theme.palette.divider}` }}>
+          {renderMessages}
+        </Stack>
       </Stack>
-    </Stack>
-  )
+      {dialogLoginOpen.value && <LoginDialog openRegister={dialogRegisterOpen.onTrue} open={dialogLoginOpen.value} onClose={dialogLoginOpen.onFalse} />}
+      {dialogRegisterOpen.value && <RegisterDialog openLogin={dialogLoginOpen.onTrue} open={dialogRegisterOpen.value} onClose={dialogRegisterOpen.onFalse} />}
+    </>
+  );
 }

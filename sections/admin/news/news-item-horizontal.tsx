@@ -22,26 +22,63 @@ import TextMaxLine from '#/components/text-max-line';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { IBlogPostProps } from '#/types/blog';
+import { INewsItem } from '#/types/news';
+
+import { useCallback, useEffect, useState } from 'react';
+import { useDeleteNew } from '#/api/news';
+import { mutate } from 'swr';
+import { endpoints } from '#/utils/axios';
+import { ConfirmDialog } from '#/components/custom-dialog';
+import { Button } from '@mui/material';
+import { useBoolean } from '#/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: IBlogPostProps;
+  item: INewsItem;
+  endpoints?: string;
 };
 
-export default function PostItemHorizontal({ news }: Props) {
+export default function PostItemHorizontal({ item, endpoints }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
 
+  const confirm = useBoolean();
+
+  const [firstImageUrl, setFirstImageUrl] = useState('');
+
+  useEffect(() => {
+    const regex = /<img.*?src="(.*?)".*?>/;
+    const match = item.content.match(regex);
+    if (match && match[1]) {
+      setFirstImageUrl(match[1]);
+    }
+  }, [item.content]);
+
   const smUp = useResponsive('up', 'sm');
+  const deleteNew = useDeleteNew();
+
+  const handleDeleteNew = useCallback(
+    async (id: string) => {
+      try {
+        await deleteNew(id);
+        confirm.onFalse();
+        mutate(endpoints);
+      } catch (error) {
+        console.error('Error deleting news:', error);
+      }
+    },
+    [deleteNew, endpoints, confirm]
+  );
 
   const {
     id,
     title,
-    coverUrl,
+    content,
     createdAt,
-  } = news;
+  } = item;
+  const cleanTitle = title.replace('#', '');
 
   return (
     <>
@@ -57,30 +94,35 @@ export default function PostItemHorizontal({ news }: Props) {
               {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.details(id)}>
+            <Link color="inherit" component={RouterLink} href={paths.dashboard.news.normal.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {title}
+                {cleanTitle}
               </TextMaxLine>
             </Link>
           </Stack>
         </Stack>
-
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
         {smUp && (
           <Box
             sx={{
               position: 'relative',
               p: 1,
-              width: "164px"
+              minWidth: "164px",
+              maxHeight: "107px"
+
             }}
           >
-            <Image alt={title} src={coverUrl} sx={{
-              borderRadius: 1.5,
+            <Image alt={title} src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"} sx={{
+              borderRadius: 1.5, width: 1, height: 1
+
             }} />
           </Box>
         )}
@@ -95,7 +137,7 @@ export default function PostItemHorizontal({ news }: Props) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            router.push(paths.dashboard.news.details(id));
+            router.push(paths.dashboard.news.normal.details(id));
           }}
         >
           <Iconify icon="solar:eye-bold" />
@@ -103,14 +145,26 @@ export default function PostItemHorizontal({ news }: Props) {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            confirm.onTrue();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          Xóa
         </MenuItem>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Xóa"
+        content={"Bạn chắc chắn muốn xóa?"}
+        action={
+          <Button variant="contained" color="error" onClick={() => handleDeleteNew(id)}>
+            Xóa
+          </Button>
+        }
+      />
     </>
   );
 }

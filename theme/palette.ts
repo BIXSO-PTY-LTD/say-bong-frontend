@@ -70,11 +70,11 @@ export const success = {
 };
 
 export const warning = {
-  lighter: '#FFF5CC',
-  light: '#FFD666',
-  main: '#FFAB00',
-  dark: '#B76E00',
-  darker: '#7A4100',
+  lighter: '#fbb6ce',
+  light: '#f87ca7',
+  main: '#F6427F',
+  dark: '#f31561',
+  darker: '#cf0a4e',
   contrastText: grey[800],
 };
 

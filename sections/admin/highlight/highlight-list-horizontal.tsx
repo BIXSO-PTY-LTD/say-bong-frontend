@@ -5,29 +5,32 @@ import NewsItemHorizontal from './highlight-item-horizontal';
 import { ITourProps } from '#/types/tour';
 import ExcitingItemHorizontal from './highlight-item-horizontal';
 import HighlightItemHorizontal from './highlight-item-horizontal';
+import { IVideoItem } from '#/types/video';
+import { MatchItemSkeleton } from '#/sections/skeletons/match-item-skeleton';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: ITourProps[];
-  // loading?: boolean;
+  highlights: IVideoItem[];
+  endpoints?: string;
+  loading?: boolean;
 };
 
-export default function HighlightListHorizontal({ news,
-  //  loading
+export default function HighlightListHorizontal({ highlights,
+  loading, endpoints
 }: Props) {
-  // const renderSkeleton = (
-  //   <>
-  //     {[...Array(16)].map((_, index) => (
-  //       <MatchItemSkeleton key={index} variant="horizontal" />
-  //     ))}
-  //   </>
-  // );
+  const renderSkeleton = (
+    <>
+      {[...Array(16)].map((_, index) => (
+        <MatchItemSkeleton key={index} variant="horizontal" />
+      ))}
+    </>
+  );
 
   const renderList = (
     <>
-      {news.slice(0, 8).map((news) => (
-        <HighlightItemHorizontal key={news.id} news={news} />
+      {highlights.map((highlight) => (
+        <HighlightItemHorizontal endpoints={endpoints} key={highlight.id} highlight={highlight} />
       ))}
     </>
   );
@@ -42,8 +45,7 @@ export default function HighlightListHorizontal({ news,
           md: 'repeat(2, 1fr)',
         }}
       >
-        {/* {loading ? renderSkeleton : renderList} */}
-        {renderList}
+        {loading ? renderSkeleton : renderList}
       </Box>
     </>
   );

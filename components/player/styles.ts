@@ -9,5 +9,6 @@ export const StyledReactPlayer = styled(ReactPlayer)({
   height: '100% !important',
   '& video': {
     objectFit: 'cover',
+    borderRadius: '12px'
   },
 });

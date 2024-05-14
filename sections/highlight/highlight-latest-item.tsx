@@ -8,23 +8,37 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
+
+import { IVideoItem } from '#/types/video';
+import { useEffect, useState } from 'react';
+import captureThumbnail from '#/utils/capturethumbnail';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  video: IVideoItem;
   // order?: number;
   largePost?: boolean;
 };
 
-export default function HighlightLatestItem({ post,
+export default function HighlightLatestItem({ video,
   //  order,
   largePost }: Props) {
+  const { id, title, createdAt, content } = video;
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnail(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Stack
         spacing={2}
         sx={{
@@ -36,8 +50,9 @@ export default function HighlightLatestItem({ post,
         }}
       >
         <Image
-          src={post.coverUrl}
-          alt={post.title}
+          src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"}
+          maxHeight="170px"
+          alt={title}
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -56,14 +71,14 @@ export default function HighlightLatestItem({ post,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.highlight.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.highlight.details(id)} color="inherit">
+            <TextMaxLine line={2} variant="subtitle1">{title}</TextMaxLine>
           </Link>
 
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

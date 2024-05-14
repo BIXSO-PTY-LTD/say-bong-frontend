@@ -1,17 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { paths } from '#/routes/paths';
 import { useRouter } from '#/routes/hooks';
 
 import { SplashScreen } from '#/components/loading-screen';
 
 import { useAuthContext } from '../hooks';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
-const loginPaths: Record<string, string> = {
-  login: paths.auth.login,
-};
+
 
 // ----------------------------------------------------------------------
 
@@ -30,31 +28,32 @@ export default function AuthGuard({ children }: Props) {
 function Container({ children }: Props) {
   const router = useRouter();
 
-  const { authenticated, method } = useAuthContext();
+  const { user } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
+
   const check = useCallback(() => {
-    if (!authenticated) {
-      const searchParams = new URLSearchParams({
-        returnTo: window.location.pathname,
-      }).toString();
 
-      const loginPath = loginPaths[method];
-
-      const href = `${loginPath}?${searchParams}`;
-
-      router.replace(href);
+    if (!user?.roles.length) {
+      router.replace("/");
+      enqueueSnackbar("Bạn chưa đăng nhập hoặc tài khoản phải có quyền admin", {
+        variant: 'error',
+        autoHideDuration: 5000
+      });
     } else {
       setChecked(true);
+
     }
-  }, [authenticated, method, router]);
+  }, [user, router, enqueueSnackbar]);
 
   useEffect(() => {
     check();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   if (!checked) {
     return null;
   }

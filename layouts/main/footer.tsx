@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { NavSubListProps } from './nav/types';
 import { RouterLink } from '#/routes/components';
 import { useBoolean } from '#/hooks/use-boolean';
+import { Box } from '@mui/material';
 
 
 
@@ -26,8 +27,7 @@ export default function Footer() {
 
   const mainFooter = (
     <>
-
-      <Container
+      <Container style={{ maxWidth: "1330px" }}
         sx={{
           overflow: 'hidden',
           py: { xs: 8, md: 10 },

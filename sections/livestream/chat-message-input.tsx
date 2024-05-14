@@ -1,109 +1,57 @@
-import { sub } from 'date-fns';
-import { useRef, useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
-import Stack from '@mui/material/Stack';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
-
-import { paths } from '#/routes/paths';
-import { useRouter } from '#/routes/hooks';
-
-import { useMockedUser } from '#/hooks/use-mocked-user';
-
-import uuidv4 from '#/utils/uuidv4';
-
-import { sendMessage, createConversation } from '#/api/chat';
-
+import EmojiPicker from 'emoji-picker-react';
 import Iconify from '#/components/iconify';
+import { useSendMessage } from '#/api/chat';
+import Image from '#/components/image';
 
-import { IChatParticipant } from '#/types/chat';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  recipients: IChatParticipant[];
-  onAddRecipients: (recipients: IChatParticipant[]) => void;
-  //
-  disabled: boolean;
-  selectedConversationId: string;
+  currentLivestreamId: string | undefined;
+  userId: string | undefined;
 };
 
 export default function ChatMessageInput({
-  recipients,
-  onAddRecipients,
-  //
-  disabled,
-  selectedConversationId,
+  currentLivestreamId,
+  userId
 }: Props) {
 
-
-  const router = useRouter();
-
-  const { user } = useMockedUser();
-
-  const fileRef = useRef<HTMLInputElement>(null);
-
   const [message, setMessage] = useState('');
-
-  const myContact = useMemo(
-    () => ({
-      id: `${user?.id}`,
-      role: `${user?.role}`,
-      email: `${user?.email}`,
-      address: `${user?.address}`,
-      name: `${user?.displayName}`,
-      lastActivity: new Date(),
-      avatarUrl: `${user?.avatarUrl}`,
-      phoneNumber: `${user?.phoneNumber}`,
-      status: 'online' as 'online' | 'offline' | 'alway' | 'busy',
-    }),
-    [user]
-  );
-
-  const messageData = useMemo(
-    () => ({
-      id: uuidv4(),
-      attachments: [],
-      body: message,
-      contentType: 'text',
-      createdAt: sub(new Date(), { minutes: 1 }),
-      senderId: myContact.id,
-    }),
-    [message, myContact.id]
-  );
-
-  const conversationData = useMemo(
-    () => ({
-      id: uuidv4(),
-      messages: [messageData],
-      participants: [...recipients, myContact],
-      type: recipients.length > 1 ? 'GROUP' : 'ONE_TO_ONE',
-      unreadCount: 0,
-    }),
-    [messageData, myContact, recipients]
-  );
-
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   }, []);
 
+  const handleEmojiClick = (emojiData: any, event: any) => {
+    setMessage((prevMessage) => prevMessage + emojiData.emoji)
+
+  }
+
+  const messageData = useMemo(
+    () => ({
+      content: message,
+      postId: currentLivestreamId,
+      userId: userId
+    }),
+    [currentLivestreamId, message, userId]
+  );
+
+  const sendMessage = useSendMessage()
   const handleSendMessage = useCallback(async () => {
     try {
       if (message) {
-        if (selectedConversationId) {
-          await sendMessage(selectedConversationId, messageData);
-        } else {
-          const res = await createConversation(conversationData);
-          router.push(`${paths.livestream.root}?id=${res.conversation.id}`);
-          onAddRecipients([]);
-        }
+        await sendMessage(messageData)
         setMessage('');
       }
     } catch (error) {
       console.error(error);
     }
-  }, [conversationData, message, messageData, onAddRecipients, router, selectedConversationId]);
+  }, [message, messageData, sendMessage]);
 
   const handleKeyPress = useCallback(
     async (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -120,27 +68,28 @@ export default function ChatMessageInput({
         value={message}
         onKeyUp={handleKeyPress}
         onChange={handleChangeMessage}
-        placeholder="Type a message"
-        disabled={disabled}
+        placeholder="Chat..."
         startAdornment={
-          <IconButton>
-            <Iconify icon="eva:smiling-face-fill" />
+          <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+            <Image alt="smile-face" src='/assets/icons/chat/smile-face.svg' sx={{ pb: 0.5 }} />
           </IconButton>
         }
         endAdornment={
           <IconButton onClick={handleSendMessage}>
-            <Iconify icon="solar:map-arrow-right-bold-duotone" />
+            <Image alt="smile-face" src='/assets/icons/chat/arrow.svg' sx={{ pb: 0.5 }} />
           </IconButton>
         }
         sx={{
           px: 1,
-          height: 56,
+          height: "80px",
           flexShrink: 0,
-          borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
+          background: "#141622",
         }}
       />
-
-      <input type="file" ref={fileRef} style={{ display: 'none' }} />
+      {showEmojiPicker &&
+        (
+          <EmojiPicker onEmojiClick={handleEmojiClick} width="300px" height="400px" style={{ position: "absolute", bottom: 60 }}/>
+        )}
     </>
   );
 }

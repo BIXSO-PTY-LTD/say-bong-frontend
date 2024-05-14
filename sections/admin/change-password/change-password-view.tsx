@@ -17,8 +17,9 @@ import Iconify from '#/components/iconify';
 import { useSnackbar } from '#/components/snackbar';
 import { useSettingsContext } from '#/components/settings';
 import FormProvider, { RHFTextField } from '#/components/hook-form';
-import axiosInstance, { endpoints } from '#/utils/axios';
 import { useState } from 'react';
+import { useChangePassword } from '#/api/user';
+import { useAuthContext } from '#/auth/hooks';
 
 
 
@@ -30,6 +31,8 @@ import { useState } from 'react';
 export default function ChangePasswordView() {
   const settings = useSettingsContext();
 
+  const { user } = useAuthContext();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -37,21 +40,15 @@ export default function ChangePasswordView() {
   const password = useBoolean();
 
   const ChangePassWordSchema = Yup.object().shape({
-    password: Yup.string().required('Bắt buộc phải có mật khẩu cũ'),
-    password_new: Yup.string()
-      .required('Bắt buộc phải có mật khẩu mới')
-      .test(
-        'Không khớp',
-        'Mật khẩu mới phải khác mật khẩu cũ',
-        (value, { parent }) => value !== parent.oldPassword
-      ),
-    password_confirmation: Yup.string().oneOf([Yup.ref('password_new')], 'Mật khẩu phải khớp'),
+    password: Yup.string().required('Hãy điền mật khẩu mới'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu phải khớp'),
+    oldPassword: Yup.string().required('Hãy điền mật khẩu mới'),
   });
 
   const defaultValues = {
     password: '',
-    password_new: '',
-    password_confirmation: '',
+    confirmPassword: '',
+    oldPassword: '',
   };
 
   const methods = useForm({
@@ -64,15 +61,18 @@ export default function ChangePasswordView() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
+  const changePassword = useChangePassword();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await changePassword(user?.userName || user?.phone, data.password, data.confirmPassword, data.oldPassword as string);
       reset();
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar('Cập nhật thành công');
+      setErrorMsg('')
       console.info('DATA', data);
-    } catch (error) {
+
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
     }
   });
 
@@ -85,7 +85,7 @@ export default function ChangePasswordView() {
         <Stack component={Card} spacing={3} sx={{ p: 3 }}>
           {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
           <RHFTextField
-            name="password"
+            name="oldPassword"
             type={password.value ? 'text' : 'password'}
             label="Mật khẩu cũ"
             InputProps={{
@@ -98,11 +98,10 @@ export default function ChangePasswordView() {
               ),
             }}
           />
-
           <RHFTextField
-            name="password_new"
-            label="Mật khẩu mới"
+            name="password"
             type={password.value ? 'text' : 'password'}
+            label="Mật khẩu mới"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -115,9 +114,9 @@ export default function ChangePasswordView() {
           />
 
           <RHFTextField
-            name="password_confirmation"
+            name="confirmPassword"
+            label="Nhập lại mật khẩu mới"
             type={password.value ? 'text' : 'password'}
-            label="Xác nhận lại"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

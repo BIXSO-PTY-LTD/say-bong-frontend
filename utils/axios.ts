@@ -1,53 +1,65 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { HOST_API, SOCCER_API } from '#/config-global';
 
-import { HOST_API } from '#/config-global';
+const axiosHostInstance: AxiosInstance = axios.create({ baseURL: HOST_API });
 
-// ----------------------------------------------------------------------
+export const axiosSoccer: AxiosInstance = axios.create({
+  baseURL: SOCCER_API, headers: {
+    'content-type': 'application/x-www-form-urlencoded',
+    'token': '75d167ad47be3a6e8d8ae84746424114'
+  }
+});
 
-const axiosInstance = axios.create({ baseURL: HOST_API });
+const responseInterceptor = (error: any) => Promise.reject((error.response && error.response.data) || 'Something went wrong');
 
-axiosInstance.interceptors.response.use(
-  (res) => res,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
-);
+axiosHostInstance.interceptors.response.use((res) => res, responseInterceptor);
 
-export default axiosInstance;
+axiosSoccer.interceptors.response.use((res) => res, responseInterceptor);
 
-// ----------------------------------------------------------------------
+export const axiosHost: AxiosInstance = axiosHostInstance;
 
-export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
+
+
+export const hostFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+
   const [url, config] = Array.isArray(args) ? args : [args];
 
-  const res = await axiosInstance.get(url, { ...config });
+  const res = await axiosHostInstance.get(url, { ...config });
+
+  return res.data.data;
+};
+
+export const soccerFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+
+  const [url, config] = Array.isArray(args) ? args : [args];
+
+  const res = await axiosSoccer.get(url, { ...config });
 
   return res.data;
 };
 
-// ----------------------------------------------------------------------
 
 export const endpoints = {
-  chat: '/api/chat',
-  kanban: '/api/kanban',
-  calendar: '/api/calendar',
   auth: {
-    me: '/api/auth/me',
-    login: '/api/auth/login',
-    register: '/api/auth/register',
+    me: '/api/v1/me',
+    login: '/api/v1/login',
+    register: '/api/v1/register',
+    changePassword: '/api/v1/change-password',
+    logout: '/api/v1/logout',
+    refreshToken: '/api/v1/refresh-token',
   },
-  mail: {
-    list: '/api/mail/list',
-    details: '/api/mail/details',
-    labels: '/api/mail/labels',
+  user: {
+    list: '/api/v1/user',
   },
-  post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
+  news: '/api/v1/new-feed',
+
+  excitingVideo: '/api/v1/interesting-shots',
+
+  highlightVideo: '/api/v1/highlight',
+
+  file: {
+    upload: '/api/v1/upload/base64'
   },
-  product: {
-    list: '/api/product/list',
-    details: '/api/product/details',
-    search: '/api/product/search',
-  },
+  livestream: '/api/v1/livestream',
+  upload: '/api/v1/upload'
 };

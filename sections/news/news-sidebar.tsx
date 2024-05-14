@@ -17,29 +17,32 @@ import Iconify from '#/components/iconify';
 import { IAuthorProps } from '#/types/author';
 import { IBlogPostProps, IBlogCategoryProps } from '#/types/blog';
 import HomeLatestPostMobile from '../home/home-latest-post-mobile';
+import { INewsItem } from '#/types/news';
+import EmptyContent from '#/components/empty-content';
+import { StackPostSkeleton } from '../skeletons/stack-post-skeleton';
 
 
 // ----------------------------------------------------------------------
 
-interface Props extends StackProps {
-  recentPosts?: {
-    list: IBlogPostProps[];
-  };
+interface Props {
+  recentPosts: INewsItem[];
+  loading?: boolean;
+  empty?: boolean;
 }
 
 export default function NewsSidebar({
   recentPosts,
-  sx,
-  ...other
+  loading,
+  empty
+
 }: Props) {
-  const mdUp = useResponsive('up', 'md');
 
-
-  const renderRecentPosts = recentPosts && (
+  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+  const renderRecentPosts = (
     <Stack spacing={3}>
       <Typography variant="h5">Tin nóng</Typography>
 
-      {recentPosts.list.map((post) => (
+      {recentPosts.map((post) => (
         <HomeLatestPostMobile key={post.id} post={post} onSiderbar />
       ))}
     </Stack>
@@ -48,11 +51,13 @@ export default function NewsSidebar({
 
   return (
     <>
-
-
-      {renderRecentPosts}
-
-
+      {loading ? (
+        <StackPostSkeleton count={2} columns={1} />
+      ) : empty ? (
+        renderNotFound
+      ) : (
+        renderRecentPosts
+      )}
     </>
   );
 }

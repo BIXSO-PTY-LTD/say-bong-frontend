@@ -1,70 +1,68 @@
 import * as Yup from 'yup';
-import { useMemo, useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { paths } from '#/routes/paths';
 import { useRouter } from '#/routes/hooks';
 
-import { fData } from '#/utils/format-number';
 
-import { countries } from '#/assets/data';
 
-import Label from '#/components/label';
-import Iconify from '#/components/iconify';
 import { useSnackbar } from '#/components/snackbar';
 import FormProvider, {
-  RHFSwitch,
   RHFTextField,
-  RHFUploadAvatar,
-  RHFAutocomplete,
-  RHFUpload,
 } from '#/components/hook-form';
 
-import { IUserItem } from '#/types/user';
-import { IBlogPostProps } from '#/types/blog';
-import { CardHeader } from '@mui/material';
+import { Alert, CardHeader, FormHelperText } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
 import RHFEditor from '#/components/hook-form/rhf-editor';
-import { useBoolean } from '#/hooks/use-boolean';
+import { mutate } from 'swr';
+import { axiosHost, endpoints } from '#/utils/axios';
+import { useCreateNews, useUpdateNew } from '#/api/news';
+import { INewsItem } from '#/types/news';
+import { useUpload } from '#/api/upload';
+import { HOST_API } from '#/config-global';
+import { base64ToFiles, extractBase64Src, updateContentUrls } from '#/utils/format-image';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentNews?: IBlogPostProps;
+  currentNew?: INewsItem;
 };
 
-export default function NewsNewEditForm({ currentNews }: Props) {
+export default function NewsNewEditForm({ currentNew }: Props) {
+
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
 
-  const preview = useBoolean();
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { enqueueSnackbar } = useSnackbar();
 
 
   const NewPostSchema = Yup.object().shape({
-    title: Yup.string().required('Title is required'),
-    content: Yup.string().required('Content is required'),
+    id: Yup.string(),
+    title: Yup.string().required('Phải có tiêu đề'),
+
+    content: Yup.string().required('Phải có nội dung'),
+
   });
 
   const defaultValues = useMemo(
     () => ({
-      title: currentNews?.title || '',
-      content: currentNews?.content || '',
+      id: currentNew?.id || '',
+      title: currentNew?.title.startsWith("#") ? currentNew?.title.replace("#", "") : currentNew?.title || '',
+      content: currentNew?.content || '',
     }),
-    [currentNews]
+    [currentNew]
   );
 
   const methods = useForm({
@@ -74,25 +72,52 @@ export default function NewsNewEditForm({ currentNews }: Props) {
 
   const {
     reset,
-    watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  useEffect(() => {
+    if (currentNew) {
+      reset(defaultValues);
+    }
+  }, [currentNew, defaultValues, reset]);
 
+
+
+  const upload = useUpload();
+  const createNews = useCreateNews();
+  const updateNew = useUpdateNew();
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentNews ? 'Cập nhật thành công!' : 'Tạo thành công!');
-      router.push(paths.dashboard.news.root);
+      if (!data.title.startsWith("#")) {
+        data.title = `#${data.title}`;
+      }
+
+      if (data.content.includes('data:image')) {
+        const base64Array: string[] = extractBase64Src(data.content);
+        const filesArray: File[] = base64ToFiles(base64Array);
+        const FilesContent: any[] = await upload(filesArray);
+        const fileNames: string[] = FilesContent.map((file: any) => file.filename);
+
+        data.content = updateContentUrls(data.content, base64Array, fileNames);
+      }
+
+      if (currentNew) {
+        await updateNew(data);
+      } else {
+        await createNews(data);
+      }
+
+      mutate(endpoints.news);
+      enqueueSnackbar(currentNew ? 'Cập nhật thành công!' : 'Tạo thành công');
+      router.push(paths.dashboard.news.normal.root);
       console.info('DATA', data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message);
     }
   });
+
 
 
 
@@ -101,11 +126,9 @@ export default function NewsNewEditForm({ currentNews }: Props) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            Chi tiết
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Title, short description, image...
-          </Typography>
+
         </Grid>
       )}
 
@@ -114,12 +137,17 @@ export default function NewsNewEditForm({ currentNews }: Props) {
           {!mdUp && <CardHeader title="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField inputColor='#fff' name="title" label="Post Title" />
+            {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
+            <RHFTextField inputColor='#fff' name="title" label="Tiêu đề" />
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Content</Typography>
+              <Typography variant="subtitle2">Nội dung</Typography>
               <RHFEditor simple name="content" />
+              <FormHelperText>Hình ảnh đẹp nhất khi ở 630x500</FormHelperText>
+              <FormHelperText>Chỉ upload tối đa 5 hình</FormHelperText>
             </Stack>
+
           </Stack>
         </Card>
       </Grid>
@@ -129,7 +157,7 @@ export default function NewsNewEditForm({ currentNews }: Props) {
   const renderActions = (
     <Box sx={{ mt: 3, width: "100%", textAlign: "end" }}>
       <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-        Tạo mới
+        {currentNew ? "Cập nhật" : "Tạo mới"}
       </LoadingButton>
     </Box>
   );

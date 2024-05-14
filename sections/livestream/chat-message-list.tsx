@@ -2,49 +2,40 @@ import Box from '@mui/material/Box';
 
 import Scrollbar from '#/components/scrollbar';
 
-import { IChatMessage, IChatParticipant } from '#/types/chat';
+import { IAuthor, ICommentItem } from '#/types/chat';
 import useMessagesScroll from '#/hooks/use-messages-scroll';
 import { Lightbox, useLightBox } from '#/components/lightbox';
 import ChatMessageItem from './chat-message-item';
+import { fDate } from '#/utils/format-time';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  messages: IChatMessage[];
-  participants: IChatParticipant[];
+  comments: ICommentItem[];
+  authors: IAuthor[];
 };
 
-export default function ChatMessageList({ messages = [], participants }: Props) {
-  const { messagesEndRef } = useMessagesScroll(messages);
+export default function ChatMessageList({ comments, authors }: Props) {
+  const { messagesEndRef } = useMessagesScroll(comments);
 
-  const slides = messages
-    .filter((message) => message.contentType === 'image')
-    .map((message) => ({ src: message.body }));
+  // Sort comments by createdAt field in descending order
+  const sortedComments = [...comments].sort((a, b) => {
+    // Convert createdAt fields to timestamps for comparison
+    const createdAtA = new Date(a.createdAt).getTime();
+    const createdAtB = new Date(b.createdAt).getTime();
 
-  const lightbox = useLightBox(slides);
-
+    return createdAtA - createdAtB;
+  });
   return (
-    <>
-      <Scrollbar ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1 }}>
-        <Box>
-          {messages.map((message) => (
-            <ChatMessageItem
-              key={message.id}
-              message={message}
-              participants={participants}
-              onOpenLightbox={() => lightbox.onOpen(message.body)}
-            />
-          ))}
-        </Box>
-      </Scrollbar>
-
-      <Lightbox
-        index={lightbox.selected}
-        slides={slides}
-        open={lightbox.open}
-        close={lightbox.onClose}
-      />
-    </>
+    <Scrollbar ref={messagesEndRef} sx={{ px: 3, py: 5, height: 1, overflow: "auto" }}>
+      {sortedComments.map((comment) => (
+        <ChatMessageItem
+          key={comment.id}
+          comment={comment}
+          authors={authors}
+        />
+      ))}
+    </Scrollbar>
   );
 }

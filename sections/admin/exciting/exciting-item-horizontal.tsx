@@ -12,8 +12,6 @@ import { RouterLink } from '#/routes/components';
 
 import { useResponsive } from '#/hooks/use-responsive';
 
-import { fDate } from '#/utils/format-time';
-import { fShortenNumber } from '#/utils/format-number';
 
 import Label from '#/components/label';
 import Image from '#/components/image';
@@ -22,26 +20,63 @@ import TextMaxLine from '#/components/text-max-line';
 import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 import { ITourProps } from '#/types/tour';
+import { IVideoItem } from '#/types/video';
+
+import { useDeleteExcitingVideo } from '#/api/exciting-video';
+import { useCallback, useEffect, useState } from 'react';
+import { mutate } from 'swr';
+import { ConfirmDialog } from '#/components/custom-dialog';
+import { Button } from '@mui/material';
+import { useBoolean } from '#/hooks/use-boolean';
+import captureThumbnail from '#/utils/capturethumbnail';
+import { fDate } from '#/utils/format-time';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: ITourProps;
+  video: IVideoItem;
+  endpoints?: string;
 };
 
-export default function ExcitingItemHorizontal({ news }: Props) {
+export default function ExcitingItemHorizontal({ video, endpoints }: Props) {
   const popover = usePopover();
 
   const router = useRouter();
 
+  const confirm = useBoolean();
+
   const smUp = useResponsive('up', 'sm');
 
+
+  const deleteExcitingVideo = useDeleteExcitingVideo();
+
+  const handleDeleteVideo = useCallback(
+    async (id: string) => {
+      try {
+        await deleteExcitingVideo(id);
+        confirm.onFalse();
+        mutate(endpoints);
+      } catch (error) {
+        console.error('Error deleting news:', error);
+      }
+    },
+    [deleteExcitingVideo, endpoints, confirm]
+  );
   const {
     id,
-    slug,
-    coverUrl,
-    createdAt,
-  } = news;
+    title,
+    content,
+    createdAt
+  } = video;
+
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnail(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
     <>
@@ -57,30 +92,35 @@ export default function ExcitingItemHorizontal({ news }: Props) {
               {fDate(createdAt)}
             </Box>
 
-            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+
           </Stack>
 
           <Stack spacing={1}>
             <Link color="inherit" component={RouterLink} href={paths.dashboard.video.exciting.details(id)}>
               <TextMaxLine color="black" variant="subtitle2" line={2}>
-                {slug}
+                {title}
               </TextMaxLine>
             </Link>
           </Stack>
         </Stack>
-
+        <Box>
+          <IconButton sx={{ textAlign: "start", mt: 2 }} color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Box>
         {smUp && (
           <Box
             sx={{
               position: 'relative',
               p: 1,
-              width: "164px"
+              minWidth: "164px",
+              maxHeight: "107px"
+
             }}
           >
-            <Image alt={slug} src={coverUrl} sx={{
-              borderRadius: 1.5,
+            <Image alt={title} src={videoThumbnail ? videoThumbnail : "/assets/images/match/background-item.jpg"} sx={{
+              borderRadius: 1.5, width: 1, height: 1
+
             }} />
           </Box>
         )}
@@ -103,14 +143,26 @@ export default function ExcitingItemHorizontal({ news }: Props) {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            confirm.onTrue();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          Xóa
         </MenuItem>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Xóa"
+        content={"Bạn chắc chắn muốn xóa?"}
+        action={
+          <Button variant="contained" color="error" onClick={() => handleDeleteVideo(id)}>
+            Xóa
+          </Button>
+        }
+      />
     </>
   );
 }

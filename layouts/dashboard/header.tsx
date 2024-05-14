@@ -50,40 +50,8 @@ export default function Header({ onOpenNav }: Props) {
   );
 
   return (
-    <AppBar
-      sx={{
-        height: HEADER.H_MOBILE,
-        zIndex: theme.zIndex.appBar + 1,
-        ...bgBlur({
-          color: theme.palette.background.default,
-        }),
-        transition: theme.transitions.create(['height'], {
-          duration: theme.transitions.duration.shorter,
-        }),
-        ...(lgUp && {
-          width: `calc(100% - ${NAV.W_VERTICAL + 1}px)`,
-          height: HEADER.H_DESKTOP,
-          ...(offsetTop && {
-            height: HEADER.H_DESKTOP_OFFSET,
-          }),
-          ...(isNavHorizontal && {
-            width: 1,
-            bgcolor: 'background.default',
-            height: HEADER.H_DESKTOP_OFFSET,
-            borderBottom: `dashed 1px ${theme.palette.divider}`,
-          }),
-
-        }),
-      }}
-    >
-      <Toolbar
-        sx={{
-          height: 1,
-          px: { lg: 5 },
-        }}
-      >
-        {renderContent}
-      </Toolbar>
-    </AppBar>
+    <>
+      {renderContent}
+    </>
   );
 }

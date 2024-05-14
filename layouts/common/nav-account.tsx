@@ -4,16 +4,30 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
+
+import { useSnackbar } from '#/components/snackbar';
+import { useRouter } from '#/routes/hooks';
+
+import { useAuthContext } from '#/auth/hooks';
 import { paths } from '#/routes/paths';
-
-import { useMockedUser } from '#/hooks/use-mocked-user';
-
-import Label from '#/components/label';
 
 // ----------------------------------------------------------------------
 
 export default function NavAccount() {
-  const { user } = useMockedUser();
+  const { user, logout } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      enqueueSnackbar('Bạn đã đăng xuất');
+      router.push(paths.home)
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+    }
+  };
 
   return (
     <Stack
@@ -25,21 +39,30 @@ export default function NavAccount() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={user?.avatarUrl} alt={user?.displayName} sx={{ width: 48, height: 48 }} />
+          <Avatar
+            alt={user?.userName}
+            sx={{
+              width: 45,
+              height: 45,
+              border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            }}
+          >
+            {user?.fullName?.charAt(0).toUpperCase()}
+          </Avatar>
 
         </Box>
 
         <Stack spacing={0.5} sx={{ mt: 1.5, mb: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {user?.fullName}
           </Typography>
 
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
-            {user?.email}
+            {user?.userName}
           </Typography>
         </Stack>
 
-        <Button variant="contained" href={paths.dashboard.root} target="_blank" rel="noopener">
+        <Button variant="contained" onClick={handleLogout}>
           Đăng xuất
         </Button>
       </Stack>

@@ -11,10 +11,7 @@ type Props = {
   filters: IMatchFilters | ITeamTableFilters;
   onFilters: (name: string, value: IMatchFilterValue) => void;
   //
-  competitionOptions: {
-    value: string;
-    label: string;
-  }[];
+  competitionOptions: string[];
 };
 
 export default function CompetitionSort({ filters, onFilters, competitionOptions }: Props) {
@@ -22,7 +19,7 @@ export default function CompetitionSort({ filters, onFilters, competitionOptions
   const handleFilterCompetition = useCallback(
     (event: SelectChangeEvent<string>) => {
       const newValue = event.target.value;
-      onFilters('competition', newValue);
+      onFilters('league_title', newValue);
 
     },
     [onFilters]
@@ -35,14 +32,14 @@ export default function CompetitionSort({ filters, onFilters, competitionOptions
         hiddenLabel
         sx={{
           flexShrink: 0,
-          width: { xs: 1, md: 200 },
+          width: { xs: 1, md: "239px" },
           background: theme => theme.palette.grey[800],
           borderRadius: 1,
         }}
       >
         <Select
           displayEmpty
-          value={filters.competition}
+          value={filters.league_title}
           onChange={handleFilterCompetition}
           MenuProps={{
             PaperProps: {
@@ -53,9 +50,9 @@ export default function CompetitionSort({ filters, onFilters, competitionOptions
             },
           }}
         >
-          {competitionOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {competitionOptions.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option === "all" ? "TẤT CẢ TRẬN ĐẤU" : option.toUpperCase()}
             </MenuItem>
           ))}
         </Select>

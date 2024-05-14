@@ -1,10 +1,11 @@
 import { paths } from '#/routes/paths';
 
-import axios from '#/utils/axios';
+import { axiosHost } from '#/utils/axios';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
-function jwtDecode(token: string) {
+function decode(token: string) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
@@ -25,7 +26,7 @@ export const isValidToken = (accessToken: string) => {
     return false;
   }
 
-  const decoded = jwtDecode(accessToken);
+  const decoded = decode(accessToken);
 
   const currentTime = Date.now() / 1000;
 
@@ -47,11 +48,11 @@ export const tokenExpired = (exp: number) => {
   clearTimeout(expiredTimer);
 
   expiredTimer = setTimeout(() => {
-    alert('Token expired');
+    alert('Vui lòng đăng nhập lại');
 
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
 
-    window.location.href = paths.auth.login;
+    window.location.href = "/";
   }, timeLeft);
 };
 
@@ -59,16 +60,16 @@ export const tokenExpired = (exp: number) => {
 
 export const setSession = (accessToken: string | null) => {
   if (accessToken) {
-    sessionStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('accessToken', accessToken);
 
-    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    axiosHost.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     // This function below will handle when token is expired
-    const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+    const { exp } = decode(accessToken); // ~3 days by minimals server
     tokenExpired(exp);
   } else {
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
 
-    delete axios.defaults.headers.common.Authorization;
+    delete axiosHost.defaults.headers.common.Authorization;
   }
 };

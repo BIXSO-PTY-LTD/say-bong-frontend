@@ -1,78 +1,77 @@
 import * as Yup from 'yup';
-import { useMemo, useCallback, useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { paths } from '#/routes/paths';
 import { useRouter } from '#/routes/hooks';
 
-import { fData } from '#/utils/format-number';
 
-import { countries } from '#/assets/data';
 
-import Label from '#/components/label';
-import Iconify from '#/components/iconify';
 import { useSnackbar } from '#/components/snackbar';
 import FormProvider, {
-  RHFSwitch,
   RHFTextField,
-  RHFUploadAvatar,
-  RHFAutocomplete,
-  RHFUpload,
-  RHFUploadFile,
 } from '#/components/hook-form';
 
-import { IUserItem } from '#/types/user';
-import { IBlogPostProps } from '#/types/blog';
-import { CardHeader } from '@mui/material';
+import { Alert, Button, CardHeader } from '@mui/material';
 import { useResponsive } from '#/hooks/use-responsive';
-import RHFEditor from '#/components/hook-form/rhf-editor';
-import { useBoolean } from '#/hooks/use-boolean';
 import { ITourProps } from '#/types/tour';
 import { Upload } from '#/components/upload';
+import { IVideoItem } from '#/types/video';
+import { useCreateExcitingVideo, useUpdateExcitingVideo } from '#/api/exciting-video';
+import { mutate } from 'swr';
+import { endpoints } from '#/utils/axios';
+import { useUpload } from '#/api/upload';
+import { HOST_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentVideo?: ITourProps;
+  currentVideo?: IVideoItem;
 };
 
 export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const router = useRouter();
 
-  const [file, setFile] = useState<File | string | null>(currentVideo?.video || null);
+  const [file, setFile] = useState<File | null>(null);
+
+  const [videoSrc, setVideoSrc] = useState('')
+
+  const videoRef = useRef(null);
 
   const mdUp = useResponsive('up', 'md');
 
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { enqueueSnackbar } = useSnackbar();
 
 
-  useEffect(() => {
-    if (currentVideo?.video) {
-      setFile(currentVideo.video);
-    }
-  }, [currentVideo?.video]);
+  // useEffect(() => {
+  //   if (currentVideo?.video) {
+  //     setFile(currentVideo.video);
+  //   }
+  // }, [currentVideo?.video]);
 
   const NewPostSchema = Yup.object().shape({
-    slug: Yup.string().required('slug is required'),
-    video: Yup.mixed<any>().nullable().required('Video is required')
+    id: Yup.string(),
+
+    title: Yup.string().required('Phải có tiêu đề'),
+    content: Yup.mixed<any>().nullable().required('Phải có file video'),
+
   });
 
   const defaultValues = useMemo(
     () => ({
-      slug: currentVideo?.slug || '',
-      video: currentVideo?.video || null,
+      id: currentVideo?.id || '',
+      title: currentVideo?.title || '',
+      content: currentVideo?.content || null,
     }),
     [currentVideo]
   );
@@ -85,35 +84,50 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const {
     reset,
     watch,
-    control,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const handleDrop = useCallback((acceptedFiles: File[]) => {
-    const newFile = acceptedFiles[0];
-    if (newFile) {
-      setFile(
-        Object.assign(newFile, {
-          preview: URL.createObjectURL(newFile),
-        })
-      );
+
+  useEffect(() => {
+    if (file) {
+      setVideoSrc(URL.createObjectURL(file));
+      setValue('content', file);
     }
-  }, []);
+  }, [file, setValue])
+
+  useEffect(() => {
+    if (currentVideo) {
+      reset(defaultValues);
+      setVideoSrc(currentVideo?.content)
+    }
+  }, [currentVideo, defaultValues, reset]);
 
 
 
-
+  const createExcitingVideo = useCreateExcitingVideo()
+  const upload = useUpload()
+  const updateExcitingVideo = useUpdateExcitingVideo()
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentVideo ? 'Cập nhật thành công!' : 'Tạo thành công!');
-      router.push(paths.dashboard.news.root);
+      if (data.content instanceof File) {
+        const updatedContent = await upload(data.content)
+
+        data.content = `${HOST_API}/api/v1/${updatedContent[0].filename}`
+      }
+      if (currentVideo) {
+        await updateExcitingVideo(data)
+      } else {
+        await createExcitingVideo(data);
+      }
+      mutate(endpoints.excitingVideo);
+      enqueueSnackbar(currentVideo ? 'Cập nhật thành công' : 'Tạo thành công');
+      router.push(paths.dashboard.video.exciting.root);
       console.info('DATA', data);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErrorMsg(error.message)
     }
   });
 
@@ -124,11 +138,9 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Details
+            Chi tiết
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            slug, short description, image...
-          </Typography>
+
         </Grid>
       )}
 
@@ -137,11 +149,33 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
           {!mdUp && <CardHeader slug="Details" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <RHFTextField inputColor='#fff' name="slug" label="Post slug" />
-
+            {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+            <RHFTextField inputColor='#fff' name="title" label="Chủ đề" />
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Video</Typography>
-              <Upload file={file} onDrop={handleDrop} onDelete={() => setFile(null)} />
+              <Typography variant="subtitle2">Video file</Typography>
+              <Button
+                variant="contained"
+                component="label"
+              >
+                Upload File
+                <input
+                  type="file"
+                  hidden
+                  onChange={(e) => {
+                    const selectedFile = e.target.files?.[0];
+                    if (selectedFile) {
+                      setFile(selectedFile);
+                    }
+                  }}
+                  accept='video/*'
+                  ref={videoRef}
+                />
+              </Button>
+              {currentVideo?.content || file ? (
+                <Box>
+                  <video id="video-summary" controls src={videoSrc} width="100%" height="350px" />
+                </Box>
+              ) : null}
             </Stack>
           </Stack>
         </Card>
@@ -152,7 +186,7 @@ export default function ExcitingNewEditForm({ currentVideo }: Props) {
   const renderActions = (
     <Box sx={{ mt: 3, width: "100%", textAlign: "end" }}>
       <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-        Tạo mới
+        {currentVideo ? "Cập nhật" : "Tạo mới"}
       </LoadingButton>
     </Box>
   );

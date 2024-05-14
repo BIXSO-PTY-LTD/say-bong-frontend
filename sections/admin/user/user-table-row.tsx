@@ -23,20 +23,14 @@ import { fDate } from '#/utils/format-time';
 
 type Props = {
   selected: boolean;
-  onEditRow: VoidFunction;
   row: IUserItem;
-  onSelectRow: VoidFunction;
-  onDeleteRow: VoidFunction;
 };
 
 export default function UserTableRow({
   row,
   selected,
-  onEditRow,
-  onSelectRow,
-  onDeleteRow,
 }: Props) {
-  const { id, name, avatarUrl, username, phoneNumber, createdAt } = row;
+  const { id, fullName, profileImage, userName, phone, createdAt } = row;
 
   const confirm = useBoolean();
 
@@ -46,15 +40,13 @@ export default function UserTableRow({
   return (
     <>
       <TableRow sx={{ borderBottom: theme => `1px solid ${theme.palette.grey[800]}` }} hover selected={selected}>
-        <TableCell sx={{ border: "none" }} padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+
 
         <TableCell sx={{ border: "none", display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+          <Avatar alt={fullName} src={profileImage} sx={{ mr: 2 }} />
 
           <ListItemText
-            primary={name}
+            primary={fullName}
             secondary={`#KH${id.slice(0, 4)}`}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
@@ -64,65 +56,22 @@ export default function UserTableRow({
           />
         </TableCell>
 
-        <TableCell sx={{ border: "none", whiteSpace: 'nowrap' }}>{username}</TableCell>
+        <TableCell sx={{ border: "none", whiteSpace: 'nowrap' }}>{userName}</TableCell>
 
-        <TableCell sx={{ border: "none", whiteSpace: 'nowrap' }}>{phoneNumber}</TableCell>
+        <TableCell sx={{ border: "none", whiteSpace: 'nowrap' }}>{phone}</TableCell>
 
 
         <TableCell sx={{ border: "none" }}>
           {fDate(createdAt)}
         </TableCell>
 
-        <TableCell align="right" sx={{ border: "none", px: 1, whiteSpace: 'nowrap' }}>
-
-
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
       </TableRow>
 
 
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
-      </CustomPopover>
 
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      />
+
     </>
   );
 }

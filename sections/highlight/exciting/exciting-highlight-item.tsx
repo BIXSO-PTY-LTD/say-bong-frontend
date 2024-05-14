@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -13,25 +13,38 @@ import Image from '#/components/image';
 import Iconify from '#/components/iconify';
 import TextMaxLine from '#/components/text-max-line';
 
-import { ITourProps } from '#/types/tour';
+import { IVideoItem } from '#/types/video';
 import Label from '#/components/label';
+
+import captureThumbnail from '#/utils/capturethumbnail';
+import { Stack, Typography } from '@mui/material';
+import { fDate } from '#/utils/format-time';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tour: ITourProps;
+  video: IVideoItem;
 };
 
-export default function ExcitingHighlightItem({ tour }: Props) {
-  const { id, slug, coverUrl } = tour;
+export default function ExcitingHighlightItem({ video }: Props) {
+  const { id, title, content } = video;
 
-
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>('');
+  useEffect(() => {
+    if (content) {
+      captureThumbnail(content, (thumbnailUrl: string) => {
+        setVideoThumbnail(thumbnailUrl);
+      });
+    }
+  }, [content]);
 
   return (
-    <Card sx={{ background: theme => theme.palette.grey[800] }}>
+    <Box sx={{ background: "transparent" }}>
       <Box
         sx={{
           position: 'relative',
+          maxHeight: '260px',
+
         }}
       >
         <Label sx={{
@@ -48,18 +61,20 @@ export default function ExcitingHighlightItem({ tour }: Props) {
           <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
         </Label>
 
-        <Image alt={slug} src={coverUrl} ratio="1/1" />
+        <Image alt={title} src={videoThumbnail} ratio="1/1" height="172px" />
 
       </Box>
 
 
 
-
-      <Link component={RouterLink} href={paths.exciting.details(id)} color="inherit" >
-        <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
-          {slug}
-        </TextMaxLine>
-      </Link>
-    </Card>
+      <Stack sx={{ mt: 2 }}>
+        <Typography variant='caption'>{fDate(video?.createdAt)}</Typography>
+        <Link sx={{ mt: 0.5 }} component={RouterLink} href={paths.exciting.details(id)} color="inherit" >
+          <TextMaxLine line={2} variant="subtitle1" persistent>
+            {title}
+          </TextMaxLine>
+        </Link>
+      </Stack>
+    </Box>
   );
 }

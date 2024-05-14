@@ -1,13 +1,11 @@
 
 
 
-import { _tours } from "#/_mock";
-import { _travelPosts } from "#/_mock/_blog";
-import NewsDetailsView from "#/sections/news/news-details-view";
+import NewsDetailsView from "#/sections/news/view/news-details-view";
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: Post Details',
+  title: 'Say Bóng: Tin tức',
 };
 
 type Props = {
@@ -19,7 +17,7 @@ type Props = {
 export default function NewsDetailsPage({ params }: Props) {
   const { id } = params;
 
-  const currentPost = _travelPosts.find(post => post.id === id);
 
-  return <NewsDetailsView currentPost={currentPost} />;
+
+  return <NewsDetailsView id={id} />;
 }

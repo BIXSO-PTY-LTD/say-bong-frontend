@@ -2,13 +2,10 @@
 
 // ----------------------------------------------------------------------
 
-import { _tours } from "#/_mock";
 import ExcitingDetailView from "#/sections/highlight/exciting/exciting-detail-view";
-import HighlightDetailView from "#/sections/highlight/highlight-detail-view";
-import LivestreamDetailView from "#/sections/livestream/view/livestream-detail-view";
 
 export const metadata = {
-  title: 'Dashboard: Post Details',
+  title: 'Say bóng: Những pha bóng thú vị',
 };
 
 type Props = {
@@ -20,7 +17,6 @@ type Props = {
 export default function ExcitingDetailsPage({ params }: Props) {
   const { id } = params;
 
-  const currentTour = _tours.find(tour => tour.id === id);
 
-  return <ExcitingDetailView currentTour={currentTour} />;
+  return <ExcitingDetailView id={id} />;
 }

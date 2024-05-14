@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -15,22 +15,20 @@ import TextMaxLine from '#/components/text-max-line';
 
 import { ITourProps } from '#/types/tour';
 import Label from '#/components/label';
+import { ILivestreamItem } from '#/types/livestream';
+
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  tour: ITourProps;
+  livestream: ILivestreamItem;
 };
 
-export default function LivestreamItem({ tour }: Props) {
-  const { id, slug, location, price, priceSale, favorited, duration, ratingNumber, coverUrl } = tour;
-
-  const [favorite, setFavorite] = useState(favorited);
-
-  const handleChangeFavorite = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setFavorite(event.target.checked);
-  }, []);
-
+export default function LivestreamItem({ livestream }: Props) {
+  const { id, title, meta } = livestream;
+  const newMetaIndex = meta && meta.length > 0
+    ? meta.length - 1
+    : 0;
   return (
     <Card sx={{ background: theme => theme.palette.grey[800] }}>
       <Box
@@ -48,13 +46,31 @@ export default function LivestreamItem({ tour }: Props) {
 
       </Box>
 
-      <Image alt={slug} src={coverUrl} ratio="1/1" />
+      <Box sx={{
+        position: "relative",
+        maxHeight: '260px',
 
+      }}>
+        <Image alt={title} width="270px" height="172px" src={meta?.[newMetaIndex]?.content ? meta[newMetaIndex]?.content : "/assets/images/match/background-item.jpg"} ratio="1/1" />
+        <Label sx={{
+          width: "30px",
+          height: "30px",
+          ml: 1,
+          mb: 1,
+          left: 0,
+          bottom: 0,
+          zIndex: 9,
+          position: 'absolute',
+          borderRadius: "100%"
+        }} variant='filled' color='default'>
+          <Iconify icon="solar:play-bold" width={0.7} color="#01B243" />
+        </Label>
+      </Box>
 
 
       <Link component={RouterLink} href={paths.livestream.details(id)} color="inherit" >
-        <TextMaxLine sx={{ m: 2 }} variant="h6" persistent>
-          {slug}
+        <TextMaxLine sx={{ m: 2 }} variant="subtitle2" persistent>
+          {title}
         </TextMaxLine>
       </Link>
     </Card>

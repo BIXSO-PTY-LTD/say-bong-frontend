@@ -8,13 +8,16 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
+import { INewsItem } from '#/types/news';
+
+import { useEffect, useState } from 'react';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  post: IBlogPostProps;
+  post: INewsItem;
   // order?: number;
   largePost?: boolean;
   transparent?: boolean;
@@ -24,8 +27,29 @@ export default function HomeLatestPostItem({ post, transparent,
   //  order,
   largePost }: Props) {
 
+  const [firstImageUrl, setFirstImageUrl] = useState('');
+
+
+
+  const {
+    id,
+    title,
+    content,
+    createdAt,
+  } = post;
+
+  const cleanTitle = title.startsWith("*") ? title.replace("*", "") : title.startsWith("#") ? title.replace("#", "") : title
+
+  useEffect(() => {
+    const regex = /<img.*?src="(.*?)".*?>/;
+    const match = content.match(regex);
+    if (match && match[1]) {
+      setFirstImageUrl(match[1]);
+    }
+  }, [content]);
+
   return (
-    <Card sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
+    <Box sx={{ background: theme => transparent ? "transparent" : theme.palette.grey[800] }}>
       <Stack
         spacing={2}
         sx={{
@@ -37,8 +61,9 @@ export default function HomeLatestPostItem({ post, transparent,
         }}
       >
         <Image
-          src={post.coverUrl}
-          alt={post.title}
+          src={firstImageUrl ? firstImageUrl : "/assets/images/match/background-item.jpg"}
+          alt={cleanTitle}
+          height="170px"
           ratio={(largePost && '3/4') ||
             // (order && '4/3') ||
             '1/1'}
@@ -57,14 +82,14 @@ export default function HomeLatestPostItem({ post, transparent,
             }),
           }}
         >
-          <Typography sx={{ px: 1 }} variant='caption'>{fDate(post.createdAt)}</Typography>
-          <Link sx={{ p: 1 }} component={RouterLink} href={paths.news.details(post.id)} color="inherit">
-            <TextMaxLine line={2} variant={largePost ? 'h5' : 'body1'}>{post.title}</TextMaxLine>
+          <Typography variant='caption'>{fDate(createdAt)}</Typography>
+          <Link component={RouterLink} href={paths.news.details(id)} color="inherit">
+            <TextMaxLine line={2} variant='subtitle1'>{cleanTitle}</TextMaxLine>
           </Link>
 
 
         </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

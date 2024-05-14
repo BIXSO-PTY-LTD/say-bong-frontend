@@ -1,6 +1,5 @@
 // ----------------------------------------------------------------------
 const ROOTS = {
-  AUTH: '/auth',
   DASHBOARD: '/admin',
 };
 
@@ -34,20 +33,22 @@ export const paths = {
   account: {
     root: "/account"
   },
-  auth: {
-    login: `${ROOTS.AUTH}/login`,
-  },
   dashboard: {
     root: '/',
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
-      new: `${ROOTS.DASHBOARD}/user/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/user/${id}`,
     },
     news: {
-      root: `${ROOTS.DASHBOARD}/news`,
-      new: `${ROOTS.DASHBOARD}/news/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/news/${id}`,
+      special: {
+        root: `${ROOTS.DASHBOARD}/news/special`,
+        new: `${ROOTS.DASHBOARD}/news/special/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/news/special/${id}`,
+      },
+      normal: {
+        root: `${ROOTS.DASHBOARD}/news/normal`,
+        new: `${ROOTS.DASHBOARD}/news/normal/new`,
+        details: (id: string) => `${ROOTS.DASHBOARD}/news/normal/${id}`,
+      },
     },
     video: {
       exciting: {
@@ -62,7 +63,11 @@ export const paths = {
       },
     },
     api: `${ROOTS.DASHBOARD}/api`,
-    livestream: `${ROOTS.DASHBOARD}/livestream`,
+    livestream: {
+      root: `${ROOTS.DASHBOARD}/livestream`,
+      new: `${ROOTS.DASHBOARD}/livestream/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/livestream/${id}`,
+    },
     password: `${ROOTS.DASHBOARD}/change-password`,
 
   }

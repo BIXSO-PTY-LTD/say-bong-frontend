@@ -11,16 +11,18 @@ import { RouterLink } from '#/routes/components';
 import Iconify from '#/components/iconify';
 import HighlightLatestItem from './highlight-latest-item';
 import HighlightLatestMobile from './highlight-latest-mobile';
+import { IVideoItem } from '#/types/video';
 
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IBlogPostProps[];
+  loading?: boolean;
+  highlightVideos: IVideoItem[];
 };
 
-export default function HighlightLatest({ posts }: Props) {
+export default function HighlightLatest({ highlightVideos }: Props) {
   const mdUp = useResponsive('up', 'md');
 
   const viewAllBtn = (
@@ -58,6 +60,7 @@ export default function HighlightLatest({ posts }: Props) {
         sx={{
           display: 'grid',
           gap: { xs: 3, md: 4 },
+          mb: 2,
           gridTemplateColumns: {
             xs: 'repeat(1, 1fr)',
             sm: 'repeat(2, 1fr)',
@@ -67,8 +70,8 @@ export default function HighlightLatest({ posts }: Props) {
       >
         {mdUp ? (
           <>
-            {posts.slice(0, 4).map((post, index) => (
-              <HighlightLatestItem key={post.id} post={post}
+            {highlightVideos.map((video, index) => (
+              <HighlightLatestItem key={video.id} video={video}
               // order={index % 2}
               />
             ))}
@@ -76,8 +79,8 @@ export default function HighlightLatest({ posts }: Props) {
           </>
         ) : (
           <>
-            {posts.slice(0, 4).map((post) => (
-              <HighlightLatestMobile key={post.id} post={post} />
+            {highlightVideos.map((video) => (
+              <HighlightLatestMobile key={video.id} video={video} />
             ))}
           </>
         )}

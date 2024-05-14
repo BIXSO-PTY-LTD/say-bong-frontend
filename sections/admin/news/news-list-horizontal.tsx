@@ -4,29 +4,34 @@ import Box from '@mui/material/Box';
 import { usePathname } from 'next/navigation';
 import { IBlogPostProps } from '#/types/blog';
 import NewsItemHorizontal from './news-item-horizontal';
+import { INewsItem } from '#/types/news';
+import { MatchItemSkeleton } from '#/sections/skeletons/match-item-skeleton';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  news: IBlogPostProps[];
-  // loading?: boolean;
+  news: INewsItem[];
+  loading?: boolean;
+  endpoints?: string;
 };
 
 export default function NewsListHorizontal({ news,
-  //  loading
+  loading, endpoints
 }: Props) {
-  // const renderSkeleton = (
-  //   <>
-  //     {[...Array(16)].map((_, index) => (
-  //       <MatchItemSkeleton key={index} variant="horizontal" />
-  //     ))}
-  //   </>
-  // );
+
+
+  const renderSkeleton = (
+    <>
+      {[...Array(8)].map((_, index) => (
+        <MatchItemSkeleton key={index} variant="horizontal" />
+      ))}
+    </>
+  );
 
   const renderList = (
     <>
-      {news.slice(0, 8).map((news) => (
-        <NewsItemHorizontal key={news.id} news={news} />
+      {news.map((item) => (
+        <NewsItemHorizontal endpoints={endpoints} key={item.id} item={item} />
       ))}
     </>
   );
@@ -41,8 +46,7 @@ export default function NewsListHorizontal({ news,
           md: 'repeat(2, 1fr)',
         }}
       >
-        {/* {loading ? renderSkeleton : renderList} */}
-        {renderList}
+        {loading ? renderSkeleton : renderList}
       </Box>
     </>
   );

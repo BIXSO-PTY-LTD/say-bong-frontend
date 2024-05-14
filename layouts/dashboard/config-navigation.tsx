@@ -38,8 +38,16 @@ export function useNavData() {
           },
           {
             title: 'Tin tức',
-            path: paths.dashboard.news.root,
+            path: paths.dashboard.news.special.root,
             icon: ICONS.blog,
+            children: [
+              { title: 'Tin tức bóng đá', path: paths.dashboard.news.special.root },
+              {
+                title: 'Tin tức nhận định',
+                path: paths.dashboard.news.normal.root,
+              },
+
+            ],
           },
           {
             title: 'Video',
@@ -55,10 +63,16 @@ export function useNavData() {
             ],
           },
           {
+            title: 'Livestream',
+            path: paths.dashboard.livestream.root,
+            icon: ICONS.video,
+          },
+          {
             title: 'Đổi mật khẩu',
             path: paths.dashboard.password,
             icon: ICONS.key,
           },
+
         ]
       }
 

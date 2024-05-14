@@ -1,15 +1,16 @@
 'use client';
 
 import { Button, Container, Pagination, Stack, Typography, paginationClasses } from '@mui/material';
-import { _careerPosts, _marketingPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
 import { useSettingsContext } from '#/components/settings';
-import { _userList } from '#/_mock/_user';
+
 import Iconify from '#/components/iconify';
 import { paths } from '#/routes/paths';
 import { RouterLink } from '#/routes/components';
-import { ITourProps, ITourTableFilters } from '#/types/tour';
+import { ITourTableFilters } from '#/types/tour';
 import HighlightListHorizontal from '../highlight-list-horizontal';
+import { useGetHighlightVideos } from '#/api/highlight-video';
+import { IVideoItem } from '#/types/video';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -21,18 +22,20 @@ const defaultFilters: ITourTableFilters = {
 export default function HighlightListView() {
   const settings = useSettingsContext();
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { highlightVideos, highlightVideosLoading, paginate, endpoints } = useGetHighlightVideos(currentPage, 8)
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
   const dataFiltered = applyFilter({
-    inputData: _tours,
+    inputData: highlightVideos,
   });
-
-
-
-
-
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <Stack direction="row" justifyContent="space-between" sx={{
+      <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" sx={{
         mb: { xs: 3, md: 5 }
       }}>
         <Typography variant="h3">Danh sách highlight</Typography>
@@ -45,12 +48,14 @@ export default function HighlightListView() {
           Thêm highlight
         </Button>
       </Stack>
-      <HighlightListHorizontal news={dataFiltered}
-      //  loading={newsLoading} 
+
+      <HighlightListHorizontal loading={highlightVideosLoading} endpoints={endpoints} highlights={dataFiltered}
       />
 
       <Pagination
-        count={10}
+        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
         sx={{
           my: 10,
@@ -68,7 +73,7 @@ export default function HighlightListView() {
 function applyFilter({
   inputData,
 }: {
-  inputData: ITourProps[];
+  inputData: IVideoItem[];
 }) {
 
   return inputData;

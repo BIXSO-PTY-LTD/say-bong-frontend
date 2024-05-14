@@ -1,97 +1,76 @@
 'use client';
 
-import { Button, Card, Container, IconButton, Pagination, Stack, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
-import { _careerPosts } from '#/_mock/_blog';
-import { _tours } from '#/_mock';
+import { Container, IconButton, Pagination, Table, TableBody, TableContainer, Tooltip, Typography, paginationClasses } from '@mui/material';
 import { useSettingsContext } from '#/components/settings';
 import { IUserItem, IUserTableFilters } from '#/types/user';
-import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedAction, getComparator, useTable } from '#/components/table';
-import { useRouter } from '#/routes/hooks';
-import { useCallback, useState } from 'react';
-import { _userList } from '#/_mock/_user';
-import isEqual from 'lodash.isequal';
+import { TableHeadCustom, TableSelectedAction, getComparator, useTable } from '#/components/table';
+import { useEffect, useState } from 'react';
+
 import Iconify from '#/components/iconify';
 import Scrollbar from '#/components/scrollbar';
 import UserTableRow from '../user-table-row';
 import { useBoolean } from '#/hooks/use-boolean';
-import { paths } from '#/routes/paths';
-import { RouterLink } from '#/routes/components';
+import { useGetUsers } from '#/api/user';
+import TableSkeleton from '#/sections/skeletons/table-skeleton';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: '', width: 88 },
-  { id: 'name', label: 'Họ tên' },
-  { id: 'username', label: 'Username', width: 180 },
-  { id: 'phoneNumber', label: 'Số điện thoại', width: 220 },
+  { id: 'fullName', label: 'Họ tên' },
+  { id: 'userName', label: 'Username', width: 180 },
+  { id: 'phone', label: 'Số điện thoại', width: 220 },
   { id: 'createdAt', label: 'Ngày tạo', width: 180 },
-  { id: '', width: 88 },
 ];
 
-const defaultFilters: IUserTableFilters = {
-  name: '',
-};
 
 export default function UserListView() {
   const table = useTable();
+  const [currentPage, setCurrentPage] = useState(1);
+
+
+  const { users, usersLoading, usersEmpty, paginate } = useGetUsers(currentPage);
+
 
   const settings = useSettingsContext();
 
   const confirm = useBoolean();
 
-  const router = useRouter();
 
-  const [tableData, setTableData] = useState(_userList);
-
-  const [filters, setFilters] = useState(defaultFilters);
+  const [tableData, setTableData] = useState<IUserItem[]>([]);
 
 
+
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    if (users.length) {
+      setTableData(users);
+    }
+
+  }, [users]);
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
-  const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const handleEditRow = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.user.details(id));
-    },
-    [router]
-  );
 
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
 
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
+
+
+
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <Stack direction="row" justifyContent="space-between" sx={{
+
+      <Typography sx={{
         mb: { xs: 3, md: 5 }
-      }}>
-        <Typography variant="h3">Danh sách người dùng</Typography>
-        <Button
-          component={RouterLink}
-          href={paths.dashboard.user.new}
-          variant="contained"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          Thêm người dùng
-        </Button>
-      </Stack>
+      }} variant="h3">Danh sách người dùng</Typography>
       <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
         <TableSelectedAction
           dense={table.dense}
@@ -104,7 +83,7 @@ export default function UserListView() {
             )
           }
           action={
-            <Tooltip title="Delete">
+            <Tooltip title="Xóa">
               <IconButton color="primary" onClick={confirm.onTrue}>
                 <Iconify icon="solar:trash-bin-trash-bold" />
               </IconButton>
@@ -125,24 +104,32 @@ export default function UserListView() {
             />
 
             <TableBody>
-              {dataFiltered.slice(0, 10)
-                .map((row) => (
-                  <UserTableRow
-                    key={row.id}
-                    row={row}
-                    selected={table.selected.includes(row.id)}
-                    onSelectRow={() => table.onSelectRow(row.id)}
-                    onDeleteRow={() => handleDeleteRow(row.id)}
-                    onEditRow={() => handleEditRow(row.id)}
-                  />
-                ))}
-              <TableNoData notFound={notFound} />
+              {usersLoading ? (
+                [...Array(table.rowsPerPage)].map((i, index) => (
+                  <TableSkeleton key={index} />
+                ))
+              ) : (
+                <>
+                  {dataFiltered.map((row) => (
+                    <UserTableRow
+                      key={row.id}
+                      row={row}
+                      selected={table.selected.includes(row.id)}
+                    />
+                  ))}
+                </>
+              )}
+
+
+
             </TableBody>
           </Table>
         </Scrollbar>
       </TableContainer>
       <Pagination
-        count={10}
+        count={paginate && paginate.total && paginate.per_page ? Math.ceil(paginate.total / paginate.per_page) : 1}
+        page={currentPage}
+        onChange={handlePageChange}
         color="primary"
         sx={{
           my: 10,

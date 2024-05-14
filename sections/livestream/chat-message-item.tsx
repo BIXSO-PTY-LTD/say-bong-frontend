@@ -1,104 +1,105 @@
-import { formatDistanceToNowStrict } from 'date-fns';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { useMockedUser } from '#/hooks/use-mocked-user';
 
-import Iconify from '#/components/iconify';
 
-import { IChatMessage, IChatParticipant } from '#/types/chat';
-import useGetMessage from '#/hooks/use-get-message';
+import { IAuthor, ICommentItem } from '#/types/chat';
+import { useAuthContext } from '#/auth/hooks';
+import { Avatar, Box } from '@mui/material';
+import { ThemeContext } from '@emotion/react';
 
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  message: IChatMessage;
-  participants: IChatParticipant[];
-  onOpenLightbox: (value: string) => void;
+  comment: ICommentItem;
+  authors: IAuthor[];
 };
 
-export default function ChatMessageItem({ message, participants, onOpenLightbox }: Props) {
-  const { user } = useMockedUser();
+export default function ChatMessageItem({ comment, authors }: Props) {
+  const { user } = useAuthContext();
 
-  const { me, senderDetails, hasImage } = useGetMessage({
-    message,
-    participants,
-    currentUserId: `${user?.id}`,
-  });
+  const isMe: boolean = user?.id === comment.author.id;
 
-  const { firstName } = senderDetails;
 
-  const { body, createdAt } = message;
+  // const { firstName } = senderDetails;
 
-  const renderInfo = (
-    <Typography
-      noWrap
-      variant="caption"
-      sx={{
-        mb: 1,
-        color: 'text.disabled',
-        ...(!me && {
-          mr: 'auto',
-        }),
-      }}
-    >
-      {!me && `${firstName},`} &nbsp;
-      {formatDistanceToNowStrict(new Date(createdAt), {
-        addSuffix: true,
-      })}
-    </Typography>
-  );
+  // const { body, createdAt } = message;
+
+  // const renderInfo = (
+  //   <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
+
+  //     <Typography
+  //       noWrap
+  //       variant="caption"
+  //       sx={{
+  //         color: 'text.disabled',
+  //         ...(!isMe && {
+  //           mr: 'auto',
+  //         }),
+  //       }}
+  //     >
+  //       {!isMe && `${comment.author.userName}`} &nbsp;
+
+  //     </Typography>
+  //   </Stack>
+  // );
 
   const renderBody = (
-    <Stack
-      sx={{
-        p: 1.5,
-        minWidth: 48,
-        maxWidth: 320,
-        borderRadius: 1,
-        typography: 'body2',
-        bgcolor: 'background.neutral',
-        ...(me && {
-          color: 'grey.800',
-          bgcolor: 'primary.lighter',
-        }),
-        ...(hasImage && {
-          p: 0,
-          bgcolor: 'transparent',
-        }),
-      }}
-    >
-      {hasImage ? (
-        <Box
-          component="img"
-          alt="attachment"
-          src={body}
-          onClick={() => onOpenLightbox(body)}
-          sx={{
-            minHeight: 220,
-            borderRadius: 1.5,
-            cursor: 'pointer',
-            '&:hover': {
-              opacity: 0.9,
-            },
-          }}
-        />
-      ) : (
-        body
-      )}
+    <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
+      {!isMe && <Avatar
+        alt={user?.userName}
+        sx={{
+          mr: 1,
+          width: 40,
+          height: 40,
+          border: 'none',
+          fontSize: (theme) => theme.typography.body2
+        }}
+      >
+        {user?.fullName?.charAt(0).toUpperCase()}
+      </Avatar>
+      }
+      <Box
+        sx={{
+          p: 1.5,
+          minWidth: 48,
+          maxWidth: 200,
+          borderRadius: 1,
+          wordWrap: 'break-word',
+          typography: 'body1',
+          bgcolor: '#131C2F',
+          ...(isMe && {
+            bgcolor: '#1B2436',
+          })
+        }}
+      >
+
+        {comment.content}
+      </Box>
+      {isMe && <Avatar
+        alt={user?.userName}
+        sx={{
+          ml: 1,
+          width: 40,
+          height: 40,
+          border: 'none',
+          fontSize: (theme) => theme.typography.body2
+        }}
+      >
+        {user?.fullName?.charAt(0).toUpperCase()}
+      </Avatar>
+      }
     </Stack>
   );
 
 
   return (
-    <Stack direction="row" justifyContent={me ? 'flex-end' : 'unset'} sx={{ mb: 5 }}>
-      <Stack alignItems="flex-end">
-        {renderInfo}
+    <Stack direction="row" justifyContent={isMe ? 'flex-end' : 'unset'} sx={{ mb: 5 }}>
+
+      <Stack>
+        {/* {renderInfo} */}
 
         <Stack
           direction="row"
