@@ -6,12 +6,9 @@ Cách Tải hoặc Pull Mã Nguồn:
 
 Clone Repository:
 
-bash
-Copy code
 git clone https://github.com/BIXSO-PTY-LTD/say-bong-frontend.git
 
 Cài đặt Các Dependency:
-
 
 npm install
 
@@ -27,6 +24,7 @@ npm run dev
 hoặc
 
 yarn dev
+
 
 Cấu Trúc Dự Án:
 
@@ -60,17 +58,6 @@ utils/: Chứa các hàm hoặc module tiện ích, chứa các hàm hoặc phư
 
 Luồng Phát Triển:
 
-Nhánh:
-
-features: Nhánh phát triển nơi các tính năng mới được triển khai.
-main: Nhánh sẵn sàng cho sản xuất, ổn định và có thể triển khai.
-
-Yêu Cầu Pull:
-
-Tạo một nhánh mới từ nhánh features.
-Triển khai tính năng hoặc sửa lỗi của bạn.
-Đẩy các thay đổi của bạn lên kho lưu trữ.
-Mở một yêu cầu pull nhắm vào nhánh features.
 
 Thông Tin Bổ Sung:
 
@@ -82,6 +69,7 @@ Công Cụ Được Khuyến Nghị:
 
 Node.js
 npm hoặc Yarn
+
 Triển Khai:
 
 Dự án được thiết lập để triển khai lên các nền tảng như Vercel hoặc Netlify.
