@@ -1,93 +1,99 @@
-Project Overview:
-This repository contains the source code for a Next.js project. Next.js is a React framework that enables server-side rendering and easy setup for modern web applications.
+Dự Án Tổng Quan:
+Dự án này chứa mã nguồn cho một dự án Next.js. Next.js là một framework React cho phép rendering phía máy chủ và thiết lập dễ dàng cho các ứng dụng web hiện đại.
 
-How to Download or Pull the Code:
-To download or pull the code for this project, follow these steps:
+Cách Tải hoặc Pull Mã Nguồn:
+Để tải hoặc pull mã nguồn cho dự án này, làm theo các bước sau:
 
-Clone the Repository:
+Clone Repository:
 
+bash
+Copy code
 git clone https://github.com/BIXSO-PTY-LTD/say-bong-frontend.git
 
+Cài đặt Các Dependency:
 
-Switch to the 'features' Branch:
-
-git checkout features
-Install Dependencies:
 
 npm install
 
-or
+hoặc
 
 yarn install
 
-Run the Project:
+
+Chạy Dự Án:
 
 npm run dev
 
-or
+hoặc
 
 yarn dev
 
-Project Structure:
-api/: Contains files related to API integration, including endpoints, API services, or utilities for making API calls.
+Cấu Trúc Dự Án:
 
-app/: This directory holds files specific to the application logic, such as state management, business logic, or main application components.
+api/: Chứa các file liên quan đến tích hợp API, bao gồm các endpoint, dịch vụ API, hoặc tiện ích để thực hiện các cuộc gọi API.
 
-assets/: Stores asset files such as images, fonts, icons, or any other static files used in the application.
+app/: Thư mục này chứa các file cụ thể cho logic ứng dụng, như quản lý trạng thái, logic kinh doanh, hoặc các thành phần chính của ứng dụng.
 
-auth/: Houses files related to authentication, including authentication logic, authentication providers, or authentication-related components.
+assets/: Lưu trữ các file tài nguyên như hình ảnh, font chữ, biểu tượng, hoặc bất kỳ file tĩnh nào được sử dụng trong ứng dụng.
 
-components/: Contains reusable React components that can be used across different parts of the application.
+auth/: Chứa các file liên quan đến xác thực, bao gồm logic xác thực, nhà cung cấp xác thực, hoặc các thành phần liên quan đến xác thực.
 
-hooks/: Holds custom React hooks, which encapsulate logic that can be reused across multiple components.
+components/: Chứa các thành phần React có thể tái sử dụng được sử dụng trong các phần khác nhau của ứng dụng.
 
-layouts/: Stores layout components, which define the overall structure and design of different pages or sections of the application.
+hooks/: Chứa các hook React tùy chỉnh, bao gồm logic được đóng gói có thể tái sử dụng trong nhiều thành phần.
 
-public/: Contains static assets that are publicly accessible, such as images, fonts, or any other files that need to be served directly to the client.
+layouts/: Lưu trữ các thành phần bố cục, định nghĩa cấu trúc và thiết kế tổng thể của các trang hoặc phần của ứng dụng.
 
-routes/: Includes routing configuration files, defining the navigation paths and routes within the application.
+public/: Chứa tài nguyên tĩnh mà có thể truy cập công khai, như hình ảnh, font chữ, hoặc bất kỳ file nào cần được phục vụ trực tiếp cho máy khách.
 
-sections/: Contains specific sections of the application, each section may consist of multiple components, pages, or features.
+routes/: Bao gồm các file cấu hình routing, định nghĩa các đường dẫn điều hướng và tuyến đường trong ứng dụng.
 
-theme/: Holds theme configuration files, defining the visual style and design system of the application.
+sections/: Chứa các phần cụ thể của ứng dụng, mỗi phần có thể bao gồm nhiều thành phần, trang hoặc tính năng.
 
-types/: Stores TypeScript type definitions, providing type safety and improving code readability and maintainability.
+theme/: Chứa các file cấu hình chủ đề, định nghĩa kiểu dáng và hệ thống thiết kế của ứng dụng.
 
-utils/: Houses utility functions or modules, containing commonly used functions or helper methods throughout the application.
+types/: Lưu trữ các định nghĩa kiểu TypeScript, cung cấp tính năng kiểm soát kiểu và cải thiện tính đọc hiểu và bảo trì mã.
 
-.env: Configuration file containing environment variables, such as API keys, database URLs, or any sensitive information required by the application.
+utils/: Chứa các hàm hoặc module tiện ích, chứa các hàm hoặc phương thức trợ giúp thường được sử dụng trong ứng dụng.
 
-Development Workflow:
+.env: File cấu hình chứa các biến môi trường, như khóa API, URL cơ sở dữ liệu, hoặc bất kỳ thông tin nhạy cảm nào cần thiết cho ứng dụng.
 
-Branches:
+Luồng Phát Triển:
 
-features: Development branch where new features are implemented.
-main: Production-ready branch, stable and deployable.
+Nhánh:
 
-Pull Requests:
+features: Nhánh phát triển nơi các tính năng mới được triển khai.
+main: Nhánh sẵn sàng cho sản xuất, ổn định và có thể triển khai.
 
-Create a new branch from features.
-Implement your feature or fix.
-Push your changes to the repository.
-Open a pull request targeting the features branch.
+Yêu Cầu Pull:
 
-Additional Information:
+Tạo một nhánh mới từ nhánh features.
+Triển khai tính năng hoặc sửa lỗi của bạn.
+Đẩy các thay đổi của bạn lên kho lưu trữ.
+Mở một yêu cầu pull nhắm vào nhánh features.
 
-Dependencies:
+Thông Tin Bổ Sung:
+
+Dependency:
 React
 Next.js
-Other project-specific dependencies listed in package.json.
-Recommended Tools:
+Các dependency cụ thể cho dự án được liệt kê trong package.json.
+Công Cụ Được Khuyến Nghị:
 
 Node.js
-npm or Yarn
-Deployment:
+npm hoặc Yarn
+Triển Khai:
 
-The project is set up for deployment to platforms like Vercel or Netlify.
-Contributing:
+Dự án được thiết lập để triển khai lên các nền tảng như Vercel hoặc Netlify.
 
-Feel free to open issues for bugs or feature requests.
-Pull requests are welcome. Please follow the outlined workflow.
-Contact:
-For any inquiries or support, please contact truongcongtrung2709@gmail.com.
+Đóng Góp:
 
+Hãy mở các vấn đề cho lỗi hoặc yêu cầu tính năng.
+Yêu cầu pull được hoan nghênh. Vui lòng tuân theo luồng làm việc được mô tả.
+
+Liên Hệ:
+Đối với bất kỳ thắc mắc hoặc hỗ trợ nào, vui lòng liên hệ truongcongtrung2709@gmail.com.
+
+Để triển khai dự án trên web và trỏ tên miền, bạn có thể thực hiện các bước sau:
+
+Triển khai trên Vercel hoặc Netlify: Cả hai nền tảng này đều hỗ trợ triển khai các dự án Next.js một cách dễ dàng. Bạn chỉ cần đăng nhập vào tài khoản của mình trên Vercel hoặc Netlify, sau đó tạo một dự án mới từ kho lưu trữ GitHub của bạn. Sau khi kết nối dự án với kho lưu trữ, bạn có thể cấu hình các biến môi
