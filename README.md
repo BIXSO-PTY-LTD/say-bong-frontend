@@ -8,6 +8,10 @@ Clone Repository:
 
 git clone https://github.com/BIXSO-PTY-LTD/say-bong-frontend.git
 
+Nhánh source chính là nhánh main
+
+Và hãy kiểm tra kĩ file .env các API có đúng chưa
+
 Cài đặt Các Dependency:
 
 npm install
