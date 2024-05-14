@@ -1,82 +1,274 @@
-Dự Án Tổng Quan:
-Dự án này chứa mã nguồn cho một dự án Next.js. Next.js là một framework React cho phép rendering phía máy chủ và thiết lập dễ dàng cho các ứng dụng web hiện đại.
+# Hướng dẫn
 
-Cách Tải hoặc Pull Mã Nguồn:
-Để tải hoặc pull mã nguồn cho dự án này, làm theo các bước sau:
+## Yêu cầu
 
-Clone Repository:
+- nvm (node version manager):
+  - MacOS: <https://github.com/nvm-sh/nvm>
+  - Windows: <https://github.com/coreybutler/nvm-windows>
+- Node: 20.11.1 (nvm sẽ tự động cài đặt phiên bản này nếu chưa có)
+  - MacOS: <https://nodejs.org/dist/v20.11.1/node-v20.11.1.pkg>
+  - Windows: <https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi>
+- Dùng npm, không dùng các công cụ khác để tránh xung đột
 
-git clone https://github.com/BIXSO-PTY-LTD/say-bong-frontend.git
+## Cài đặt
 
-Nhánh source chính là nhánh main
+```bash
+npm i --color=always
+```
 
-Và hãy kiểm tra kĩ file .env các API có đúng chưa
+## Chạy ở môi trường development
 
-Cài đặt Các Dependency:
-
-npm install
-
-hoặc
-
-yarn install
-
-
-Chạy Dự Án:
-
+```bash
 npm run dev
+```
 
-hoặc
+Khi thành công sẽ thấy terminal/console hiển thị thông báo:
 
-yarn dev
+```bash
+▲ Next.js 14.1.3
+- Local:        http://localhost:3000
+- Environments: .env
+```
 
+## Kiểm tra lỗi (chạy thủ công)
 
-Cấu Trúc Dự Án:
+```bash
+npm run lint:check
+```
 
-api/: Chứa các file liên quan đến tích hợp API, bao gồm các endpoint, dịch vụ API, hoặc tiện ích để thực hiện các cuộc gọi API.
+## Sửa lỗi (chạy thủ công)
 
-app/: Thư mục này chứa các file cụ thể cho logic ứng dụng, như quản lý trạng thái, logic kinh doanh, hoặc các thành phần chính của ứng dụng.
+```bash
+npm run lint:fix
+```
 
-assets/: Lưu trữ các file tài nguyên như hình ảnh, font chữ, biểu tượng, hoặc bất kỳ file tĩnh nào được sử dụng trong ứng dụng.
+## Một số quy ước
 
-auth/: Chứa các file liên quan đến xác thực, bao gồm logic xác thực, nhà cung cấp xác thực, hoặc các thành phần liên quan đến xác thực.
+### Quy ước đặt tên
 
-components/: Chứa các thành phần React có thể tái sử dụng được sử dụng trong các phần khác nhau của ứng dụng.
+- Tên biến: `camelCase`
+- Tên hàm: `camelCase`
+- Tên biến parameter: `camelCase`
+- Tên biến argument: `camelCase`
 
-hooks/: Chứa các hook React tùy chỉnh, bao gồm logic được đóng gói có thể tái sử dụng trong nhiều thành phần.
+- Tên biến private: `_camelCase`
+- Tên biến protected: `camelCase_`
+- Tên biến static: `camelCase_`
+- Tên class: `PascalCase`
+- Tên hằng số: `UPPER_CASE`
+- Tên file: `kebab-case`
+- Tên thư mục: `kebab-case`
 
-layouts/: Lưu trữ các thành phần bố cục, định nghĩa cấu trúc và thiết kế tổng thể của các trang hoặc phần của ứng dụng.
+### Quy ước đặt tên type typescript
 
-public/: Chứa tài nguyên tĩnh mà có thể truy cập công khai, như hình ảnh, font chữ, hoặc bất kỳ file nào cần được phục vụ trực tiếp cho máy khách.
+- Dùng tiền tố `I_` cho interface (ví dụ: `I_User`)
+- Dùng tiền tố `T_` cho type (ví dụ: `T_User`)
+- Dùng tiền tố `E_` cho enum (ví dụ: `E_User`)
 
-routes/: Bao gồm các file cấu hình routing, định nghĩa các đường dẫn điều hướng và tuyến đường trong ứng dụng.
+### Quy ước đặt tên biến môi trường
 
-sections/: Chứa các phần cụ thể của ứng dụng, mỗi phần có thể bao gồm nhiều thành phần, trang hoặc tính năng.
+- Dùng tiền tố `REACT_APP_` cho biến môi trường của react
+- Dùng tiền tố `NEXT_PUBLIC_` cho biến môi trường của nextjs
+- Dùng tiền tố `VITE_` cho biến môi trường của vite
+- Dùng tiền tố `NODE_` cho biến môi trường của node
 
-theme/: Chứa các file cấu hình chủ đề, định nghĩa kiểu dáng và hệ thống thiết kế của ứng dụng.
+### Quy ước viết code
 
-types/: Lưu trữ các định nghĩa kiểu TypeScript, cung cấp tính năng kiểm soát kiểu và cải thiện tính đọc hiểu và bảo trì mã.
+- Không dùng `var`
+- Không dùng `==`
+- Xóa `console.log` trước khi commit
+- Xóa `debugger` trước khi commit
+- Không dùng `any`, `unknown`, `never` nếu không cần thiết
+- Không dùng `@ts-ignore`
+- Không dùng `@ts-nocheck`
 
-utils/: Chứa các hàm hoặc module tiện ích, chứa các hàm hoặc phương thức trợ giúp thường được sử dụng trong ứng dụng.
+### Quy ước commit
 
-.env: File cấu hình chứa các biến môi trường, như khóa API, URL cơ sở dữ liệu, hoặc bất kỳ thông tin nhạy cảm nào cần thiết cho ứng dụng.
+- Commit message có dạng: `type(scope): message` (ví dụ: `feat(user): add user feature`)
 
-Luồng Phát Triển:
+### Quy ước pull request
 
+- Pull request có dạng: `type(scope): message` (ví dụ: `feat(user): add user feature`)
 
-Thông Tin Bổ Sung:
+## Cấu trúc thư mục và ý nghĩa
 
-Dependency:
-React
-Next.js
-Các dependency cụ thể cho dự án được liệt kê trong package.json.
-Công Cụ Được Khuyến Nghị:
+```text
+.
+├── api/                   => Tích hợp API
+├── app/                   => Logic ứng dụng
+├── assets/                => Tài nguyên
+├── auth/                  => Xác thực
+├── components/            => Các thành phần tái sử dụng
+├── hooks/                 => Hook React tùy chỉnh
+├── layouts/               => Bố cục
+├── public/                => Tài nguyên công khai
+├── routes/                => Routing
+├── sections/              => Các phần của ứng dụng
+├── theme/                 => Cấu hình chủ đề
+├── types/                 => Định nghĩa kiểu TypeScript
+├── utils/                 => Tiện ích
+├── .env                   => Biến môi trường
+├── .commitlintrc          => Quy ước commit
+├── .editorconfig          => Quy ước định dạng mã
+├── .env.example           => Mẫu biến môi trường
+├── .eslintrc              => Cấu hình eslint
+├── .gitignore             => Cấu hình git
+├── .lintstagedrc          => Cấu hình lint-staged
+├── .ncurc.js              => Cấu hình commitizen
+├── .nvmrc                 => Phiên bản Node
+├── .prettierrc            => Quy ước định dạng mã
+├── next-env.d.ts          => Kiểu Next.js
+├── next.config.mjs        => Cấu hình Next.js
+├── package-lock.json      => Cấu hình npm
+├── package.json           => Cấu hình npm
+├── postcss.config.js      => Cấu hình postcss
+├── README.md              => Hướng dẫn
+├── tailwind.config.ts     => Cấu hình tailwindcss
+└── tsconfig.json          => Cấu hình TypeScript
+```
+## deploy server 
+### set up self hosted runner action on VPS
+- access github settings>actions>runners>New self-hosted runner
+- follow documents
+when run config it will require sudo, run cmd as below instead (add RUNNER_ALLOW_RUNASROOT=1 before config)
+```
+RUNNER_ALLOW_RUNASROOT=1 ./config.cmd --url https://github.com/xxxxxx --token xxxxxxxxxx
+```
+to start runner as service, instead of run.sh, run below cmds:
+for help
+```
+sudo ./svc.sh help
+```
+install and start
+```
+sudo ./svc.sh install
+sudo ./svc.sh start
+```
+to check runner status
+```
+sudo ./svc.sh status
+```
+### install pm2
+```
+npm install pm2 -g
+```
+- To automatically generate and configuration a startup script
+```
+pm2 startup
+```
+- Once you have started all desired apps, save the app list so it will respawn after reboot
+```
+pm2 save
+```
+### nginx
+- install nginx
+```
+apt install -y nginx
+```
+### Copy default nginx config to new file
+- Use your own hostname (staging:  staging.saybong.com/saybong.com)
+```
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/saybong-staging
+```
+- edit above file, update your own server name and port
+```
+server {
+    listen 80;
+    server_name  staging.saybong.com;
 
-Node.js
-npm hoặc Yarn
+    location / {
+        proxy_pass http://127.0.0.1:8001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+- link config file from site sites-available to sites-enable
+```
+ln -s /etc/nginx/sites-available/saybong-staging /etc/nginx/sites-enabled/saybong-staging
+```
+- Test config
+```
+service nginx configtest
+```
+- Restart nginx
+```
+service nginx restart
+```
+- Startup default run nginx
+```
+update-rc.d nginx defaults
+```
+- check nginx status
+```
+service nginx status
+```
+- status working but website can not be reached (if you want to run without SSL follow below, if not, skip this and continue set up SSL)
+run below command in server
+```
+curl -v http://localhost
+```
+if resposne nginx html page -> good
+check firewall
+```
+sudo ufw status
+```
+if no port 80 allow
+```
+sudo ufw allow 80/tcp
+```
+### Setup SSL for domain
+- Enable firewall
+```
+sudo ufw enable
+```
+- Enable SSH
+```
+sudo ufw allow ssh
+```
+- Allow SSL in nginx
+```
+ufw allow 'Nginx Full'
+```
+- if you already add rule to allow port 80 and run without ssl run below command to remove it
+```
+sudo ufw delete deny 80/tcp
+```
+- Install cerbot
+```
+add-apt-repository ppa:certbot/certbot
+```
 
-Liên Hệ:
-Đối với bất kỳ thắc mắc hoặc hỗ trợ nào, vui lòng liên hệ truongcongtrung2709@gmail.com.
+```
+apt-get update
+```
 
-Để triển khai dự án trên web và trỏ tên miền, bạn có thể thực hiện các bước sau:
+```
+apt-get install python3-certbot-nginx
+```
 
-Triển khai trên Vercel hoặc Netlify: Cả hai nền tảng này đều hỗ trợ triển khai các dự án Next.js một cách dễ dàng. Bạn chỉ cần đăng nhập vào tài khoản của mình trên Vercel hoặc Netlify, sau đó tạo một dự án mới từ kho lưu trữ GitHub của bạn. Sau khi kết nối dự án với kho lưu trữ, bạn có thể cấu hình các biến môi
+- Test nginx config
+
+```
+nginx -t
+```
+
+Reload nginx
+
+```
+systemctl reload nginx
+```
+- Apply cerbot to domain ( staging.saybong.com)
+
+```
+certbot --nginx -d  staging.saybong.com
+```
+
+Choose 1 (no redirect) or 2 (redirect) base on your need
+Auto renew SSL certificate
+
+```
+certbot renew --dry-run
+```
