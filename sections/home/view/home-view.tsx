@@ -36,7 +36,6 @@ export default function HomeView() {
     <MainLayout>
       <Container style={{ maxWidth: "1330px", padding: "0" }}>
         <Typography sx={{ textTransform: "uppercase", mt: "40px" }} variant="h3">Trực tiếp bóng đá</Typography>
-        {matchesLoading && <Typography>Loading...</Typography>}
         <MatchList matches={matches} matchesEmpty={matchesEmpty} matchesLoading={matchesLoading} />
 
         <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={sortedHighlightVideos} />
