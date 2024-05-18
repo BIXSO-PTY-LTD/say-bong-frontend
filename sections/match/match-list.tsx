@@ -25,10 +25,13 @@ const defaultFilters: IMatchFilters = {
 
 type Props = {
   matches: IMatchItem[];
-}
+  matchesLoading?: boolean;
+  matchesEmpty?: boolean;
+};
+
 
 // ----------------------------------------------------------------------
-export default function MatchList({ matches }: Props) {
+export default function MatchList({ matches, matchesLoading, matchesEmpty }: Props) {
   const pathname = usePathname();
 
   const [itemsToShow, setItemsToShow] = useState(10);
@@ -240,13 +243,13 @@ export default function MatchList({ matches }: Props) {
         </Stack>
       )}
 
-      {dataFiltered.length === 0 ? (
+      {matchesLoading ? (
+        <Typography>Loading...</Typography >
+      ) : matchesEmpty ? (
         <Typography sx={{ mb: 2 }}>Không có trận đấu nào</Typography>
-      ) :
-        (
-          <MatchListHorizontal matchs={dataFiltered} />
-
-        )}
+      ) : (
+        <MatchListHorizontal matchs={matches} />
+      )}
 
       {pathname === '/' && (
         <Button
@@ -275,7 +278,6 @@ export default function MatchList({ matches }: Props) {
           Xem thêm
         </Button>
       )}
-
 
     </>
   )

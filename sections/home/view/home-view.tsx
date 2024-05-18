@@ -14,13 +14,15 @@ import resposneData from '#/public/responseData.json'
 import { axiosSoccer } from '#/utils/axios';
 import { SOCCER_API } from '#/config-global';
 import QueryString from 'qs';
+import { useGetMatches } from '#/api/match';
 
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
   const { news, newsLoading, newsEmpty } = useGetNews(1, 100)
   const { highlightVideos, highlightVideosLoading, highlightVideosEmpty } = useGetHighlightVideos(1, 100);
-  const [matches, setMatches] = useState<IMatchItem[]>([]);
+  const { matches, matchesLoading, matchesEmpty } = useGetMatches();
+
   const sortedHighlightVideos = useMemo(() => {
     return [...highlightVideos].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [highlightVideos]);
@@ -28,33 +30,14 @@ export default function HomeView() {
   const sortedNews = useMemo(() => {
     return [...news].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [news]);
-  // useEffect(() => {
-  //   if (resposneData) {
-  //     setMatches(resposneData.data.list)
-  //   }
-  // }, [])
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = QueryString.stringify({
-          'type': '1'
-        });
-        const response = await axiosSoccer.post(SOCCER_API as string, data);
-        // Handle success
-        setMatches(response.data.data.list);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
 
-    fetchData();
-  }, []);
+
   return (
     <MainLayout>
       <Container style={{ maxWidth: "1330px", padding: "0" }}>
         <Typography sx={{ textTransform: "uppercase", mt: "40px" }} variant="h3">Trực tiếp bóng đá</Typography>
-        <MatchList matches={matches} />
+        {matchesLoading && <Typography>Loading...</Typography>}
+        <MatchList matches={matches} matchesEmpty={matchesEmpty} matchesLoading={matchesLoading} />
 
         <HomeHighlight loading={highlightVideosLoading} empty={highlightVideosEmpty} highlightVideos={sortedHighlightVideos} />
         <HomeLastestPosts loading={newsLoading} empty={newsEmpty} posts={sortedNews} />

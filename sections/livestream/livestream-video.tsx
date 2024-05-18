@@ -15,6 +15,7 @@ type Props = {
 };
 
 export default function LivestreamVideo({ currentLivestream, currentMatch }: Props) {
+
   const playerRef = useRef(null);
   const isHLS = currentLivestream?.content?.endsWith('.m3u8');
   return (
@@ -38,7 +39,7 @@ export default function LivestreamVideo({ currentLivestream, currentMatch }: Pro
         <Typography variant="h3" sx={{ mt: 4 }}>{currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}</Typography >
       ) :
         (
-          <Typography variant="h3" sx={{ mt: 4 }}>{currentLivestream?.title}</Typography >
+          <Typography variant="h3" sx={{ mt: 4 }}>Loading...</Typography >
         )
       }
 

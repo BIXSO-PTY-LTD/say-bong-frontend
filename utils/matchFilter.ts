@@ -77,7 +77,7 @@ export function filterMatchesByLeagueTitle(matches: IMatchItem[], leagueTitle: s
 
 export function filterLiveMatches(matches: IMatchItem[]) {
   const currentTime = new Date();
-  const endTimeThreshold = new Date(currentTime.getTime() + 105 * 60000); // 105 minutes in milliseconds
+  const endTimeThreshold = new Date(currentTime.getTime() + 120 * 60000); // 105 minutes in milliseconds
 
   return matches
     .filter((match) => {
@@ -87,7 +87,7 @@ export function filterLiveMatches(matches: IMatchItem[]) {
 
 export function isMatchOngoing(match: IMatchItem, currentTime: Date, endTimeThreshold: Date) {
   const matchStartTime = formatStringToDateTime(match.startTimez);
-  const matchEndTime = new Date(matchStartTime.getTime() + 105 * 60000); // 105 minutes in milliseconds
+  const matchEndTime = new Date(matchStartTime.getTime() + 120 * 60000);
   return matchStartTime <= currentTime && currentTime <= matchEndTime;
 }
 

@@ -74,7 +74,7 @@ export default function BXHTableRow({
                 </Label>
               ))
             ) : (
-              "error"
+              ""
             )
           )}
 
