@@ -69,11 +69,7 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
     },
     [handleFilters]
   );
-  const [page, setPage] = useState<number>(1)
 
-  const handlePageChange = (event: React.ChangeEvent<any>, newPage: number) => {
-    setPage(newPage);
-  };
   const dataFiltered = applyFilter({
     inputData: matches,
     filters,
@@ -83,7 +79,6 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
 
 
   useEffect(() => {
-    setPage(1)
     setItemsToShow(10)
   }, [filters.matchStatus, filters.league_title])
 
@@ -248,7 +243,7 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
       ) : matchesEmpty ? (
         <Typography sx={{ mb: 2 }}>Không có trận đấu nào</Typography>
       ) : (
-        <MatchListHorizontal matchs={matches} />
+        <MatchListHorizontal matchs={dataFiltered} />
       )}
 
       {pathname === '/' && (
@@ -343,6 +338,7 @@ const applyFilter = ({
 
       break;
   }
+
   // Apply filters sequentially
   let filteredData = inputData;
   for (const filter of filtersToApply) {
