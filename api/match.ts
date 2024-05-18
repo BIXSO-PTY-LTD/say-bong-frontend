@@ -1,9 +1,10 @@
 import { MATCH_API, SOCCER_API } from '#/config-global';
-import { IMatchResults } from '#/types/match';
-import { axiosSoccer } from '#/utils/axios';
+import { IMatchItem, IMatchResults } from '#/types/match';
+import { axiosSoccer, hostFetcher } from '#/utils/axios';
 import axios, { AxiosRequestConfig } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import QueryString from 'qs';
+import { useMemo } from 'react';
 import useSWR from 'swr';
 
 
@@ -35,17 +36,22 @@ export function useGetMatch(matchId: string | undefined) {
   return memoizedValue;
 }
 
-export async function useGetMatches() {
-  try {
-    const data = QueryString.stringify({
-      'type': '1'
-    });
-    const response = await axiosSoccer.post(SOCCER_API as string, data);
-    // Handle success
-    return response.data.data.list;
-  } catch (error) {
-    // Handle error
-    console.error(error);
-    throw error; // Rethrow the error for the caller to handle
-  }
+export function useGetMatches() {
+  const URL = `/api/v1/addon/schedule`;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, hostFetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      matches: (data?.list as IMatchItem[]) || [],
+      paginate: data || [],
+      matchesLoading: isLoading,
+      matchesError: error,
+      matchesValidating: isValidating,
+      matchesEmpty: !isLoading && !data?.list.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
 }

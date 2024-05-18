@@ -10,38 +10,19 @@ import resposneData from '#/public/responseData.json'
 import { axiosSoccer } from '#/utils/axios';
 import { SOCCER_API } from '#/config-global';
 import QueryString from 'qs';
+import { useGetMatches } from '#/api/match';
 
 // ----------------------------------------------------------------------
 
 export default function BXHView() {
-  const [matches, setMatches] = useState<IMatchItem[]>([]);
-  // useEffect(() => {
-  //   if (resposneData) {
-  //     setMatches(resposneData.data.list)
-  //   }
-  // }, [])
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = QueryString.stringify({
-          'type': '1'
-        });
-        const response = await axiosSoccer.post(SOCCER_API as string, data);
-        // Handle success
-        setMatches(response.data.data.list);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
 
-    fetchData();
-  }, []);
+  const { matches, matchesLoading, matchesEmpty } = useGetMatches();
+
   return (
     <Container style={{ maxWidth: "1330px", padding: "0" }}>
 
 
-      <BXHList matches={matches} />
+      <BXHList matches={matches} matchesLoading={matchesLoading} matchesEmpty={matchesEmpty} />
 
     </Container>
   );

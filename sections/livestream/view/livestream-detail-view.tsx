@@ -11,6 +11,9 @@ import EmptyContent from "#/components/empty-content/empty-content"
 import { useEffect, useState } from "react"
 import resposneData from '#/public/responseData.json'
 import { IMatchItem } from "#/types/match"
+import QueryString from 'qs';
+import { axiosSoccer } from "#/utils/axios"
+import { SOCCER_API } from "#/config-global"
 
 type Props = {
   id: string;
@@ -28,12 +31,28 @@ export default function LivestreamDetailView({ id }: Props) {
 
 
 
+  // useEffect(() => {
+  //   if (resposneData) {
+  //     setMatches(resposneData.data.list)
+  //   }
+  // }, [])
   useEffect(() => {
-    if (resposneData) {
-      setMatches(resposneData.data.list)
-    }
-  }, [])
+    const fetchData = async () => {
+      try {
+        const data = QueryString.stringify({
+          'type': '1'
+        });
+        const response = await axiosSoccer.post(SOCCER_API as string, data);
+        // Handle success
+        setMatches(response.data.data.list);
+      } catch (error) {
+        // Handle error
+        console.error(error);
+      }
+    };
 
+    fetchData();
+  }, []);
   const currentMatch = matches.find(match => match.matchId === currentLivestream?.title);
   return (
     <Container style={{ maxWidth: "1330px", padding: "0" }}>

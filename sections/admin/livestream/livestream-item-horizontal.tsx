@@ -21,12 +21,15 @@ import CustomPopover, { usePopover } from '#/components/custom-popover';
 import { useCallback, useEffect, useState } from 'react';
 import { mutate } from 'swr';
 import { ConfirmDialog } from '#/components/custom-dialog';
-import { Button, MenuItem } from '@mui/material';
+import { Button, MenuItem, Typography } from '@mui/material';
 import { useBoolean } from '#/hooks/use-boolean';
 import { ILivestreamItem } from '#/types/livestream';
 import { useDeleteLivestream } from '#/api/livestream';
 import resposneData from '#/public/responseData.json'
 import { IMatchItem } from '#/types/match';
+import QueryString from 'qs';
+import { axiosSoccer } from '#/utils/axios';
+import { SOCCER_API } from '#/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -55,12 +58,24 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
   } = livestream;
 
   useEffect(() => {
-    if (resposneData) {
-      setMatches(resposneData.data.list)
-      setMatchingLivestream(matches.find(item => item.matchId === title))
-    }
-  }, [matches, title])
+    const fetchData = async () => {
+      try {
+        const data = QueryString.stringify({
+          'type': '1'
+        });
+        const response = await axiosSoccer.post(SOCCER_API as string, data);
+        // Handle success
+        setMatches(response.data.data.list);
+      } catch (error) {
+        // Handle error
+        console.error(error);
+      }
+    };
 
+    fetchData();
+  }, []);
+
+  const currentMatch = matches.find(match => match.matchId === livestream?.title);
 
   const smUp = useResponsive('up', 'sm');
   const deleteLivestream = useDeleteLivestream();
@@ -98,14 +113,17 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
           </Stack>
 
           <Stack spacing={1}>
-            <Link color="inherit" component={RouterLink} href={paths.dashboard.livestream.details(id)}>
-              <TextMaxLine color="black" variant="subtitle2" line={2}>{
-                matchingLivestream ? (`${matchingLivestream?.localteam_title} vs ${matchingLivestream?.visitorteam_title}`) : (
-                  title
-                )}
+            {currentMatch ? (
+              <Link color="inherit" component={RouterLink} href={paths.dashboard.livestream.details(id)}>
+                <TextMaxLine color="black" variant="subtitle2" line={2}>{currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}
+                </TextMaxLine>
+              </Link>
+            ) : (
 
-              </TextMaxLine>
-            </Link>
+              <Typography variant="h3" sx={{ mt: 4 }}>Loading...</Typography>
+            )}
+
+
           </Stack>
         </Stack>
         <Box>
@@ -127,7 +145,7 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
             }} />
           </Box>
         )}
-      </Stack>
+      </Stack >
 
       <CustomPopover
         open={popover.open}
@@ -135,21 +153,6 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
         arrow="bottom-center"
         sx={{ width: 140 }}
       >
-        {matchingLivestream ? (
-          <></>
-        ) : (
-          <>
-            <MenuItem
-              onClick={() => {
-                popover.onClose();
-                router.push(paths.dashboard.livestream.details(id));
-              }}
-            >
-              <Iconify icon="solar:eye-bold" />
-              View
-            </MenuItem>
-          </>
-        )}
 
         <MenuItem
           onClick={() => {

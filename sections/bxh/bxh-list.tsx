@@ -1,10 +1,11 @@
 import { Box, Stack, Table, TableBody, TableContainer, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { IMatchFilterValue, IMatchItem, IRankFilters } from "#/types/match";
-import { TableHeadCustom, useTable } from "#/components/table";
+import { TableHeadCustom, TableNoData, useTable } from "#/components/table";
 import CompetitionSort from "../competition/competition-sort";
 import BXHTableRow from "./bxh-table-row";
 import { filterMatchesByLeagueTitle } from "#/utils/matchFilter";
+import isEqual from "lodash.isequal";
 
 const TABLE_HEAD = [
   { id: 'team', label: 'TEAM', width: { md: 300, lg: 740 } },
@@ -24,8 +25,10 @@ const defaultFilters: IRankFilters = {
 
 type Props = {
   matches: IMatchItem[]
+  matchesLoading: boolean
+  matchesEmpty: boolean
 }
-export default function BXHList({ matches }: Props) {
+export default function BXHList({ matches, matchesLoading, matchesEmpty }: Props) {
 
   const table = useTable();
   const [filters, setFilters] = useState(defaultFilters);
@@ -43,6 +46,10 @@ export default function BXHList({ matches }: Props) {
     }));
 
   }, []);
+
+  const canReset = !isEqual(defaultFilters, filters);
+
+  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
   useEffect(() => {
     if (COMPETITION_OPTIONS.length > 0) {
       // Set filter to the first option in COMPETITION_OPTIONS when component mounts
@@ -99,7 +106,7 @@ export default function BXHList({ matches }: Props) {
                 />
               ))}
 
-              {/* <TableNoData notFound={notFound} /> */}
+              <TableNoData notFound={notFound} />
             </TableBody>
           </Table>
         </Box>
