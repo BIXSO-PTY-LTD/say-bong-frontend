@@ -28,7 +28,7 @@ type Props = {
   matchesLoading: boolean
   matchesEmpty: boolean
 }
-export default function BXHList({ matches, matchesLoading, matchesEmpty }: Props) {
+export default function BXHList({ matches = [], matchesLoading, matchesEmpty }: Props) {
 
   const table = useTable();
   const [filters, setFilters] = useState(defaultFilters);
@@ -61,16 +61,21 @@ export default function BXHList({ matches, matchesLoading, matchesEmpty }: Props
   }, [COMPETITION_OPTIONS]);
 
   useEffect(() => {
+    if (Array.isArray(matches)) {
+      // Extract unique league titles and convert to lowercase
+      const options = Array.from(new Set(matches.map(match => match.league_title.trim().toLowerCase())));
 
-    // Extract unique league titles and convert to lowercase
-    const options = Array.from(new Set(matches.map(match => match.league_title.trim().toLowerCase())));
-
-    // Convert Set to array and sort alphabetically
-    setCompetitionOptions(options.sort());
-
+      // Convert Set to array and sort alphabetically
+      setCompetitionOptions(options.sort());
+    } else {
+      console.error('Expected matches to be an array, but received:', matches);
+    }
   }, [matches]);
-
-
+  useEffect(() => {
+    if (matches.length === 0) {
+      console.warn('Matches array is empty.');
+    }
+  }, [matches]);
   return (
     <>
       <Stack spacing={3}
