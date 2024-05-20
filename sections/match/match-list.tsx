@@ -31,7 +31,7 @@ type Props = {
 
 
 // ----------------------------------------------------------------------
-export default function MatchList({ matches = [], matchesLoading, matchesEmpty }: Props) {
+export default function MatchList({ matches, matchesLoading, matchesEmpty }: Props) {
   const pathname = usePathname();
 
   const [itemsToShow, setItemsToShow] = useState(10);
@@ -83,15 +83,8 @@ export default function MatchList({ matches = [], matchesLoading, matchesEmpty }
 
 
   useEffect(() => {
-
-
     setItemsToShow(10)
   }, [filters.matchStatus, filters.league_title])
-  useEffect(() => {
-    if (matches.length === 0) {
-      setIsError(true);
-    }
-  }, [matches]);
 
   return (
     <>

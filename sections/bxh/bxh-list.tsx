@@ -28,7 +28,7 @@ type Props = {
   matchesLoading: boolean
   matchesEmpty: boolean
 }
-export default function BXHList({ matches = [], matchesLoading, matchesEmpty }: Props) {
+export default function BXHList({ matches, matchesLoading, matchesEmpty }: Props) {
 
   const table = useTable();
   const [filters, setFilters] = useState(defaultFilters);
@@ -69,11 +69,6 @@ export default function BXHList({ matches = [], matchesLoading, matchesEmpty }: 
       setCompetitionOptions(options.sort());
     } else {
       console.error('Expected matches to be an array, but received:', matches);
-    }
-  }, [matches]);
-  useEffect(() => {
-    if (matches.length === 0) {
-      console.warn('Matches array is empty.');
     }
   }, [matches]);
   return (
