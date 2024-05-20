@@ -2,9 +2,9 @@ name: Fancy CI
 
 on:
   push:
-    branches: ["features"]
+    branches: ["main"]
   pull_request:
-    branches: ["features"]
+    branches: ["main"]
 
 jobs:
   build:
@@ -27,9 +27,9 @@ jobs:
             cd ${{ secrets.PROJECT_WORKING_DIR }}
             git clean -fd
             git pull
-            git checkout features
+            git checkout main
             git pull
-            npm install
+            npm install --force
             npm run build
-            pm2 reload ecosystem.config.js
+            pm2 startOrRestart ecosystem.config.js
             echo "Deployment successful!"
