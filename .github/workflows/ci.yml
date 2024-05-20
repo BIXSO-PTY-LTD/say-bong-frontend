@@ -30,6 +30,7 @@ jobs:
             git checkout main
             git pull
             npm install --force
+            npm install pm2 -g
             npm run build
             pm2 startOrRestart ecosystem.config.js
             echo "Deployment successful!"
