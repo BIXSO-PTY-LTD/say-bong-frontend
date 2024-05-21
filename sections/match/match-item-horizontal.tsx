@@ -26,18 +26,20 @@ type Props = {
 
 const getMatchStatus = (matchTime: number, halfStartTime: number) => {
   const matchStartTime = convertTimestampToDate(matchTime);
-  const matchHalfTime = convertTimestampToDate(halfStartTime);
+  const halfStartTimeDate = convertTimestampToDate(halfStartTime);
 
   const currentTime = new Date();
   const elapsedTime = (currentTime.getTime() - matchStartTime.getTime()) / (1000 * 60);
 
   if (currentTime.getTime() < matchStartTime.getTime()) {
     return { round: "Chưa bắt đầu", time: "" };
-  } else if (currentTime.getTime() < matchHalfTime.getTime()) {
+  } else if (elapsedTime <= 45) {
     return { round: "Hiệp 1", time: `${Math.floor(elapsedTime)}'` };
+  } else if (elapsedTime <= 60) {
+    return { round: "Nghỉ giữa hiệp", time: `` };
   } else {
-    const elapsedHalfTime = (currentTime.getTime() - matchHalfTime.getTime()) / (1000 * 60);
-    return { round: "Hiệp 2", time: `${Math.floor(elapsedHalfTime)}'` };
+    const halfTimeElapsed = Math.floor(elapsedTime - 45);
+    return { round: "Hiệp 2", time: `${Math.floor(halfTimeElapsed)}'` };
   }
 };
 
