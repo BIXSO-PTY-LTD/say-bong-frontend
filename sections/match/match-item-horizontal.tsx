@@ -38,7 +38,7 @@ const getMatchStatus = (matchTime: number, halfStartTime: number) => {
   } else if (elapsedTime <= 60) {
     return { round: "Nghỉ giữa hiệp", time: `` };
   } else {
-    const halfTimeElapsed = Math.floor(elapsedTime - 45);
+    const halfTimeElapsed = Math.floor(elapsedTime - 15);
     return { round: "Hiệp 2", time: `${Math.floor(halfTimeElapsed)}'` };
   }
 };
