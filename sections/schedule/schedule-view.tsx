@@ -8,7 +8,6 @@ import QueryString from 'qs';
 
 import resposneData from '#/public/responseData.json'
 import { axiosSoccer } from '#/utils/axios';
-import { SOCCER_API } from '#/config-global';
 import { useGetMatches } from '#/api/match';
 // ----------------------------------------------------------------------
 

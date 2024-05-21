@@ -35,3 +35,7 @@ export function formatStringToDateTime(dateTimeString: string) {
 
   return new Date(formattedDateString);
 }
+
+export const convertTimestampToDate = (timestamp: number) => {
+  return new Date(timestamp * 1000);
+};

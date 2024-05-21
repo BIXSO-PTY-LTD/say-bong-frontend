@@ -10,7 +10,6 @@ import resposneData from '#/public/responseData.json'
 import { IMatchItem } from '#/types/match';
 import QueryString from 'qs';
 import { axiosSoccer } from '#/utils/axios';
-import { SOCCER_API } from '#/config-global';
 import { useGetMatches } from '#/api/match';
 
 

@@ -29,7 +29,7 @@ import resposneData from '#/public/responseData.json'
 import { IMatchItem } from '#/types/match';
 import QueryString from 'qs';
 import { axiosSoccer } from '#/utils/axios';
-import { SOCCER_API } from '#/config-global';
+import { useGetMatches } from '#/api/match';
 
 // ----------------------------------------------------------------------
 
@@ -41,11 +41,9 @@ type Props = {
 export default function LivestreamlivestreamHorizontal({ livestream, endpoints }: Props) {
   const popover = usePopover();
 
-  const [matches, setMatches] = useState<IMatchItem[]>([]);
-  const [matchingLivestream, setMatchingLivestream] = useState<IMatchItem>();
+  const { matches } = useGetMatches();
 
-
-  const router = useRouter();
+  const [currentMatch, setCurrentMatch] = useState<IMatchItem>();
 
   const confirm = useBoolean();
 
@@ -58,24 +56,11 @@ export default function LivestreamlivestreamHorizontal({ livestream, endpoints }
   } = livestream;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = QueryString.stringify({
-          'type': '1'
-        });
-        const response = await axiosSoccer.post(SOCCER_API as string, data);
-        // Handle success
-        setMatches(response.data.data.list);
-      } catch (error) {
-        // Handle error
-        console.error(error);
-      }
-    };
+    if (matches.length > 0) {
+      setCurrentMatch(matches.find(match => match.matchId === livestream?.title));
+    }
+  }, [matches, livestream.title])
 
-    fetchData();
-  }, []);
-
-  const currentMatch = matches.find(match => match.matchId === livestream?.title);
 
   const smUp = useResponsive('up', 'sm');
   const deleteLivestream = useDeleteLivestream();
