@@ -23,7 +23,7 @@ const useSocket = (user: AuthUserType, currentLivestream: ILivestreamItem | unde
       return;
     }
 
-    const newSocket = io("ws://api.saybong.tv:8001", {
+    const newSocket = io("ws://api.saybong.tv", {
       extraHeaders: { Authorization: accessToken },
     });
 
