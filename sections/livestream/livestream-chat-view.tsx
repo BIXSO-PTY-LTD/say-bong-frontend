@@ -12,57 +12,24 @@ import { IAuthor, ICommentItem } from "#/types/chat";
 import io from "socket.io-client";
 import { mutate } from "swr";
 import Image from "#/components/image";
+import useSocket from "#/websocket/useSocket";
 
 type Props = {
   currentLivestream?: ILivestreamItem;
 };
 
-const EVENTS = {
-  CLIENT: {
-    NEW_USER_JOIN_ROOM: "1",
-  },
-  SERVER: {
-    RECEIVE_NEW_LIVE_STREAM_COMMENT: "2",
-  },
-};
+
 
 export default function LivestreamChatView({ currentLivestream }: Props) {
   const { user } = useAuthContext();
+
+
   const { dialogLoginOpen, dialogRegisterOpen } = useDialogControls();
   const { comments, endpoint } = useGetLivestreamComments(currentLivestream?.id);
   const authors: IAuthor[] = comments.flatMap((comment) => comment.author).filter((author) => author.id !== user?.id);
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      console.log("Access token not found in localStorage");
-      return;
-    }
 
-    const newSocket = io("ws://157.119.248.121:8001", {
-      extraHeaders: { Authorization: accessToken },
-    });
+   useSocket(user, currentLivestream, endpoint);
 
-    newSocket.on("connect", () => {
-      console.log("Connected to Socket.IO server");
-      newSocket.emit(EVENTS.CLIENT.NEW_USER_JOIN_ROOM, {
-        userId: user?.id,
-        postId: currentLivestream?.id,
-      });
-    });
-
-    newSocket.on(EVENTS.SERVER.RECEIVE_NEW_LIVE_STREAM_COMMENT, (comment: { data: ICommentItem }) => {
-      if (comment && comment.data && currentLivestream?.id === comment.data.postId) {
-        mutate(endpoint);
-      }
-    });
-
-    return () => {
-      if (newSocket.connected) {
-        console.log("Disconnecting from Socket.IO server");
-        newSocket.disconnect();
-      }
-    };
-  }, [currentLivestream?.id, endpoint, user?.id]);
 
   const renderHead = (
     <Stack direction="row" alignItems="center" flexShrink={0} sx={{ px: 2, py: 2, background: "#141622", border: "1px solid #1B1D29" }}>
