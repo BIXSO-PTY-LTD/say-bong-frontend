@@ -2,28 +2,37 @@ import { IMatchItem } from "#/types/match";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 import { fDate, formatStringToDateTime } from "./format-time";
 
+const isArray = (value: any): value is IMatchItem[] => Array.isArray(value);
+
 export const filterMatchByDate = (baseDate: Date, daysToAdd: number) => (matches: IMatchItem[]) => {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const targetDate = new Date(baseDate);
   targetDate.setDate(targetDate.getDate() + daysToAdd);
 
   const formattedTargetDate = fDate(targetDate);
 
   return matches.filter((match) => {
-    // Splitting match.startTimez into components
     const [matchMonth, matchDay, matchYearTime] = match.startTimez.split("-");
     const [matchYear, matchTime] = matchYearTime.split("T");
     const matchTimeParts = matchTime.split(":");
 
-    // Constructing formatted date string
     const formattedMatchDate = `${matchMonth}/${matchDay}/${matchYear}`;
-
 
     return formattedMatchDate === formattedTargetDate;
   });
 };
 
 export function filterYesterdayMatches(matches: IMatchItem[]) {
-  const yesterday = subDays(new Date(), 1); // Get yesterday's date
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
+  const yesterday = subDays(new Date(), 1);
   const startOfYesterday = startOfDay(yesterday);
   const endOfYesterday = endOfDay(yesterday);
 
@@ -34,55 +43,67 @@ export function filterYesterdayMatches(matches: IMatchItem[]) {
 }
 
 export function filterTodayMatches(matches: IMatchItem[]) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const endOfDay = new Date(today);
   endOfDay.setHours(23, 59, 59, 999);
 
-
-  return matches
-    .filter((match) => {
-      const matchStartTime = formatStringToDateTime(match.startTimez);
-      return matchStartTime >= today && matchStartTime <= endOfDay;
-    })
-    ;
+  return matches.filter((match) => {
+    const matchStartTime = formatStringToDateTime(match.startTimez);
+    return matchStartTime >= today && matchStartTime <= endOfDay;
+  });
 }
 
 export function filterTomorrowMatches(matches: IMatchItem[]) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const tomorrow = new Date();
-  // Get tomorrow's date by adding 1 to the current date
   tomorrow.setDate(tomorrow.getDate() + 1);
-  // Set the time to the start of tomorrow
   tomorrow.setHours(0, 0, 0, 0);
-  // Set the time to the end of tomorrow
+
   const endOfTomorrow = new Date(tomorrow);
   endOfTomorrow.setHours(23, 59, 59, 999);
 
-  return matches
-    .filter((match) => {
-      const matchStartTime = formatStringToDateTime(match.startTimez);
-      return matchStartTime >= tomorrow && matchStartTime <= endOfTomorrow;
-    })
-    ;
+  return matches.filter((match) => {
+    const matchStartTime = formatStringToDateTime(match.startTimez);
+    return matchStartTime >= tomorrow && matchStartTime <= endOfTomorrow;
+  });
 }
+
 export function filterMatchesByLeagueTitle(matches: IMatchItem[], leagueTitle: string) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   if (leagueTitle !== "all") {
-    return matches.filter(match => match.league_title.toLowerCase().includes(leagueTitle.toLowerCase()))
+    return matches.filter(match => match.league_title.toLowerCase().includes(leagueTitle.toLowerCase()));
   } else {
-    return matches
+    return matches;
   }
 }
 
-
 export function filterLiveMatches(matches: IMatchItem[]) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const currentTime = new Date();
   const endTimeThreshold = new Date(currentTime.getTime() + 120 * 60000); // 105 minutes in milliseconds
 
-  return matches
-    .filter((match) => {
-      return isMatchOngoing(match, currentTime, endTimeThreshold);
-    });
+  return matches.filter((match) => {
+    return isMatchOngoing(match, currentTime, endTimeThreshold);
+  });
 }
 
 export function isMatchOngoing(match: IMatchItem, currentTime: Date, endTimeThreshold: Date) {
@@ -92,6 +113,11 @@ export function isMatchOngoing(match: IMatchItem, currentTime: Date, endTimeThre
 }
 
 export function filterAllTimeMatches(matches: IMatchItem[]) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const currentTime = new Date();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -115,12 +141,18 @@ export function filterAllTimeMatches(matches: IMatchItem[]) {
     );
   });
 }
+
 export function filterTodayAndLiveMatches(matches: IMatchItem[]) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const currentTime = new Date();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const endOfToday = endOfDay(currentTime);
-  const endTimeThreshold = new Date(currentTime.getTime() + 105 * 60000); // 105 minutes in milliseconds
+  const endTimeThreshold = new Date(currentTime.getTime() + 105 * 60000);
 
   return matches.filter((match) => {
     const matchStartTime = formatStringToDateTime(match.startTimez);
@@ -130,7 +162,13 @@ export function filterTodayAndLiveMatches(matches: IMatchItem[]) {
     );
   });
 }
+
 export function filterFourDaysLaterMatches(matches: IMatchItem[]) {
+  if (!isArray(matches)) {
+    console.error('Expected matches to be an array, but received:', matches);
+    return [];
+  }
+
   const today = new Date();
   const fourDaysLater = addDays(today, 4);
 

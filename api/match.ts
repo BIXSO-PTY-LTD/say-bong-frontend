@@ -1,6 +1,6 @@
 import { MATCH_API, SOCCER_API } from '#/config-global';
-import { IMatchItem, IMatchResults } from '#/types/match';
-import { axiosSoccer, hostFetcher } from '#/utils/axios';
+import { IMatchInfo, IMatchItem } from '#/types/match';
+import { axiosSoccer, hostFetcher, soccerFetcher } from '#/utils/axios';
 import axios, { AxiosRequestConfig } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import QueryString from 'qs';
@@ -8,29 +8,17 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 
 
-export function useGetMatch(matchId: string | undefined) {
-  const endpoints = `${MATCH_API}/h2h`
+export function useGetInfoMatches() {
+  const URL = `${SOCCER_API}`
 
+  const { data, error, isValidating } = useSWR(URL, soccerFetcher);
 
-  const hostFetcher = async (url: string) => {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
-    }
-    return response.json();
-  };
-
-  const URL = matchId ? `${endpoints}/${matchId}` : '';
-
-  const { data, error, isValidating } = useSWR(URL, hostFetcher);
-
-  const matchLoading = !data && !error;
-
+  const matchesInfoLoading = !data && !error;
   const memoizedValue = {
-    match: data?.results as IMatchResults,
-    matchLoading,
-    matchError: error,
-    matchValidating: isValidating,
+    matchesInfo: data as IMatchInfo[],
+    matchesInfoLoading,
+    matchesInfoError: error,
+    matchesInfoValidating: isValidating,
   };
 
   return memoizedValue;

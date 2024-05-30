@@ -4,10 +4,7 @@ import { HOST_API, SOCCER_API } from '#/config-global';
 const axiosHostInstance: AxiosInstance = axios.create({ baseURL: HOST_API });
 
 export const axiosSoccer: AxiosInstance = axios.create({
-  baseURL: SOCCER_API, headers: {
-    'content-type': 'application/x-www-form-urlencoded',
-    'token': '75d167ad47be3a6e8d8ae84746424114'
-  }
+  baseURL: SOCCER_API
 });
 
 const responseInterceptor = (error: any) => Promise.reject((error.response && error.response.data) || 'Something went wrong');
@@ -35,7 +32,7 @@ export const soccerFetcher = async (args: string | [string, AxiosRequestConfig])
 
   const res = await axiosSoccer.get(url, { ...config });
 
-  return res.data;
+  return res.data.data;
 };
 
 

@@ -8,7 +8,6 @@ import { IMatchItem } from '#/types/match';
 
 import resposneData from '#/public/responseData.json'
 import { axiosSoccer } from '#/utils/axios';
-import { SOCCER_API } from '#/config-global';
 import QueryString from 'qs';
 import { useGetMatches } from '#/api/match';
 

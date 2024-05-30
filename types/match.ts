@@ -44,14 +44,12 @@ export type IResult = {
   score: string;
   score_half: string;
 }
-export type IMatchResults = {
-  away: string;
-  home: string;
-  future_away: IResult[];
-  future_home: IResult[];
-  history_away: IResult[];
-  history_home: IResult[];
-  history_vs: IResult[];
+export type IMatchInfo = {
+  matchId: string,
+  match_time: number,
+  halfStartTime: number,
+  status: number,
+  score: string
 }
 
 // ----------------------------------------------------------------------

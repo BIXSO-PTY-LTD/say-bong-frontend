@@ -36,6 +36,10 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
 
   const [itemsToShow, setItemsToShow] = useState(10);
 
+  const [isError, setIsError] = useState<boolean>(false);
+
+
+
   const loadMoreItems = () => {
     setItemsToShow(prevItems => prevItems + 10);
   };
@@ -240,7 +244,7 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
 
       {matchesLoading ? (
         <Typography>Loading...</Typography >
-      ) : matchesEmpty ? (
+      ) : matchesEmpty || isError ? (
         <Typography sx={{ mb: 2 }}>Không có trận đấu nào</Typography>
       ) : (
         <MatchListHorizontal matchs={dataFiltered} />

@@ -18,14 +18,8 @@ type Props = {
 export default function MatchListHorizontal({ matchs,
   //  loading
 }: Props) {
+
   const pathname = usePathname();
-  // const renderSkeleton = (
-  //   <>
-  //     {[...Array(16)].map((_, index) => (
-  //       <MatchItemSkeleton key={index} variant="horizontal" />
-  //     ))}
-  //   </>
-  // );
 
   const renderList = (
     <>

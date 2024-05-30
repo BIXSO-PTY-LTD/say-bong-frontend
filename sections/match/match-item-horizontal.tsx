@@ -2,8 +2,8 @@
 
 import { Typography, Stack, Avatar, Card, Button, Box } from '@mui/material';
 import Label from '#/components/label';
-import { fDateTime, formatStringToDateTime } from '#/utils/format-time';
-import { IMatchItem } from '#/types/match';
+import { convertTimestampToDate, fDateTime, formatStringToDateTime } from '#/utils/format-time';
+import { IMatchInfo, IMatchItem } from '#/types/match';
 import { useEffect, useState } from 'react';
 import { useResponsive } from '#/hooks/use-responsive';
 import { useCreateLivestream, useGetLivestreams } from '#/api/livestream';
@@ -13,6 +13,7 @@ import { ILivestreamItem } from '#/types/livestream';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { mutate } from 'swr';
+import { useGetInfoMatches } from '#/api/match';
 
 // ----------------------------------------------------------------------
 
@@ -22,12 +23,34 @@ type Props = {
   match: IMatchItem;
 };
 
+
+const getMatchStatus = (matchTime: number, halfStartTime: number) => {
+  const matchStartTime = convertTimestampToDate(matchTime);
+  const halfStartTimeDate = convertTimestampToDate(halfStartTime);
+
+  const currentTime = new Date();
+  const elapsedTime = (currentTime.getTime() - matchStartTime.getTime()) / (1000 * 60);
+
+  if (currentTime.getTime() < matchStartTime.getTime()) {
+    return { round: "Chưa bắt đầu", time: "" };
+  } else if (elapsedTime <= 45) {
+    return { round: "Hiệp 1", time: `${Math.floor(elapsedTime)}'` };
+  } else if (elapsedTime <= 60) {
+    return { round: "Nghỉ giữa hiệp", time: `` };
+  } else {
+    const halfTimeElapsed = Math.floor(elapsedTime - 15);
+    return { round: "Hiệp 2", time: `${Math.floor(halfTimeElapsed)}'` };
+  }
+};
+
 export default function MatchItemHorizontal({ match }: Props) {
   const mdUp = useResponsive("up", "md");
   const router = useRouter()
   const { livestreams, endpoints } = useGetLivestreams()
-
+  const { matchesInfo } = useGetInfoMatches();
+  const [currentMatch, setCurrentMatch] = useState<IMatchInfo>();
   const { enqueueSnackbar } = useSnackbar();
+
 
   const {
     matchId,
@@ -65,6 +88,15 @@ export default function MatchItemHorizontal({ match }: Props) {
       // Handle error appropriately, e.g., display an error message to the user
     }
   };
+  useEffect(() => {
+    if (matchesInfo && match) {
+      setCurrentMatch(matchesInfo.find(item => item.matchId === match.matchId));
+
+    }
+  }, [match, match.matchId, matchesInfo])
+
+  const matchStatus = getMatchStatus(currentMatch?.match_time as number, currentMatch?.halfStartTime as number);
+
   return (
     <Stack component={Card} sx={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/assets/images/match/background-match.svg)`, p: 1, backgroundSize: 'cover' }} direction="column">
       <Stack sx={{ py: 0.5, px: '20px' }} direction="row" justifyContent="space-between">
@@ -73,16 +105,17 @@ export default function MatchItemHorizontal({ match }: Props) {
       </Stack>
       <Stack direction="row" justifyContent="space-around" spacing={0.5} alignItems="center">
         <TeamInfo image={localteam_logo} team={localteam_title} />
-        <Stack direction="column" spacing={2}>
-          {formatStringToDateTime(startTimez) < new Date() ? (
+        <Stack direction="column" spacing={2} alignItems="center"
+          justifyContent="center">
+          {convertTimestampToDate(currentMatch?.match_time as number) < new Date() ? (
             <>
-              {/* <Label sx={{ width: { md: "94px" }, height: { md: "32px" } }} color="success" variant="filled" >
-                <Typography variant={mdUp ? "body2" : "caption"}>{`Hiệp 1 : 12'`}</Typography>
-              </Label> */}
+              <Label sx={{ width: { md: "110px" }, height: { md: "32px" } }} color="success" variant="filled" >
+                <Typography variant={mdUp ? "body2" : "caption"}>{`${matchStatus.round} ${matchStatus.time}`}</Typography>
+              </Label>
               <Label sx={{ background: BACKGROUND_GRADIENT, width: { md: "94px" }, height: { md: "47px" } }} variant="filled" >
 
 
-                <Typography variant={mdUp ? "h3" : "body2"}>{score}</Typography>
+                <Typography variant={mdUp ? "h3" : "body2"}>{currentMatch?.score.replace(',', ' - ')}</Typography>
 
               </Label>
 
