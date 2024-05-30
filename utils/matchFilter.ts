@@ -1,6 +1,6 @@
 import { IMatchItem } from "#/types/match";
 import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
-import { fDate, formatStringToDateTime } from "./format-time";
+import { convertTimestampToDate, fDate, formatStringToDateTime } from "./format-time";
 
 const isArray = (value: any): value is IMatchItem[] => Array.isArray(value);
 
@@ -177,3 +177,24 @@ export function filterFourDaysLaterMatches(matches: IMatchItem[]) {
     return matchDate >= today && matchDate <= fourDaysLater;
   });
 }
+
+export const getMatchStatus = (matchTime: number, halfStartTime: number) => {
+  const matchStartTime = convertTimestampToDate(matchTime);
+  const halfStartTimeDate = convertTimestampToDate(halfStartTime);
+
+  const currentTime = new Date();
+  const elapsedTime = (currentTime.getTime() - matchStartTime.getTime()) / (1000 * 60);
+
+  if (currentTime.getTime() < matchStartTime.getTime()) {
+    return { round: "Chưa bắt đầu", time: "" };
+  } else if (elapsedTime <= 45) {
+    return { round: "Hiệp 1", time: `${Math.floor(elapsedTime)}'` };
+  } else if (elapsedTime <= 60) {
+    return { round: "Nghỉ giữa hiệp", time: `` };
+  } else if (elapsedTime <= 120) {
+    const halfTimeElapsed = elapsedTime - 15;
+    return { round: "Hiệp 2", time: `${Math.floor(halfTimeElapsed)}'` };
+  } else {
+    return { round: "Đã kết thúc", time: `` };
+  }
+};
