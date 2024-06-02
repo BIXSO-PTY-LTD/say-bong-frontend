@@ -1,4 +1,4 @@
-export type ILivestreamFilterValue = string | string[];
+export type ILivestreamFilterValue = string | string[] | Date | null;
 
 export type ILivestreamFilters = {
   league_title: string;
@@ -7,9 +7,9 @@ export type ILivestreamFilters = {
   endDate: Date | null,
   localTeam: string,
   visitorTeam: string,
-  videoSource: boolean,
-  live: boolean,
-  hot: boolean
+  videoSource: string,
+  live: string,
+  hot: string
 };
 
 export type ILivestreamMetas = {
@@ -24,4 +24,8 @@ export type ILivestreamItem = {
   video: string;
   metas?: ILivestreamMetas[];
   meta?: ILivestreamMetas[];
+};
+export type ILivestreamBroadcoaster = {
+  name: string;
+  link: string;
 };

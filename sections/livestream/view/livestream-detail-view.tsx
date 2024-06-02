@@ -27,7 +27,6 @@ export default function LivestreamDetailView({ id }: Props) {
   const { matches } = useGetMatches();
   const [currentMatch, setCurrentMatch] = useState<IMatchItem>();
 
-  const filteredLivestreams = currentLivestream ? livestreams.filter(livestream => livestream.id !== currentLivestream.id) : livestreams;
 
 
   useEffect(() => {

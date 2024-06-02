@@ -185,16 +185,15 @@ export const getMatchStatus = (matchTime: number, halfStartTime: number) => {
   const currentTime = new Date();
   const elapsedTime = (currentTime.getTime() - matchStartTime.getTime()) / (1000 * 60);
 
-  if (currentTime.getTime() < matchStartTime.getTime()) {
+  if (isNaN(elapsedTime)) {
     return { round: "Chưa bắt đầu", time: "" };
   } else if (elapsedTime <= 45) {
     return { round: "Hiệp 1", time: `${Math.floor(elapsedTime)}'` };
   } else if (elapsedTime <= 60) {
     return { round: "Nghỉ giữa hiệp", time: `` };
-  } else if (elapsedTime <= 120) {
-    const halfTimeElapsed = elapsedTime - 15;
-    return { round: "Hiệp 2", time: `${Math.floor(halfTimeElapsed)}'` };
+  } else if (elapsedTime <= 105) {
+    return { round: "Hiệp 2", time: `${Math.floor(elapsedTime - 15)}'` };
   } else {
-    return { round: "Đã kết thúc", time: `` };
+    return { round: "Đã kết thúc", time: "" };
   }
 };
