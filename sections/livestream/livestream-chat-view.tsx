@@ -1,16 +1,13 @@
 import { Box, Stack, Typography } from "@mui/material";
 import ChatMessageList from "./chat-message-list";
 import ChatMessageInput from "./chat-message-input";
-import { useEffect } from "react";
 import { useAuthContext } from "#/auth/hooks";
 import { useDialogControls } from "#/hooks/use-dialog-controls";
 import LoginDialog from "../auth/login-dialog";
 import RegisterDialog from "../auth/register-dialog";
 import { ILivestreamItem } from "#/types/livestream";
 import { useGetLivestreamComments } from "#/api/chat";
-import { IAuthor, ICommentItem } from "#/types/chat";
-import io from "socket.io-client";
-import { mutate } from "swr";
+import { IAuthor } from "#/types/chat";
 import Image from "#/components/image";
 import useSocket from "#/websocket/useSocket";
 

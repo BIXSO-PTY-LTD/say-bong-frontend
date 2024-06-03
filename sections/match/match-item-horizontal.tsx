@@ -14,6 +14,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { mutate } from 'swr';
 import { useGetInfoMatches } from '#/api/match';
+import { getMatchStatus } from '#/utils/matchFilter';
 
 // ----------------------------------------------------------------------
 
@@ -24,29 +25,12 @@ type Props = {
 };
 
 
-const getMatchStatus = (matchTime: number, halfStartTime: number) => {
-  const matchStartTime = convertTimestampToDate(matchTime);
-  const halfStartTimeDate = convertTimestampToDate(halfStartTime);
 
-  const currentTime = new Date();
-  const elapsedTime = (currentTime.getTime() - matchStartTime.getTime()) / (1000 * 60);
-
-  if (currentTime.getTime() < matchStartTime.getTime()) {
-    return { round: "Chưa bắt đầu", time: "" };
-  } else if (elapsedTime <= 45) {
-    return { round: "Hiệp 1", time: `${Math.floor(elapsedTime)}'` };
-  } else if (elapsedTime <= 60) {
-    return { round: "Nghỉ giữa hiệp", time: `` };
-  } else {
-    const halfTimeElapsed = Math.floor(elapsedTime - 15);
-    return { round: "Hiệp 2", time: `${Math.floor(halfTimeElapsed)}'` };
-  }
-};
 
 export default function MatchItemHorizontal({ match }: Props) {
   const mdUp = useResponsive("up", "md");
   const router = useRouter()
-  const { livestreams, endpoints } = useGetLivestreams()
+  const { livestreams, endpoints } = useGetLivestreams(1, 100)
   const { matchesInfo } = useGetInfoMatches();
   const [currentMatch, setCurrentMatch] = useState<IMatchInfo>();
   const { enqueueSnackbar } = useSnackbar();
@@ -60,8 +44,6 @@ export default function MatchItemHorizontal({ match }: Props) {
     localteam_title,
     visitorteam_logo,
     visitorteam_title,
-    score,
-    startTimez,
     m3u8
   } = match;
   const createLivestream = useCreateLivestream()

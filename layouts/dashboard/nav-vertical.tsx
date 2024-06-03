@@ -65,7 +65,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     <Box
       sx={{
         flexShrink: { lg: 0 },
-        width: { lg: NAV.W_VERTICAL },
+        width: { md: "190px" },
       }}
     >
 
@@ -74,7 +74,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
           sx={{
             height: 1,
             position: 'fixed',
-            width: NAV.W_VERTICAL,
+            width: "190px",
             borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
           }}
         >
@@ -86,7 +86,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
           onClose={onCloseNav}
           PaperProps={{
             sx: {
-              width: NAV.W_VERTICAL,
+              width: "190px",
             },
           }}
         >

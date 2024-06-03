@@ -1,9 +1,17 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
 import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { alpha, styled } from '@mui/material';
 
 // ----------------------------------------------------------------------
-
+const StyledTextField = styled(TextField, {
+  shouldForwardProp: (prop) => prop !== 'inputColor',
+})<{ inputColor?: string }>(({ inputColor, theme }) => ({
+  '& .MuiInputBase-root.Mui-disabled': {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Custom background color
+    color: inputColor || 'black', // Custom text color for disabled state
+  },
+}));
 type Props = TextFieldProps & {
   name: string;
   inputColor?: string;
@@ -17,7 +25,7 @@ export default function RHFTextField({ name, helperText, inputColor, type, ...ot
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <TextField
+        <StyledTextField
           {...field}
           fullWidth
           type={type}

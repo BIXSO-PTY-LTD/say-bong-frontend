@@ -33,10 +33,10 @@ export function table(theme: Theme) {
     MuiTableCell: {
       styleOverrides: {
         root: {
-          borderBottomStyle: 'dashed',
+          border: "none"
         },
         head: {
-          fontSize: 14,
+          fontSize: 12,
           color: theme.palette.text.secondary,
           fontWeight: theme.typography.fontWeightSemiBold,
           backgroundColor: theme.palette.background.neutral,

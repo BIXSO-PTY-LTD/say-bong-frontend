@@ -19,7 +19,6 @@ export default function MatchListHorizontal({ matchs,
   //  loading
 }: Props) {
 
-  const pathname = usePathname();
 
   const renderList = (
     <>
