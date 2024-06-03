@@ -23,7 +23,7 @@ export default function LivestreamVideo({ currentLivestream, activeLink }: Props
       {isHLS ? (
         <ReactHlsPlayer
           playerRef={playerRef}
-          src={activeLink || currentLivestream?.content as string}
+          src={activeLink as string || currentLivestream?.content as string}
           autoPlay={true}
           controls={true}
           width="100%"

@@ -26,7 +26,7 @@ export default function LivestreamDetailView({ id }: Props) {
   const { matches } = useGetMatches();
   const [currentMatch, setCurrentMatch] = useState<IMatchItem>();
 
-  const [activeLink, setActiveLink] = useState<string | undefined>(currentMatch?.m3u8);
+  const [activeLink, setActiveLink] = useState<string>();
 
   const broadcasterMetas = currentLivestream?.meta?.filter(meta => meta.key?.startsWith('broadcaster'));
 
@@ -34,7 +34,9 @@ export default function LivestreamDetailView({ id }: Props) {
     if (matches.length > 0) {
       setCurrentMatch(matches.find(match => match.matchId === currentLivestream?.title));
     }
-  }, [matches, currentLivestream?.title])
+
+    setActiveLink(currentLivestream?.content)
+  }, [matches, currentLivestream?.title, currentLivestream?.content])
 
 
   return (
@@ -78,9 +80,9 @@ export default function LivestreamDetailView({ id }: Props) {
 
           <Stack spacing={2} direction="row">
             <Button
-              variant={activeLink === currentMatch?.m3u8 ? "contained" : "outlined"}
+              variant={activeLink === currentLivestream?.content ? "contained" : "outlined"}
               color="primary"
-              onClick={() => setActiveLink(currentMatch?.m3u8)}
+              onClick={() => setActiveLink(currentLivestream?.content)}
             >
               Nguồn Video
             </Button>
