@@ -9,8 +9,6 @@ import { useBoolean } from '#/hooks/use-boolean';
 
 import Label from '#/components/label';
 import Iconify from '#/components/iconify';
-import { ConfirmDialog } from '#/components/custom-dialog';
-import CustomPopover, { usePopover } from '#/components/custom-popover';
 
 
 import { IMatchInfo, IMatchItem } from '#/types/match';
@@ -117,7 +115,7 @@ export default function LivestreamTableRow({
         </TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap', textAlign: "center" }}>
           <Label variant="soft" color="info">
-            {currentMatch?.score.replace(',', ' - ')}
+            {currentMatch?.score === "" ? currentMatch?.score.replace(',', ' - ') : "chưa có"}
           </Label>
         </TableCell>
 
