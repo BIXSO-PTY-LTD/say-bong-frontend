@@ -321,7 +321,7 @@ function applyFilter({
       if (hotMeta) {
         return hotMeta?.content?.toLowerCase() === hotValue;
       }
-      return false; // If there's no "hot" meta, exclude the livestream
+      return false;
     });
 
     // Filter inputData based on matching livestream titles
@@ -335,8 +335,10 @@ function applyFilter({
     const liveValue = live.toLowerCase();
     livestreams = livestreams.filter((livestream) => {
       const liveMeta = livestream.meta?.find(meta => meta.key === "live");
+
+
       if (liveMeta) {
-        return liveMeta?.content?.toLowerCase() === liveValue;
+        return liveMeta?.content?.toLowerCase() === liveValue || (liveMeta?.content?.toLowerCase() === undefined && liveValue === "không live");
       }
       return false;
     });
@@ -377,10 +379,25 @@ function applyFilter({
   }
 
 
+
   inputData.sort((a, b) => {
+    const aHot = livestreams.find(livestream => livestream.title === a.matchId)?.meta?.find(meta => meta.key === "hot")?.content?.toLowerCase();
+    const bHot = livestreams.find(livestream => livestream.title === b.matchId)?.meta?.find(meta => meta.key === "hot")?.content?.toLowerCase();
+
+    const hotPriority = (hotValue: string | undefined) => {
+      if (hotValue === "có") return 0;
+      return 1;
+    };
+
+    const aPriority = hotPriority(aHot);
+    const bPriority = hotPriority(bHot);
+
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority;
+    }
+
     return formatStringToDateTime(a.startTimez).getTime() - formatStringToDateTime(b.startTimez).getTime();
   });
-
 
   return inputData;
 }
