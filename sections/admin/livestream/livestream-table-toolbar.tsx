@@ -199,33 +199,36 @@ export default function LivestreamTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <TextField
-          variant='filled'
-          value={filters.localTeam}
-          onChange={handleFilterLocalTeam}
-          placeholder="Đội nhà..."
-          sx={{
-            '& input': {
-              paddingTop: '8px',
-              height: '2.7em'
+        <Stack direction="row" width={1} spacing={2}>
+          <TextField
+            fullWidth
+            variant='filled'
+            value={filters.localTeam}
+            onChange={handleFilterLocalTeam}
+            placeholder="Đội nhà..."
+            sx={{
+              '& input': {
+                paddingTop: '8px',
+                height: '2.7em'
 
-            },
-          }}
-        />
-        <TextField
-          variant='filled'
-          value={filters.visitorTeam}
-          onChange={handleFilterVisitorTeam}
-          placeholder="Đội khách..."
-          sx={{
-            '& input': {
-              paddingTop: '8px',
-              height: '2.7em'
+              },
+            }}
+          />
+          <TextField
+            fullWidth
+            variant='filled'
+            value={filters.visitorTeam}
+            onChange={handleFilterVisitorTeam}
+            placeholder="Đội khách..."
+            sx={{
+              '& input': {
+                paddingTop: '8px',
+                height: '2.7em'
 
-            },
-          }}
-        />
-
+              },
+            }}
+          />
+        </Stack>
         <FormControl
           sx={{
             flexShrink: 0,

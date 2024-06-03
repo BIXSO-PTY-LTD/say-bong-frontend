@@ -11,19 +11,19 @@ import { IMatchItem } from '#/types/match';
 
 type Props = {
   currentLivestream?: ILivestreamItem;
-  currentMatch?: IMatchItem;
+  activeLink: string | undefined;
 };
 
-export default function LivestreamVideo({ currentLivestream, currentMatch }: Props) {
+export default function LivestreamVideo({ currentLivestream, activeLink }: Props) {
 
   const playerRef = useRef(null);
-  const isHLS = currentLivestream?.content?.endsWith('.m3u8');
+  const isHLS = activeLink?.endsWith('.m3u8');
   return (
     <>
       {isHLS ? (
         <ReactHlsPlayer
           playerRef={playerRef}
-          src={currentLivestream?.content as string}
+          src={activeLink || currentLivestream?.content as string}
           autoPlay={true}
           controls={true}
           width="100%"
@@ -33,7 +33,7 @@ export default function LivestreamVideo({ currentLivestream, currentMatch }: Pro
           }}
         />
       ) : (
-        <Player controls autoPlay url={currentLivestream?.content} />
+        <Player controls autoPlay url={activeLink || currentLivestream?.content} />
       )}
 
 

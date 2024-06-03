@@ -14,6 +14,8 @@ import { filterAllTimeMatches, filterFourDaysLaterMatches, filterLiveMatches, fi
 import { useFilteredMatchesCount } from "#/hooks/use-filtered-matches-count";
 import { addDays } from "date-fns";
 import { generateOptions } from "#/utils/generate-shedule_options";
+import { useGetLivestreams } from "#/api/livestream";
+import { ILivestreamItem } from "#/types/livestream";
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +40,7 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
 
   const [isError, setIsError] = useState<boolean>(false);
 
+  const { livestreams } = useGetLivestreams(1, 100);
 
 
   const loadMoreItems = () => {
@@ -78,7 +81,8 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
     inputData: matches,
     filters,
     pathname,
-    itemsToShow
+    itemsToShow,
+    livestreams
   });
 
 
@@ -287,12 +291,14 @@ const applyFilter = ({
   inputData,
   filters,
   pathname,
-  itemsToShow
+  itemsToShow,
+  livestreams
 }: {
   itemsToShow: number,
   inputData: IMatchItem[];
   filters: IMatchFilters;
-  pathname: string
+  pathname: string,
+  livestreams: ILivestreamItem[]
 }) => {
   const { matchStatus, league_title } = filters;
   const today = new Date()
@@ -349,10 +355,26 @@ const applyFilter = ({
     filteredData = filter(filteredData);
 
   }
+  const sortByHotAndDate = (a: IMatchItem, b: IMatchItem) => {
+    const getHotValue = (matchId: string) => {
+      const livestream = livestreams.find(livestream => livestream.title === matchId);
+      const hotMeta = livestream?.meta?.find(meta => meta.key === "hot")?.content?.toLowerCase();
+      if (hotMeta === "có") return 0;
+      if (hotMeta === "không") return 1;
+      return 2; // For "", undefined, or other values
+    };
 
+    const aPriority = getHotValue(a.matchId);
+    const bPriority = getHotValue(b.matchId);
+
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority;
+    }
+
+    return new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime();
+  };
 
   return filteredData
-    .sort((a, b) => new Date(a.startTimez).getTime() - new Date(b.startTimez).getTime())
+    .sort(sortByHotAndDate)
     .slice(0, itemsToShow);
-
 };

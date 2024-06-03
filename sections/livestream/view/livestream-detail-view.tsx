@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Container, Grid, Skeleton, Stack, Typography } from "@mui/material"
+import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from "@mui/material"
 import LivestreamVideo from "../livestream-video"
 import LivestreamLastest from "../livestream-latest"
 import LivestreamChatView from "../livestream-chat-view"
@@ -22,12 +22,13 @@ export default function LivestreamDetailView({ id }: Props) {
 
 
   const { livestream: currentLivestream, livestreamLoading } = useGetLivestream(id);
-  const { livestreams, livestreamsLoading, livestreamsEmpty } = useGetLivestreams(1, 100);
 
   const { matches } = useGetMatches();
   const [currentMatch, setCurrentMatch] = useState<IMatchItem>();
 
+  const [activeLink, setActiveLink] = useState<string | undefined>(currentMatch?.m3u8);
 
+  const broadcasterMetas = currentLivestream?.meta?.filter(meta => meta.key?.startsWith('broadcaster'));
 
   useEffect(() => {
     if (matches.length > 0) {
@@ -53,7 +54,7 @@ export default function LivestreamDetailView({ id }: Props) {
           ) : (
             <>
               <Grid item xs={12} md={9}>
-                <LivestreamVideo currentMatch={currentMatch} currentLivestream={currentLivestream} />
+                <LivestreamVideo currentLivestream={currentLivestream} activeLink={activeLink} />
               </Grid>
               <Grid item xs={12} md={3}>
                 <LivestreamChatView currentLivestream={currentLivestream} />
@@ -71,7 +72,38 @@ export default function LivestreamDetailView({ id }: Props) {
           )
         }
       </Stack>
-      {/* <LivestreamLastest loading={livestreamsLoading} empty={livestreamsEmpty} livestreams={livestreams.length === 1 ? livestreams : filteredLivestreams} /> */}
-    </Container>
+      {broadcasterMetas ? (
+        <Box sx={{ m: 2 }}>
+          <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>Bình Luận Viên</Typography >
+
+          <Stack spacing={2} direction="row">
+            <Button
+              variant={activeLink === currentMatch?.m3u8 ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => setActiveLink(currentMatch?.m3u8)}
+            >
+              Nguồn Video
+            </Button>
+            {broadcasterMetas?.map((meta, index) => {
+              // Split the content into name and link
+              const [name, link] = meta?.content?.split(' ') ?? [];
+              return (
+
+                <Button
+                  key={index}
+                  variant={activeLink === link ? "contained" : "outlined"}
+                  color="primary"
+                  onClick={() => setActiveLink(link)}
+                >
+                  {name}
+                </Button>
+              )
+            })}
+          </Stack>
+        </Box>
+      ) : (<></>)
+      }
+
+    </Container >
   )
 }
