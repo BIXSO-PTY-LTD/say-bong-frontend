@@ -44,6 +44,7 @@ export default function LivestreamQuickEditForm({ currentLivestream, open, onClo
 
 
   const [metas, setMetas] = useState<ILivestreamMetas[]>();
+  console.log(metas);
 
   const NewMatchSchema = Yup.object().shape({
     id: Yup.string().required('Trường bắt buộc'),
