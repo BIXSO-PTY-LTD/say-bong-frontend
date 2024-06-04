@@ -30,7 +30,7 @@ type Props = {
 export default function MatchItemHorizontal({ match }: Props) {
   const mdUp = useResponsive("up", "md");
   const router = useRouter()
-  const { livestreams, endpoints } = useGetLivestreams(1, 100)
+  const { livestreams, endpoints } = useGetLivestreams(1, 200)
   const { matchesInfo } = useGetInfoMatches();
   const [currentMatch, setCurrentMatch] = useState<IMatchInfo>();
   const { enqueueSnackbar } = useSnackbar();

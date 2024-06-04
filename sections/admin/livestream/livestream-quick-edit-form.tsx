@@ -18,7 +18,7 @@ import FormProvider from '#/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField } from '#/components/hook-form';
 import { MATCH_HOT_OPTIONS, MATCH_LIVE_OPTIONS } from '#/_mock';
 import LivestreamNewEditBroadCaster from './livestream-new-edit-broadcoaster';
-import { useCreateLivestream, useGetLivestreams, useUpdateLivestream } from '#/api/livestream';
+import { useCreateLivestream, useDeleteLivestream, useGetLivestreams, useUpdateLivestream } from '#/api/livestream';
 import { ILivestreamItem, ILivestreamMetas } from '#/types/livestream';
 import { mutate } from 'swr';
 
@@ -29,14 +29,14 @@ type Props = {
   open: boolean;
   onClose: VoidFunction;
   currentLivestream?: IMatchItem;
+  matchesInfo: IMatchInfo[];
+  endpoints: string;
+  livestreams: ILivestreamItem[]
 };
 
-export default function LivestreamQuickEditForm({ currentLivestream, open, onClose }: Props) {
+export default function LivestreamQuickEditForm({ currentLivestream, open, onClose, matchesInfo, endpoints, livestreams }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { matchesInfo } = useGetInfoMatches();
-
-  const { livestreams, endpoints } = useGetLivestreams(1, 100)
 
   const [currentMatchInfo, setCurrentMatchInfo] = useState<IMatchInfo>();
 
@@ -44,7 +44,6 @@ export default function LivestreamQuickEditForm({ currentLivestream, open, onClo
 
 
   const [metas, setMetas] = useState<ILivestreamMetas[]>();
-  console.log(metas);
 
   const NewMatchSchema = Yup.object().shape({
     id: Yup.string().required('Trường bắt buộc'),
@@ -123,6 +122,8 @@ export default function LivestreamQuickEditForm({ currentLivestream, open, onClo
     if (matchesInfo && currentLivestream) {
       reset(defaultValues);
       setCurrentMatchInfo(matchesInfo.find(item => item.matchId === currentLivestream.matchId));
+      console.log(livestreams);
+
       setMatchingLivestream(livestreams.find(item => item.title === currentLivestream.matchId));
 
       if (matchingLivestream) {
@@ -133,6 +134,8 @@ export default function LivestreamQuickEditForm({ currentLivestream, open, onClo
 
   const createLivestream = useCreateLivestream()
   const updateLivestream = useUpdateLivestream()
+  // const deleteLivestream = useDeleteLivestream()
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       const metas = [
@@ -149,6 +152,7 @@ export default function LivestreamQuickEditForm({ currentLivestream, open, onClo
       if (matchingLivestream) {
         await updateLivestream({ id: matchingLivestream.id, title: data.id, content: data.m3u8, metas: metas });
         enqueueSnackbar('Livestream updated!');
+
       } else {
         await createLivestream({ title: data.id, content: data.m3u8, metas: metas });
         enqueueSnackbar('Livestream created!');
