@@ -40,7 +40,7 @@ export default function MatchList({ matches, matchesLoading, matchesEmpty }: Pro
 
   const [isError, setIsError] = useState<boolean>(false);
 
-  const { livestreams } = useGetLivestreams(1, 100);
+  const { livestreams } = useGetLivestreams(1, 200);
 
 
   const loadMoreItems = () => {

@@ -29,15 +29,18 @@ type Props = {
   onDeleteRow: VoidFunction;
   index: number
   livestreams: ILivestreamItem[];
+  matchesInfo: IMatchInfo[];
+  endpoints: string;
 };
 
 export default function LivestreamTableRow({
   row,
   selected,
   index,
-  livestreams
+  livestreams,
+  matchesInfo,
+  endpoints
 }: Props) {
-  const { matchesInfo } = useGetInfoMatches();
 
   const { matchId, league_title, startTimez, localteam_title, visitorteam_title, m3u8, localteam_logo, visitorteam_logo } = row;
   const [currentMatch, setCurrentMatch] = useState<IMatchInfo>();
@@ -115,7 +118,7 @@ export default function LivestreamTableRow({
         </TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap', textAlign: "center" }}>
           <Label variant="soft" color="info">
-            {currentMatch?.score === "" ? currentMatch?.score.replace(',', ' - ') : "chưa có"}
+            {currentMatch === undefined || currentMatch?.score === "" ? "chưa có" : currentMatch?.score.replace(',', ' - ')}
           </Label>
         </TableCell>
 
@@ -130,7 +133,7 @@ export default function LivestreamTableRow({
 
       </TableRow>
 
-      <LivestreamQuickEditForm currentLivestream={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+      <LivestreamQuickEditForm currentLivestream={row} open={quickEdit.value} onClose={quickEdit.onFalse} matchesInfo={matchesInfo} endpoints={endpoints} livestreams={livestreams} />
 
 
     </>

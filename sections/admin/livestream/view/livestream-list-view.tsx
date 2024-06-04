@@ -58,7 +58,7 @@ export default function LivestreamListView() {
 
   const { matches, matchesLoading } = useGetMatches();
 
-  const { livestreams } = useGetLivestreams(1, 100);
+  const { livestreams, endpoints } = useGetLivestreams(1, 200);
 
   const { matchesInfo } = useGetInfoMatches();
 
@@ -209,6 +209,9 @@ export default function LivestreamListView() {
                           onDeleteRow={() => handleDeleteRow(row.matchId)}
                           onEditRow={() => handleEditRow(row.matchId)}
                           livestreams={livestreams}
+                          endpoints={endpoints}
+                          matchesInfo={matchesInfo}
+
                         />
                       ))
                   )}
