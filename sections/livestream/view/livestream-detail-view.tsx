@@ -30,6 +30,7 @@ export default function LivestreamDetailView({ id }: Props) {
 
   const broadcasterMetas = currentLivestream?.meta?.filter(meta => meta.key?.startsWith('broadcaster'));
 
+
   useEffect(() => {
     if (matches.length > 0) {
       setCurrentMatch(matches.find(match => match.matchId === currentLivestream?.title));
@@ -74,7 +75,7 @@ export default function LivestreamDetailView({ id }: Props) {
           )
         }
       </Stack>
-      {broadcasterMetas ? (
+      {broadcasterMetas && broadcasterMetas.length > 0 ? (
         <Box sx={{ m: 2 }}>
           <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>Bình Luận Viên</Typography >
 
@@ -103,7 +104,7 @@ export default function LivestreamDetailView({ id }: Props) {
             })}
           </Stack>
         </Box>
-      ) : (<></>)
+      ) : null
       }
 
     </Container >
