@@ -43,7 +43,13 @@ export default function LivestreamDetailView({ id }: Props) {
   return (
     <Container style={{ maxWidth: "1330px", padding: "0" }}>
       <Stack direction="column">
-        <Typography sx={{ textTransform: "uppercase", my: 3 }} variant="h3">LIVESTREAM</Typography>
+        {currentMatch ? (
+          <Typography variant="h5" sx={{ my: 3, textTransform: 'uppercase' }}>Phát trực tiếp {currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}</Typography >
+        ) :
+          (
+            <Typography variant="h5" sx={{ my: 3 }}>Loading...</Typography >
+          )
+        }
         <Grid container spacing={4}>
           {livestreamLoading ? (
             <>
@@ -67,25 +73,17 @@ export default function LivestreamDetailView({ id }: Props) {
 
           )}
         </Grid>
-        {currentMatch ? (
-          <Typography variant="h3" sx={{ m: 3 }}>{currentMatch?.localteam_title} vs {currentMatch?.visitorteam_title}</Typography >
-        ) :
-          (
-            <Typography variant="h3" sx={{ m: 3 }}>Loading...</Typography >
-          )
-        }
+
       </Stack>
       {broadcasterMetas && broadcasterMetas.length > 0 ? (
         <Box sx={{ m: 2 }}>
-          <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>Bình Luận Viên</Typography >
-
           <Stack spacing={2} direction="row">
             <Button
               variant={activeLink === currentLivestream?.content ? "contained" : "outlined"}
               color="primary"
               onClick={() => setActiveLink(currentLivestream?.content)}
             >
-              Nguồn Video
+              HD
             </Button>
             {broadcasterMetas?.map((meta, index) => {
               // Split the content into name and link

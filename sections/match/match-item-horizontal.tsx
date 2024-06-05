@@ -34,8 +34,9 @@ export default function MatchItemHorizontal({ match }: Props) {
   const { matchesInfo } = useGetInfoMatches();
   const [currentMatch, setCurrentMatch] = useState<IMatchInfo>();
   const { enqueueSnackbar } = useSnackbar();
+  const [currentLivestream, setCurrentLivestream] = useState<ILivestreamItem>();
 
-
+  const broadcasterMetas = currentLivestream?.meta?.filter(meta => meta.key?.startsWith('broadcaster'));
   const {
     matchId,
     startTime,
@@ -73,9 +74,10 @@ export default function MatchItemHorizontal({ match }: Props) {
   useEffect(() => {
     if (matchesInfo && match) {
       setCurrentMatch(matchesInfo.find(item => item.matchId === match.matchId));
-
+      const matchingLivestream = livestreams.find(item => item.title === match.matchId);
+      setCurrentLivestream(matchingLivestream);
     }
-  }, [match, match.matchId, matchesInfo])
+  }, [livestreams, match, match.matchId, matchesInfo])
 
   const matchStatus = getMatchStatus(currentMatch?.match_time as number, currentMatch?.halfStartTime as number);
 
@@ -115,10 +117,49 @@ export default function MatchItemHorizontal({ match }: Props) {
 
         <TeamInfo image={visitorteam_logo} team={visitorteam_title} />
       </Stack>
-      <Box textAlign="end" >
-        <LoadingButton onClick={handleWatchClick} variant='text' color='primary'>Xem Ngay {`> >`}</LoadingButton>
+      {broadcasterMetas ? (
+        <Stack direction="row" justifyContent={{ xs: "start", sm: "center" }}  >
+          <Typography
+            color="primary"
+            sx={{
 
-      </Box>
+              backgroundColor: 'transparent',
+
+              color: 'primary.main',
+              borderRadius: 16,
+              padding: '8px 16px',
+
+            }}
+          >
+            HD
+          </Typography>
+          {broadcasterMetas?.map((meta, index) => {
+            // Split the content into name and link
+            const [name, link] = meta?.content?.split(' ') ?? [];
+            return (
+
+              <Typography
+                key={index}
+                color="primary"
+                sx={{
+                  backgroundColor: 'transparent',
+                  color: 'primary.main',
+                  borderRadius: 16,
+                  padding: '8px 16px',
+
+                }}
+              >
+                {name}
+              </Typography>
+            )
+          })}
+        </Stack>
+      ) : (
+        <Box sx={{ visibility: 'hidden' }} />
+      )
+      }
+      <LoadingButton sx={{ position: 'absolute', right: 0, bottom: 10 }} onClick={handleWatchClick} variant='text' color='primary'>Xem Ngay {`> >`}</LoadingButton>
+
     </Stack>
   );
 }
